@@ -1,5 +1,6 @@
 . /Users/tsukudamayo/.bash_profile
 
-#vimのpathをHomebrewでインストールした時に/usr/local/bin/vimに変更
-export PATH=/usr/local/bin:/usr/bin:/usr/sbin:/bin:/sbin
-
+# go
+export GOPATH=$HOME/Documents/go
+export GOROOT=/usr/local/Cellar/go/1.6/libexec/
+export PATH=$GOPATH/bin:$GOROOT/bin:$PATH

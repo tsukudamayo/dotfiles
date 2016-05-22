@@ -11,6 +11,8 @@ set smartindent
 
 "BSキーが使用できなくなってしまったため、追加
 set backspace=indent,eol,start
+"クリップボードでコピーできるようにする
+set clipboard=unnamed,autoselect
 
 "ファイル別のインデントの設定
 augroup fileTypeIndent
@@ -19,6 +21,8 @@ augroup fileTypeIndent
     autocmd BufNewFile,BufRead *.rb     setlocal tabstop=2 softtabstop=2 shiftwidth=2
     autocmd BufNewFile,BufRead *.html   setlocal tabstop=2 softtabstop=2 shiftwidth=2
     autocmd BufNewFile,BufRead *.md     setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd BufNewFile,BufRead *.js     setlocal tabstop=2 softtabstop=2 shiftwidth=2
+    autocmd BufNewFile,BufRead *.rst    setlocal tabstop=2 softtabstop=2 shiftwidth=2
 augroup END
 
 "dein.vim(インストールできていない)
