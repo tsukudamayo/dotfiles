@@ -1,12 +1,6 @@
 syntax on
 set nu
 
-"バックアップファイルの保存先
-set backupdir=~/vimfiles/backup
-
-"スワップファイルの保存先
-set directory=~/vimfiles/tmp
-
 "インデントの設定
 set tabstop=4
 set shiftwidth=4
