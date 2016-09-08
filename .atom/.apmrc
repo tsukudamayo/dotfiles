@@ -1,0 +1,3 @@
+proxy=http://proxy.nara.sharp.co.jp:3080/
+https-proxy=http://proxy.nara.sharp.co.jp:3080/
+strict-ssl=false
