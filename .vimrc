@@ -5,7 +5,10 @@ set nu
 set backupdir=~/vimfiles/backup
 
 "スワップファイルの保存先
-set directory=~/vimfiles/tmp
+set directory=~/vimfiles/swp
+
+"undoファイルの保存先
+:set undodir=~/vimfiles/undo
 
 "インデントの設定
 set tabstop=4
