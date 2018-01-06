@@ -4,6 +4,10 @@ mkdir ~/lib
 mkdir ~/local
 mkdir ~/opt
 mkdir ~/etc
+mkdir ~/.vimfiles
+mkdir ~/.vimfiles/swp
+mkdir ~/.vimfiles/backup
+mkdir ~/.vimfiles/undo
 
 # apt update
 sudo apt-get update
