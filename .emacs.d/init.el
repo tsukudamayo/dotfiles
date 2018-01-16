@@ -45,6 +45,10 @@
 
 ;; flymake settinegs
 (custom-set-faces
+ ;; custom-set-faces was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
  '(flymake-errline ((((class color)) (:background "red"))))
  '(flymake-warnline ((((class color)) (:background "yellow")))))
 
@@ -55,15 +59,29 @@
       (if help (message "%s" help)))))
 (add-hook 'post-command-hook 'flymake-show-help)
 
+;; highlight flymake error and warnings
+(custom-set-faces
+ '(flymake-warnline ((((class color))
+		     (:foreground "yellow"
+		      :bold t
+		      :background "red"))))
+ '(flymake-errline ((((class color))
+		      (:foreground "red"
+		       :bold t
+		       :background "yellow")))))
+
+;; markdown
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (manoj-dark))))
-(custom-set-faces
- ;; custom-set-faces was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- )
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(package-selected-packages
+   (quote
+    (markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+
