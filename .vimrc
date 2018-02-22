@@ -4,7 +4,7 @@ set nu
 " filepath to save file backup undo swp  file
 set backupdir=~/.vimfiles/backup
 set directory=~/.vimfiles/swp
-set directory=~/.vimfiles/undo
+set undodir=~/.vimfiles/undo
 
 " set encofing fileencoding
 set encoding=utf-8
