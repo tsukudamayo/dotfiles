@@ -59,6 +59,11 @@
 			  (setq indent-tabs-mode nil)
 			  (setq c-basic-offset 4)
 			  (setq tab-width 4)))
+
+
+;; C#
+(add-hook 'csharp-mode-hook 'omnisharp-mode)
+
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -82,4 +87,4 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor))))
+    (omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor))))
