@@ -1,7 +1,5 @@
 (require 'package)
-(add-to-list 'package-archives
-	     '("melpa" . "http://melpa.org/packages/") t)
-
+(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
 (package-initialize)
 
 ;; settings load-path
@@ -15,6 +13,19 @@
 (setq auto-save-file-name-transforms
   `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
 
+;; flycheck
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
+;; markdown
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+;; ddskk settings
+(when (require 'skk nil t)
+  (global-set-key (kbd "C-x C-j") 'skk-auto-fill-mode)
+  (setq default-input-method "japanese-skk")
+  (require 'skk-study))
+
 ;; python-mode settings
 (require 'python-mode)
 (setq auto-mode-alist (cons '("\\.py\\'" . python-mode) auto-mode-alist))
@@ -25,54 +36,68 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 
-;; ;; settings chnage virtualenv
-;; (require 'virtualenvwrapper)
-;; (require 'auto-virtualenvwrapper)
-;; (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
+;; ein(emacs ipython notebook)
+(require 'ein)
 
-;; python flymake pyflakes
-(add-hook 'find-file-hook 'flymake-find-file-hook)
-(when (load "flymake" t)
-  (defun flymake-pyflakes-init()
-    (let* ((temp-file (flymake-init-create-temp-buffer-copy
-		       'flymake-create-temp-inplace))
-	   (local-file (file-relative-name
-			temp-file
-			(file-name-directory buffer-file-name))))
-      (list "~/.pyenv/shims/pyflakes" (list local-file))))
-  (add-to-list 'flymake-allowed-file-name-masks
-	       '("\\.py\\'" flymake-pyflakes-init)))
+;; golang
+(add-to-list 'exec-path (expand-file-name "/usr/local/bin/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "~/lib/local/go/bin/"))
+(require 'go-mode)
+(require 'company-go)
+(add-hook 'go-mode-hook 'company-mode)
+(add-hook 'go-mode-hook 'flycheck-mode)
+(add-hook 'go-mode-hook (lambda ()
+			  (add-hook 'before-save-hook' 'gofmt-before-save)
+			  (local-set-key (kbd "M-.") 'godef-jump)
+			  (set (make-local-variable 'company-backends) '(company-go))
+			  (company-mode)
+			  (setq indent-tabs-mode nil)
+			  (setq c-basic-offset 4)
+			  (setq tab-width 4)))
 
-;; flymake settinegs
+
+;; TODO
+;; google translate
+(require 'google-translate)
+(defvar google-translate-english-chars "[:ascii:]’“”–"
+  "これらの文字が含まれているときは英語とみなす")
+(defun google-translate-enja-or-jaen (&optional string)
+  "regionか、現在のセンテンスを言語自動判別でGoogle翻訳する。"
+  (interactive)
+  (setq string
+        (cond ((stringp string) string)
+              (current-prefix-arg
+               (read-string "Google Translate: "))
+              ((use-region-p)
+               (buffer-substring (region-beginning) (region-end)))
+              (t
+               (save-excursion
+                 (let (s)
+                   (forward-char 1)
+                   (backward-sentence)
+                   (setq s (point))
+                   (forward-sentence)
+                   (buffer-substring s (point)))))))
+  (let* ((asciip (string-match
+                  (format "\\`[%s]+\\'" google-translate-english-chars)
+                  string)))
+    (run-at-time 0.1 nil 'deactivate-mark)
+    (google-translate-translate
+     (if asciip "en" "ja")
+     (if asciip "ja" "en")
+     string)))
+(global-set-key (kbd "C-c t") 'google-translate-enja-or-jaen)
+
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;; highlight flymake error and warnings
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
- '(flymake-errline ((((class color)) (:background "red"))))
- '(flymake-warnline ((((class color)) (:background "yellow")))))
+ '(flycheck-error ((((class color)) (:foreground "yellow" :bold t :background "red"))))
+ '(flycheck-warning ((((class color)) (:foreground "red" :bold t :background "yellow")))))
 
-;; show message from flymake on mini buffer
-(defun flymake-show-help()
-  (when (get-char-property (point) 'flymake-overlay)
-    (let ((help (get-char-property (point) 'help-echo)))
-      (if help (message "%s" help)))))
-(add-hook 'post-command-hook 'flymake-show-help)
-
-;; highlight flymake error and warnings
-(custom-set-faces
- '(flymake-warnline ((((class color))
-		     (:foreground "yellow"
-		      :bold t
-		      :background "red"))))
- '(flymake-errline ((((class color))
-		      (:foreground "red"
-		       :bold t
-		       :background "yellow")))))
-
-;; markdown
-(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 
 (custom-set-variables
@@ -83,5 +108,5 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+    (ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
 
