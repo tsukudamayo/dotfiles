@@ -24,11 +24,14 @@
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; slime
-(setq inferior-lisp-program "clisp")
-(add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
-(require 'slime)
-(slime-setup '(slime-repl slime-fancy slime-banner))
+;; company-mode
+(add-hook 'after-init-hook 'global-company-mode)
+
+;; ;; slime
+;; (setq inferior-lisp-program "clisp")
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
+;; (require 'slime)
+;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
 ;; python-mode
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -60,9 +63,12 @@
 			  (setq c-basic-offset 4)
 			  (setq tab-width 4)))
 
-
 ;; C#
 (add-hook 'csharp-mode-hook 'omnisharp-mode)
+(eval-after-load
+    'company
+    '(add-to-list 'company-backends #'company-omnisharp))
+(add-hook 'charp-mode-hook #'compamy-mode)
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
