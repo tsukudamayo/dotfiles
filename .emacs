@@ -1,4 +1,3 @@
-
 (require 'package)
 (add-to-list 'package-archives
 	     '("melpa" . "http://melpa.org/packages/") t)
@@ -19,13 +18,33 @@
 ;; ddskk
 (setq load-path (cons "c:/Users/USER/opt/emacs-25.3-x86_64/share/emacs/site-lisp/skk" load-path))
 (setq Info-default-directory-list
-        (cons "c:/Users/USER/opt/emacs-25.3-x86_64/share/info" Info-default-directory-list))
+      (cons "c:/Users/USER/opt/emacs-25.3-x86_64/share/info" Info-default-directory-list))
+(global-set-key (kbd "C-x C-j") 'skk-mode)
 
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; company-mode
-(add-hook 'after-init-hook 'global-company-mode)
+;; ;; company-mode
+;; (add-hook 'after-init-hook 'global-company-mode)
+
+;; auto-complete
+(require 'auto-complete-config)
+(ac-config-default)
+(global-auto-complete-mode t)
+(setq ac-use-menu-map t)
+(setq ac-use-fuzzy t)
+
+;; helm
+(require 'helm)
+(require 'helm-config)
+(helm-mode 1)
+
+;; projectile
+(require 'projectile)
+(projectile-global-mode)
+;; TODO
+;; (setq projectile-completion-system 'helm)
+;; (helm-projectile-on)
 
 ;; ;; slime
 ;; (setq inferior-lisp-program "clisp")
@@ -64,11 +83,11 @@
 			  (setq tab-width 4)))
 
 ;; C#
-(add-hook 'csharp-mode-hook 'omnisharp-mode)
-(eval-after-load
-    'company
-    '(add-to-list 'company-backends #'company-omnisharp))
-(add-hook 'charp-mode-hook #'compamy-mode)
+;; (add-hook 'csharp-mode-hook 'omnisharp-mode)
+;; (eval-after-load
+;;     'company
+;;     '(add-to-list 'company-backends #'company-omnisharp))
+;; (add-hook 'charp-mode-hook #'compamy-mode)
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
@@ -93,4 +112,4 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor))))
+    (projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor))))
