@@ -52,6 +52,12 @@
 ;; (require 'slime)
 ;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
+;; shell-mode
+(add-hook 'shell-mode-hook 'company-mode)
+
+;; eshell-mode
+(add-hook 'eshell-mode-hook 'company-mode)
+
 ;; python-mode
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
   (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
