@@ -16,6 +16,10 @@
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+;; company
+(require 'company)
+(global-company-mode)
+
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
@@ -40,8 +44,8 @@
 (require 'ein)
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "/usr/local/bin/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "~/lib/local/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "/home/tsukudamayo/opt/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "/home/tsukudamayo/.go/bin/"))
 (require 'go-mode)
 (require 'company-go)
 (add-hook 'go-mode-hook 'company-mode)
@@ -56,37 +60,56 @@
 			  (setq tab-width 4)))
 
 
-;; TODO
-;; google translate
-(require 'google-translate)
-(defvar google-translate-english-chars "[:ascii:]’“”–"
-  "これらの文字が含まれているときは英語とみなす")
-(defun google-translate-enja-or-jaen (&optional string)
-  "regionか、現在のセンテンスを言語自動判別でGoogle翻訳する。"
-  (interactive)
-  (setq string
-        (cond ((stringp string) string)
-              (current-prefix-arg
-               (read-string "Google Translate: "))
-              ((use-region-p)
-               (buffer-substring (region-beginning) (region-end)))
-              (t
-               (save-excursion
-                 (let (s)
-                   (forward-char 1)
-                   (backward-sentence)
-                   (setq s (point))
-                   (forward-sentence)
-                   (buffer-substring s (point)))))))
-  (let* ((asciip (string-match
-                  (format "\\`[%s]+\\'" google-translate-english-chars)
-                  string)))
-    (run-at-time 0.1 nil 'deactivate-mark)
-    (google-translate-translate
-     (if asciip "en" "ja")
-     (if asciip "ja" "en")
-     string)))
-(global-set-key (kbd "C-c t") 'google-translate-enja-or-jaen)
+;; c,c++
+(require 'irony)
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony)
+
+;; rust
+(add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
+(eval-after-load "rust-mode"
+  '(setq-default rust-format-on-save t))
+(add-hook 'racer-mode-hook (lambda ()
+			     (racer-mode)
+			     (flycheck-rust-setup)))
+(add-hook 'racer-mode-hook #'eldoc-mode)
+(add-hook 'racer-mode-hook (lambda ()
+			     (company-mode)))
+
+
+;; ;; TODO
+;; ;; google translate
+;; (require 'google-translate)
+;; (defvar google-translate-english-chars "[:ascii:]’“”–"
+;;   "これらの文字が含まれているときは英語とみなす")
+;; (defun google-translate-enja-or-jaen (&optional string)
+;;   "regionか、現在のセンテンスを言語自動判別でGoogle翻訳する。"
+;;   (interactive)
+;;   (setq string
+;;         (cond ((stringp string) string)
+;;               (current-prefix-arg
+;;                (read-string "Google Translate: "))
+;;               ((use-region-p)
+;;                (buffer-substring (region-beginning) (region-end)))
+;;               (t
+;;                (save-excursion
+;;                  (let (s)
+;;                    (forward-char 1)
+;;                    (backward-sentence)
+;;                    (setq s (point))
+;;                    (forward-sentence)
+;;                    (buffer-substring s (point)))))))
+;;   (let* ((asciip (string-match
+;;                   (format "\\`[%s]+\\'" google-translate-english-chars)
+;;                   string)))
+;;     (run-at-time 0.1 nil 'deactivate-mark)
+;;     (google-translate-translate
+;;      (if asciip "en" "ja")
+;;      (if asciip "ja" "en")
+;;      string)))
+;; (global-set-key (kbd "C-c t") 'google-translate-enja-or-jaen)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highlight flymake error and warnings
@@ -108,5 +131,5 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+    (flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
 
