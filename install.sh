@@ -4,10 +4,6 @@ mkdir ~/lib
 mkdir ~/local
 mkdir ~/opt
 mkdir ~/etc
-mkdir ~/.vimfiles
-mkdir ~/.vimfiles/swp
-mkdir ~/.vimfiles/backup
-mkdir ~/.vimfiles/undo
 
 # apt update
 sudo apt-get update
@@ -90,11 +86,33 @@ sudo make install
 cd ~/opt
 rm emacs-25.3.tar.xz
 
-# python settings
-LATEST_VERSION=$(pyenv install -list | grep anaconda3 | tail -n 1 | sed "s/\ //g")
-git clone https://github.com/yyuu/pyenv.git ~/.pyenv
-pyenv install ${LATEST_VERSION}
-pyenv rehash
-pyenv global ${LATEST_VERSION}
-conda update conda
+## python settings
+#LATEST_VERSION=$(pyenv install -list | grep anaconda3 | tail -n 1 | sed "s/\ //g")
+#git clone https://github.com/yyuu/pyenv.git ~/.pyenv
+#pyenv install ${LATEST_VERSION}
+#pyenv rehash
+#pyenv global ${LATEST_VERSION}
+#conda update conda
 
+# python install
+chmod +x etc/Miniconda3-latest-Linux-x86_64.sh
+./etc/Miniconda3-latest-Linux-x86_64.sh
+
+# go install
+wget https://dl.google.com/go/go1.10.linux-amd64.tar.gz
+tar -C ~/opt -xvf ~/go1.10.linux-amd64.tar.gz
+rm ~/go1.10.linux-amd64.tar.gz
+
+#source .bashrc
+
+cp ~/dotfiles/.go ~/
+chmod +x .go/go-get.sh 
+bash $HOME/.go/go-get.sh
+
+# rust install
+curl https://sh.rustup.rs -sSf | sh
+cargo install rustfmt
+cargo install racer
+
+# c++ settings
+sudo apt-get install -y llvm-dev clang libclang-dev cmake
