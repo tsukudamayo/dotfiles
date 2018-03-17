@@ -34,6 +34,7 @@ sudo apt-get -y install tmux
 
 # git install
 sudo apt-get -y install git
+sudo apt-get -y git-flow
 
 # git settings
 git config --global user.name "tsukudamayo"
