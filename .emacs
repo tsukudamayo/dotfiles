@@ -37,12 +37,12 @@
 	(define-key company-active-map [tab] 'company-complete-selection)
 	(define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
-;; auto-complete
-(require 'auto-complete-config)
-(ac-config-default)
-;; (global-auto-complete-mode t)
-(setq ac-use-menu-map t)
-(setq ac-use-fuzzy t)
+;; ;; auto-complete
+;; (require 'auto-complete-config)
+;; (ac-config-default)
+;; ;; (global-auto-complete-mode t)
+;; (setq ac-use-menu-map t)
+;; (setq ac-use-fuzzy t)
 
 ;; helm
 (require 'helm)
@@ -113,20 +113,16 @@
 
 ;; c, c++
 (require 'irony)
-(setenv "PATH"
-	(concat
-	 "C:\\msys64\\mingw64\\bin" ";"
-	 (getenv "PATH")))
-(setq exec-path
-      (append '("c:/msys64/mingw64/bin")
-	      exec-path))
+(add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
 (add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-to-list 'company-backends 'company-irony)
-(setq irony-lang-compile-option-alist
-      '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
-        (c-mode . ("c"))))
+;; (setq irony-lang-compile-option-alist
+;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
+;;         (c-mode . ("c"))))
 (defun irony--loang-compile-option ()
   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
     (append '("-x") it)))
