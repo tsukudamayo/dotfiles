@@ -24,13 +24,23 @@
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; ;; company-mode
+;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
+(require 'company)
+(with-eval-after-load 'company
+	(setq company-transformers '(company-sort-by-backend-importance))
+	(setq company-selection-wrap-around t)
+	(global-set-key (kbd "C-M-i") 'company-complete)
+	(define-key company-active-map (kbd "C-n") 'company-select-next)
+	(define-key company-active-map (kbd "C-p") 'company-select-previous)
+	(define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+	(define-key company-active-map [tab] 'company-complete-selection)
+	(define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
 ;; auto-complete
 (require 'auto-complete-config)
 (ac-config-default)
-(global-auto-complete-mode t)
+;; (global-auto-complete-mode t)
 (setq ac-use-menu-map t)
 (setq ac-use-fuzzy t)
 
@@ -87,17 +97,6 @@
 	(setq indent-tabs-mode nil)
 	(setq c-basic-offset 4)
 	(setq tab-width 4)))
-(require 'company-go)
-(add-hook 'go-mode-hook (lambda ()
-	(company-mode)
-	(setq company-transformers '(company-sort-by-backend-importance))
-	(setq company-selection-wrap-around t)
-	(global-set-key (kbd "C-M-i") 'company-complete)
-	(define-key company-active-map (kbd "C-n") 'company-select-next)
-	(define-key company-active-map (kbd "C-p") 'company-select-previous)
-	(define-key company-active-map (kbd "C-s") 'company-filter-candidates)
-	(define-key company-active-map [tab] 'company-complete-selection)
-	(define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete)))
 
 
 ;; rust-mode
@@ -114,16 +113,24 @@
 
 ;; c, c++
 (require 'irony)
+(setenv "PATH"
+	(concat
+	 "C:\\msys64\\mingw64\\bin" ";"
+	 (getenv "PATH")))
+(setq exec-path
+      (append '("c:/msys64/mingw64/bin")
+	      exec-path))
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-to-list 'company-backends 'company-irony)
 (setq irony-lang-compile-option-alist
       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
-        (c-mode . ("C"))))
+        (c-mode . ("c"))))
 (defun irony--loang-compile-option ()
   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
-		(append '("-x") it)))
+    (append '("-x") it)))
+(setq w32-pipe-read-delay 0)
 
 ;; c#
 (add-hook 'csharp-mode-hook 'omnisharp-mode)
