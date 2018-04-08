@@ -13,7 +13,13 @@
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
         backup-directory-alist))
 (setq auto-save-file-name-transforms
-  `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
+      `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
+
+;; encoding
+(prefer-coding-system 'utf-8)
+(set-file-name-coding-system 'cp932)
+(set-keyboard-coding-system 'cp932)
+(set-terminal-coding-system 'cp932)
 
 ;; ddskk
 (setq load-path (cons "c:/Users/USER/opt/emacs-25.3-x86_64/share/emacs/site-lisp/skk" load-path))
@@ -25,17 +31,19 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
-;; (add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
 (with-eval-after-load 'company
-	(setq company-transformers '(company-sort-by-backend-importance))
-	(setq company-selection-wrap-around t)
-	(global-set-key (kbd "C-M-i") 'company-complete)
-	(define-key company-active-map (kbd "C-n") 'company-select-next)
-	(define-key company-active-map (kbd "C-p") 'company-select-previous)
-	(define-key company-active-map (kbd "C-s") 'company-filter-candidates)
-	(define-key company-active-map [tab] 'company-complete-selection)
-	(define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
+  (setq company-transformers '(company-sort-by-backend-importance))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (setq company-selection-wrap-around t)
+  (global-set-key (kbd "C-M-i") 'company-complete)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+  (define-key company-active-map [tab] 'company-complete-selection)
+  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
 ;; ;; auto-complete
 ;; (require 'auto-complete-config)
@@ -78,9 +86,12 @@
 (require 'ein)
 
 ;; jedi settings
-(require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
+(require 'jedi-core)
 (setq jedi:complete-on-dot t)
+(setq jedi:use-shortcuts t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-to-list 'company-backends 'company-jedi)
+
 
 ;; goloang
 (add-to-list 'exec-path (expand-file-name "c:/tools/go/bin/"))
@@ -103,12 +114,14 @@
 (add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
-;; (add-hook 'rust-mode-hook 'lambda ()
-;; 	  (racer-mode)
-;; 	  (flycheck-rust-setup)))
-;; (add-hook 'racer-mode-hook #'eldoc-mode)
-;; (add-hook 'racer-mode-hook (lambda ()
-;; 			     (company-mode)))
+(require 'company-racer)
+(eval-after-load 'company-mode
+  (add-to-list 'company-backends 'company-racer))
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+(unless (getenv "RUST_SRC_PATH")
+  (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
 
 
 ;; c, c++
@@ -158,5 +171,5 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
+    (company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
  '(tool-bar-mode nil))
