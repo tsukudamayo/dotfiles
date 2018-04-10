@@ -31,7 +31,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
-(add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -69,6 +69,9 @@
 ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
 ;; (require 'slime)
 ;; (slime-setup '(slime-repl slime-fancy slime-banner))
+
+;; emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
 
 ;; shell-mode
 (add-hook 'shell-mode-hook 'company-mode)
