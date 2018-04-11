@@ -31,7 +31,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
-;; (add-hook 'after-init-hook 'global-company-mode)
+(add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -57,12 +57,12 @@
 (require 'helm-config)
 (helm-mode 1)
 
-;; projectile
-(require 'projectile)
-(projectile-global-mode)
-;; ;; TODO
-;; (setq projectile-completion-system 'helm)
-;; (helm-projectile-on)
+;; ;; projectile
+;; (require 'projectile)
+;; (projectile-global-mode)
+;; ;; ;; TODO
+;; ;; (setq projectile-completion-system 'helm)
+;; ;; (helm-projectile-on)
 
 ;; ;; slime
 ;; (setq inferior-lisp-program "clisp")
@@ -144,12 +144,12 @@
     (append '("-x") it)))
 (setq w32-pipe-read-delay 0)
 
-;; c#
-(add-hook 'csharp-mode-hook 'omnisharp-mode)
-(eval-after-load
-    'company
-    '(add-to-list 'company-backends #'company-omnisharp))
-(add-hook 'charp-mode-hook #'compamy-mode)
+;; ;; c#
+;; (add-hook 'csharp-mode-hook 'omnisharp-mode)
+;; (eval-after-load
+;;     'company
+;;     '(add-to-list 'company-backends #'company-omnisharp))
+;; (add-hook 'charp-mode-hook #'compamy-mode)
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
