@@ -17,6 +17,8 @@ go get github.com\nsf\gocode
 go get github.com\rogpeppe\godef
 go get github.com\jstemmer\gotags
 go get github.com\kisielk\errcheck
+go get github.com/julienschmidt/httprouter
+go get golang.org/x/net/http2
 
 go get -u github.com\tsenart\vegeta
 go get github.com\derekparker\delve\cmd\dlv 
