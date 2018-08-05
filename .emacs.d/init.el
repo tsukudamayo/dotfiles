@@ -13,12 +13,44 @@
 (setq auto-save-file-name-transforms
   `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
 
+;; encoding
+(prefer-coding-system 'utf-8)
+
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-;; company
+;; company-mode
+(add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
-(global-company-mode)
+(with-eval-after-load 'company
+  (setq company-transformers '(company-sort-by-backend-importance))
+  (setq company-idle-delay 0)
+  (setq company-minimum-prefix-length 2)
+  (setq company-selection-wrap-around t)
+  (global-set-key (kbd "C-M-i") 'company-complete)
+  (define-key company-active-map (kbd "C-n") 'company-select-next)
+  (define-key company-active-map (kbd "C-p") 'company-select-previous)
+  (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
+  (define-key company-active-map [tab] 'company-complete-selection)
+  (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
+
+;; helm
+(require 'helm)
+(require 'helm-config)
+(helm-mode 1)
+
+;; ;; projectile
+;; (require 'projectile)
+;; (projectile-global-mode)
+;; ;; ;; TODO
+;; ;; (setq projectile-completion-system 'helm)
+;; ;; (helm-projectile-on)
+
+;; ;; slime
+;; (setq inferior-lisp-program "clisp")
+;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
+;; (require 'slime)
+;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
 ;; markdown
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
@@ -30,86 +62,84 @@
   (setq default-input-method "japanese-skk")
   (require 'skk-study))
 
-;; python-mode settings
-(require 'python-mode)
-(setq auto-mode-alist (cons '("\\.py\\'" . python-mode) auto-mode-alist))
-(setq interpreter-mode-alist (cons '("python" . python-mode) interpreter-mode-alist))
-
-;; jedi settings
-(require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
+;; python-mode
+(setenv "PYTHONPATH" "~/lib/python")
+(when (autoload 'python-mode "python-mode" "Python editing mode." t)
+  (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
+  (setq interpreter-mode-alist (cons '("python" . python-mode)
+				     interpreter-mode-alist)))
 
 ;; ein(emacs ipython notebook)
 (require 'ein)
 
-;; golang
-(add-to-list 'exec-path (expand-file-name "/home/tsukudamayo/opt/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "/home/tsukudamayo/.go/bin/"))
+;; jedi settings
+(require 'jedi-core)
+(setq jedi:complete-on-dot t)
+(setq jedi:use-shortcuts t)
+(add-hook 'python-mode-hook 'jedi:setup)
+(add-to-list 'company-backends 'company-jedi)
+
+;; goloang
+(add-to-list 'exec-path (expand-file-name "c:/tools/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "c:/Users/USER/lib/go/bin/"))
 (require 'go-mode)
 (require 'company-go)
 (add-hook 'go-mode-hook 'company-mode)
 (add-hook 'go-mode-hook 'flycheck-mode)
 (add-hook 'go-mode-hook (lambda ()
-			  (add-hook 'before-save-hook' 'gofmt-before-save)
-			  (local-set-key (kbd "M-.") 'godef-jump)
-			  (set (make-local-variable 'company-backends) '(company-go))
-			  (company-mode)
-			  (setq indent-tabs-mode nil)
-			  (setq c-basic-offset 4)
-			  (setq tab-width 4)))
+	(add-hook 'before-save-hook' 'gogmt-before-save)
+	(local-set-key (kbd "M-.") 'godef-jump)
+	(set (make-local-variable 'compamy-backends) '(company-go))
+	(company-mode)
+	(setq indent-tabs-mode nil)
+	(setq c-basic-offset 4)
+	(setq tab-width 4)))
 
-
-;; c,c++
-(require 'irony)
-(add-hook 'c-mode-hook 'irony-mode)
-(add-hook 'c++-mode-hook 'irony-mode)
-(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-(add-to-list 'company-backends 'company-irony)
-
-;; rust
-(add-to-list 'exec-path (expand-file-name "~/.cargo/bin/"))
+;; rust-mode
+(add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
 (eval-after-load "rust-mode"
   '(setq-default rust-format-on-save t))
-(add-hook 'racer-mode-hook (lambda ()
-			     (racer-mode)
-			     (flycheck-rust-setup)))
-(add-hook 'racer-mode-hook #'eldoc-mode)
-(add-hook 'racer-mode-hook (lambda ()
-			     (company-mode)))
+(require 'company-racer)
+(eval-after-load 'company-mode
+  (add-to-list 'company-backends 'company-racer))
+(add-hook 'rust-mode-hook #'racer-mode)
+(add-hook 'racer-mode-hook #'company-mode)
+(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+(unless (getenv "RUST_SRC_PATH")
+  (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
+
+;; c, c++
+(require 'irony)
+;; (add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony)
+;; (setq irony-lang-compile-option-alist
+;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
+;;         (c-mode . ("c"))))
+(defun irony--loang-compile-option ()
+  (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
+    (append '("-x") it)))
+(setq w32-pipe-read-delay 0)
+
+;; js
+(setq company-tern-property-marker "")
+(defun company-tern-depth (candidate)
+  "Return depth attribute for CANDIDATE. 'nil' entries are treated as 0."
+  (let ((depth (get-text-property 0 'depth candidate)))
+    (if (eq depth nil) 0 depth)))
+(add-hook 'js2-mode-hook 'tern-mode)
+(add-to-list 'company-backends 'company-tern)
 
 
-;; ;; TODO
-;; ;; google translate
-;; (require 'google-translate)
-;; (defvar google-translate-english-chars "[:ascii:]’“”–"
-;;   "これらの文字が含まれているときは英語とみなす")
-;; (defun google-translate-enja-or-jaen (&optional string)
-;;   "regionか、現在のセンテンスを言語自動判別でGoogle翻訳する。"
-;;   (interactive)
-;;   (setq string
-;;         (cond ((stringp string) string)
-;;               (current-prefix-arg
-;;                (read-string "Google Translate: "))
-;;               ((use-region-p)
-;;                (buffer-substring (region-beginning) (region-end)))
-;;               (t
-;;                (save-excursion
-;;                  (let (s)
-;;                    (forward-char 1)
-;;                    (backward-sentence)
-;;                    (setq s (point))
-;;                    (forward-sentence)
-;;                    (buffer-substring s (point)))))))
-;;   (let* ((asciip (string-match
-;;                   (format "\\`[%s]+\\'" google-translate-english-chars)
-;;                   string)))
-;;     (run-at-time 0.1 nil 'deactivate-mark)
-;;     (google-translate-translate
-;;      (if asciip "en" "ja")
-;;      (if asciip "ja" "en")
-;;      string)))
-;; (global-set-key (kbd "C-c t") 'google-translate-enja-or-jaen)
+;; markdown
+(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
+(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
+(tool-bar-mode -1)
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highlight flymake error and warnings
@@ -131,5 +161,4 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
-
+    (company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
