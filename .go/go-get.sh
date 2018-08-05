@@ -24,3 +24,5 @@ mv peco_linux_amd64/peco ../bin/
 
 go get -u github.com/tsenart/vegeta
 go get github.com/derekparker/delve/cmd/dlv 
+
+go get github.com/PuerkitoBio/goquery 
