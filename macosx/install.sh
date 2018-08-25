@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 
 mkdir lib
 mkdir local
@@ -6,6 +6,9 @@ mkdir etc
 mkdir opt
 mkdir .fonts
 mkdir lib/src
+
+# xcode-select
+xcode-select --install
 
 # homebrew
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -18,7 +21,7 @@ brew install git
 brew install git-flow
 
 git config --global user.name "tsukudamayo"
-git congig --global user.email "tsukudamayo@gmail.com"
+git config --global user.email "tsukudamayo@gmail.com"
 
 # dotfiles
 git clone https://github.com/tsukudamayo/dotfiles.git
@@ -58,14 +61,15 @@ mkdir .vimfiles/swp
 mkdir .vimfiles/backup
 mkdir .vimfiles/undo
 
-brew install vim ¥
---with-lua
---with-luajit
---override-system-vi
---with-tcl
+brew install vim \
+--with-lua \
+--with-luajit \
+--override-system-vi \
+--with-tcl \
+
+brew upgrade vim
 
 # wget
-xcode-select --install
 brew install wget
 
 # fonts(monaco bold)
@@ -91,7 +95,7 @@ brew install protoc
 
 # opencv
 brew install opencv3 --with-contrib --with-python3 --without-python
-ln -s /usr/local/Cellar/opencv/3.4.2/lib/python3.7/site-packages/cv2.cpython-37m-darwin.so ~/lib/miniconda3/envs/ssd/lib/python3.6/site-packages
+# ln -s /usr/local/Cellar/opencv/3.4.2/lib/python3.7/site-packages/cv2.cpython-37m-darwin.so ~/lib/miniconda3/envs/ssd/lib/python3.6/site-packages
 
 # miniconda(python)
 chmod +x Miniconda3-latest-MacOSX-x86_64.sh
