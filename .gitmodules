@@ -1,0 +1,9 @@
+[submodule ".vim/pack/opt/jedi-vim"]
+	path = .vim/pack/opt/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git
+[submodule ".vim/pack/start/jedi-vim"]
+	path = .vim/pack/start/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git
+[submodule ".vim/pack/plugin/start/jedi-vim"]
+	path = .vim/pack/plugin/start/jedi-vim
+	url = https://github.com/davidhalter/jedi-vim.git
