@@ -1,0 +1,12 @@
+.emacs.d/elpa
+.emacs.d/auto-save-list
+.emacs.d/network-security.data
+.emacs.d/request
+.emacs.d/irony
+.emacs.d/eshell
+macosx/.emacs.d/elpa
+macosx/.emacs.d/auto-save-list
+macosx/.emacs.d/network-security.data
+macosx/.emacs.d/request
+macosx/.emacs.d/irony
+macosx/.emacs.d/eshell
