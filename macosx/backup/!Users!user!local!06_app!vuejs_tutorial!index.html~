@@ -1,0 +1,10 @@
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>vue.js tutorial</title>
+  </head>
+  <body>
+    <script src="https://cdn.jsdelvr.net/npm/vue/dist/vue.js"></script>
+    <script src="sample.js"></script>
+  </body>
+</html>

@@ -1,0 +1,4 @@
+#!/bin/bash
+
+DATASET_DIR=~/tmp/data/model/flowers
+TRAIN_DIR=~/tmp/model/flowers

@@ -1,0 +1,7 @@
+#include <opencv2/highgui.cpp>
+
+void main() {
+  Mat img = imread("sample_for_display.jpg");
+  imshow("image", img)
+    waitKey(0);
+}

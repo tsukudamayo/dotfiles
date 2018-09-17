@@ -1,0 +1,34 @@
+import os
+import sys
+import tarfile
+import six.moves.urllib as urllib
+import tarfile
+import zipfile
+from io import StringIO
+from PIL import Image
+
+import numpy as np
+import matplotlib.pyplot as plt
+import tensorflow as tf
+
+from object_detection.utils import ops as util_ops
+from object_detection.utils import label_map_util
+from object_detection.utils import visualization_utils as vis_util
+
+
+MODEL_NAME = 'ssd_mobilenet_v1_coco_2017_11_17'
+MODEL_FILE = MODEL_FILE + '.tar.gz'
+DOWNLOAD_BASE = 'http://download.tensorflow.org/models/object_detection/'
+PATH_TO_CKPT = MODEL_NAME + '/frozen_inference_graph.pb'
+PATH_TO_LABELS = os.path.join('data', 'mscoco_label_map.pbtxt')
+NUM_CLASSES = 90
+
+opener = urllib.request.URLopener()
+opener.retrieve(DOWNLOAD_BASE + MODEL_FILE, MODEL_FILE)
+tar_file = tarfile.open(MODEL_FILE)
+for file in tar_file.getmembers():
+    file_name = os.path.basename(file.name)
+    print('file_name', file_name)
+    if 'frozen_inference_graph.pb' in file_name:
+        tar_file.extract(file, os.getcwd())
+

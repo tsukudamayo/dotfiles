@@ -1,0 +1,26 @@
+import numpy as np
+import matplotlib.pyplot as plt
+
+import cv2
+
+
+img = cv2.imread('hisetq_numpy1.jpg')
+hist, bins = np.histogram(img.flatten(),256,[0,256])
+
+cdf = hist.cumsum()
+cdf_normalized = cdf*hist.max() / cdf.max()
+
+plt.subplot(1,2,1)
+plt.imshow(img,cmap='gray')
+plt.xticks([])
+plt.yticks([])
+plt.title('image')
+
+plt.subplot(1,2,2)
+plt.imshow(cdf_normalized,cmap='b')
+plt.hist(img.flatten(),256,[0,256],color='r')
+plt.xlim([0,256])
+plt.legend(('cdf','histogram'),loc='upper left')
+
+plt.show()
+

@@ -1,0 +1,4 @@
+virtualenv
+numpy
+pandas
+matplotlib
