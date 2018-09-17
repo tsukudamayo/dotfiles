@@ -1,0 +1,30 @@
+export PATH="/usr/local/bin:$PATH"
+# added by Miniconda3 installer
+export PATH="/Users/user/lib/miniconda3/bin:$PATH"
+
+# nodejs path
+export PATH=$PATH:$HOME/.nodebrew/current/bin
+if [ -f ~/.bashrc ] ; then
+    . ~/.bashrc
+fi
+
+# go
+export PATH="$HOME/.cargo/bin:$PATH"
+export GOPATH="$HOME/go"
+
+# git settings
+source /usr/local/Cellar/git/2.18.0/etc/bash_completion.d/git-prompt.sh
+source /usr/local/Cellar/git/2.18.0/etc/bash_completion.d/git-completion.bash
+GIT_PS1_SHOWDIRTYSTATE=true
+export PS1='\[\033[34m\]\w\[\033[31m\]$(__git_ps1)\[\033[00m\]\$ '
+
+export PATH="usr/local/Cellar/postgresql/10.5/bin/":$PATH
+
+# cuda cudnn
+export CUDA_HOME=/usr/local/cuda
+export PATH="/Developer/NVIDIA/CUDA-9.2/lib":$PATH
+export DYLD_LIBRARY_PATH=/Developer/NVIDIA/CUDA-9.2/lib:$DYLD_LIBRARY_PATH
+export LD_LIBRARY_PATH=$DYLD_LIBRARY_PATH
+export PATH=$DYLD_LIBRARY_PATH:$PATH
+export PATH=$PATH:/usr/local/cuda/bin
+export PATH=/usr/local/cuda/lib:$DYLD_LIBRARY_PATH

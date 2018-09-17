@@ -1,0 +1,24 @@
+import math, os
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from keras.preprocessing.image import ImageDataGenerator
+from keras.applications.inception_v3 import preprocess_input
+from keras.utils.data_utils import GeneratorEnqueuer
+
+
+image_path = './test'
+batch_size = 100
+img_generator = ImageDataGenerator().flow_from_directory(
+    image_path,
+    shuffle=False,
+    batch_size=batch_size,
+)
+n_rounds = math.ceil(img_generator.samples / img_generator.batch_size)
+filenames = img_generator.filenames
+
+img_generator = GeneratorEnqueuer(img_generator)
+img_generator.start()
+img_generator = img_generator.get()

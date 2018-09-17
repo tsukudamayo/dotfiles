@@ -1,0 +1,67 @@
+import requests
+import zipfile
+import math
+
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+from scipy.stats import poisson
+
+# load dataset
+# response = requests.get('https://archive.ics.uci.edu/ml/machine-learning-databases/00320/student.zip')
+# with open('student.zip', 'wb') as f:
+#     f.write(response.content)
+#     f.close()
+
+# zfile = zipfile.ZipFile('student.zip')
+# zfile.extractall('.')
+
+pd.set_option('display.max_columns', None)
+
+# load dataset
+student_math_data = pd.read_csv('student-mat.csv', delimiter=';')
+print('before', student_math_data.shape)
+print(student_math_data.head())
+student_math_data = student_math_data[student_math_data['absences'] < 30]
+print('after', student_math_data.shape)
+print(student_math_data.head())
+
+data = student_math_data['absences']
+print('data absences', data)
+print('data absences', data.shape)
+
+# plot histogram
+plt.hist(data, bins=np.arange(-0.5, 29.5))
+plt.show()
+
+data = pd.Series(data / 2, dtype=int)
+print('divede 2', data)
+plt.hist(data, bins=np.arange(-0.5, 29.5))
+plt.show()
+
+# describe data
+print('describe', data.describe())
+print('median', data.median())
+print('25%', data.quantile(0.25))
+print('75%', data.quantile(0.75))
+print('average: {}'.format(data.mean()))
+print('variance: {}'.format(data.var()))
+print('std : {}'.format(data.std()))
+
+print('distribution')
+print(data.value_counts())
+print('histogram')
+plt.hist(data, bins=np.arange(-0.5, 14.5))
+plt.show()
+
+print('*'*5 + ' what is poisson distribution ' + '*'*5)
+prod1 = [poisson.pmf(i, 3.5) for i in range(35)]
+prod2 = [poisson.pmf(i, 7.7) for i in range(35)]
+prod3 = [poisson.pmf(i, 15.1) for i in range(35)]
+
+plt.plot(range(35), prod1, label='l=3.5')
+plt.plot(range(35), prod2, label='l=7.7')
+plt.plot(range(35), prod3, label='l=15.1')
+
+plt.legend(loc='best')
+plt.show()

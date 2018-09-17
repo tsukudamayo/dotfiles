@@ -1,0 +1,6 @@
+# -*- mode: snippet -*-
+# name: imptf
+# key: imptf
+# --
+import tensorflow as tf
+$0

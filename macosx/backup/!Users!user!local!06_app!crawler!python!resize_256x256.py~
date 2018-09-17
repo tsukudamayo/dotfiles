@@ -1,0 +1,8 @@
+import os
+
+
+_IMAGE_DIR = 'data/'
+
+image_dir = _IMAGE_DIR
+print(os.listdir(image_dir))
+

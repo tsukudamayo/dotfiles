@@ -1,0 +1,6 @@
+import numpy as np
+import cv2
+
+img = cv2.imread('image', img)
+cv2.imshow(0)
+cv2.destroyAllWindows()
