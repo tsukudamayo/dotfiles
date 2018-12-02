@@ -92,6 +92,10 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 
+;; autopep8 settings
+(require 'py-autopep8)
+(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+
 ;; yapf settings
 (require 'py-yapf)
 (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
@@ -102,7 +106,7 @@
 	 '(lambda()
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
-;; goloang
+;; golang
 (add-to-list 'exec-path (expand-file-name "/usr/lib/go-1.10/bin"))
 (add-to-list 'exec-path (expand-file-name "~/go/bin"))
 (require 'go-mode)
@@ -133,7 +137,15 @@
 		    :underline t :foreground "green"
 		    :weight 'bold)
 (custom-set-variables
- '(ac-go-expand-arguments-into-snippets nil))
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-go-expand-arguments-into-snippets nil)
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(package-selected-packages
+   (quote
+    (py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
 
 ;; ;; rust-mode
 ;; (add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
@@ -197,12 +209,4 @@
 
 
 
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (manoj-dark)))
- '(package-selected-packages
-   (quote
-    (go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+

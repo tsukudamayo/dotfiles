@@ -30,6 +30,7 @@ source /etc/default/locale
 echo $LANG
 
 # ibus reboot
+sudo apt-get -y install ibus-mozc
 killall ibus-daemon
 ibus-daemon -d -x &
 
