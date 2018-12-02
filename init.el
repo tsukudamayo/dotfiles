@@ -186,6 +186,15 @@
 ;; (add-hook 'js2-mode-hook 'tern-mode)
 ;; (add-to-list 'company-backends 'company-tern)
 
+;; emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+
+;; shell-mode
+(add-hook 'shell-mode-hook 'company-mode)
+
+;; eshell-mode
+(add-hook 'eshell-mode-hook 'company-mode)
+
 (tool-bar-mode -1)
 
 ;; keyboard macro
@@ -206,7 +215,3 @@
  ;; If there is more than one, they won't work right.
  '(flycheck-error ((((class color)) (:foreground "yellow" :bold t :background "red"))))
  '(flycheck-warning ((((class color)) (:foreground "red" :bold t :background "yellow")))))
-
-
-
-
