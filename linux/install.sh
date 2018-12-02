@@ -48,7 +48,7 @@ sudo apt-get -y install curl
 
 # git install
 sudo apt-get -y install git
-sudo apt-get -y git-flow
+sudo apt-get -y install git-flow
 
 # git settings
 git config --global user.name "tsukudamayo"
