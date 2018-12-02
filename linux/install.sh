@@ -4,6 +4,16 @@ mkdir ~/lib
 mkdir ~/local
 mkdir ~/opt
 mkdir ~/etc
+mkdir ~/vimfiles
+mkdir ~/vimfiles/undo
+mkdir ~/vimfiles/backup
+mkdir ~/vimfiles/swp
+
+cp -r ~/dotfiles/.emacs.d ~/
+cp -r ~/dotfiles/go ~/go
+cp ~/dotfiles/.tern-config ~/
+cp -r ~/dotfiles/.fonts ~/
+cp ~/dotfiles/.vimrc ~/
 
 # apt update
 sudo apt-get update
@@ -31,6 +41,9 @@ sudo apt-get -y install terminator
 
 # install tmux
 sudo apt-get -y install tmux
+
+# curl install
+sudo apt-get -y install curl
 
 # git install
 sudo apt-get -y install git
@@ -71,41 +84,55 @@ sudo make install
 
 # emacs install
 cd ~/opt
-wget http://ftp.gnu.org/gnu/emacs/emacs-25.3.tar.xz
-tar xvf emacs-25.3.tar.xz
+wget http://ftp.gnu.org/gnu/emacs/emacs-26.1.tar.xz
+tar xvf emacs-26.1.tar.xz
 
-cd ~/opt/emacs-25.3
+cd ~/opt/emacs-26.1
 
 ./configure \
 --with-jpeg=no \
 --with-gif=no \
---with-tiff=no
+--with-tiff=no \
+--with-gnutls=no
 
 make
 sudo make install 
 
 cd ~/opt
-rm emacs-25.3.tar.xz
+rm emacs-26.1.tar.xz
 
-## python settings
-#LATEST_VERSION=$(pyenv install -list | grep anaconda3 | tail -n 1 | sed "s/\ //g")
-#git clone https://github.com/yyuu/pyenv.git ~/.pyenv
-#pyenv install ${LATEST_VERSION}
-#pyenv rehash
-#pyenv global ${LATEST_VERSION}
-#conda update conda
+# ffmpeg install
+sudo add-apt-repository ppa:jonathonf/ffmpeg-3
+sudo apt update
+sudo apt install ffmpeg libav-tools x264 x265
+
+# google chrome install
+sudo sh -c 'echo "deb http://dl.google.com/linux/chrome/deb/ stable main" >> /etc/apt/sources.list.d/google.list'
+sudo wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
+sudo apt-get update
+sudo apt-get install google-chrome-stable
+
+# kindle wine install
+sudo dpkg --add-architecture i386
+sudo add-apt-repository -y ppa:wine/wine-builds
+sudo apt update
+sudo apt install winehq-devel
+wineboot
+
+# bazel install
+sudo apt-get -y install openjdk-8-jdk
+echo "deb [arch=amd64] http://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+curl https://bazel.build/bazel-release.pub.gpg | sudo apt-key add -
+sudo apt-get update && sudo apt-get -y install bazel
+sudo apt-get -y upgrade bazel
 
 # python install
-chmod +x etc/Miniconda3-latest-Linux-x86_64.sh
-./etc/Miniconda3-latest-Linux-x86_64.sh
+chmod +x ~/Downloads/Miniconda3-latest-Linux-x86_64.sh
+sh ~/Downloads/Miniconda3-latest-Linux-x86_64.sh
 
 # go install
-wget https://dl.google.com/go/go1.10.linux-amd64.tar.gz
-tar -C ~/opt -xvf ~/go1.10.linux-amd64.tar.gz
-rm ~/go1.10.linux-amd64.tar.gz
-
+sudo snap install --classic go
 #source .bashrc
-
 cp ~/dotfiles/.go ~/
 chmod +x .go/go-get.sh 
 bash $HOME/.go/go-get.sh

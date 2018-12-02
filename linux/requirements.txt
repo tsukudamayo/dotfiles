@@ -1,0 +1,7 @@
+virtualenv
+jedi
+epc
+autopep8
+isort
+yapf
+
