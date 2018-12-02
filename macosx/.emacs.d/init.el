@@ -20,7 +20,7 @@
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
-(add-hook 'after-init-hook 'global-company-mode)
+;; (add-hook 'after-init-hook 'global-company-mode)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -33,6 +33,15 @@
   (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
   (define-key company-active-map [tab] 'company-complete-selection)
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
+
+;; auto-complete
+(require 'auto-complete)
+(require 'auto-complete-config)
+(ac-config-default)
+(setq ac-use-menu-map t)
+(setq ac-use-fuzzy t)
+(setq ac-delay 0)
+(setq ac-auto-show-menu 0.05)
 
 ;; helm
 (require 'helm)
@@ -83,19 +92,42 @@
 ;; ein(emacs ipython notebook)
 (require 'ein)
 
-;; jedi settings
-(require 'jedi-core)
-(setq jedi:complete-on-dot t)
-(setq jedi:use-shortcuts t)
-(add-hook 'python-mode-hook 'jedi:setup)
-(add-to-list 'company-backends 'company-jedi)
+;; ;; company-jedi settings
+;; (require 'jedi-core)
+;; (setq jedi:complete-on-dot t)
+;; (setq jedi:use-shortcuts t)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (add-to-list 'company-backends 'company-jedi)
 
-;; goloang
+;; jedi settings
+(require 'jedi)
+(add-hook 'python-mode-hook 'jedi:setup)
+(setq jedi:complete-on-dot t)
+
+;; yapf settings
+(require 'py-yapf)
+(add-hook 'python-mode-hook 'py-yapf-enable-on-save)
+
+;; isort settings
+(require 'py-isort)
+(add-hook 'python-mode-hook
+	 '(lambda()
+	    (add-hook 'before-save-hook 'py-isort-before-save)))
+
+;; golang
 (add-to-list 'exec-path (expand-file-name "c:/tools/go/bin/"))
 (add-to-list 'exec-path (expand-file-name "c:/Users/USER/lib/go/bin/"))
 (require 'go-mode)
-(require 'company-go)
-(add-hook 'go-mode-hook 'company-mode)
+
+;; ;; company-go
+;; (require 'company-go)
+;; (add-hook 'go-mode-hook 'company-mode)
+
+;; auto-complete-go
+(eval-after-load "go-mode"
+  '(progn
+     (require 'go-autocomplete)))
+
 (add-hook 'go-mode-hook 'flycheck-mode)
 (add-hook 'go-mode-hook (lambda ()
 	(add-hook 'before-save-hook' 'gogmt-before-save)
@@ -160,7 +192,27 @@
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
+;; emacs-lisp-mode
+(add-hook 'emacs-lisp-mode-hook 'company-mode)
+
+;; shell-mode
+(add-hook 'shell-mode-hook 'company-mode)
+
+;; eshell-mode
+(add-hook 'eshell-mode-hook 'company-mode)
+
+;; tool-bar setting
 (tool-bar-mode -1)
+
+;; keyboard macro
+;; python import
+(fset 'importpy
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 105 109 112 111 114 116 return 67108896 67108896 67108896 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
+;; frompy
+(fset 'frompy
+   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
+
+
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highlight flymake error and warnings
@@ -182,4 +234,7 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (helm-c-yasnippet yasnippet sql-indent closql company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+    (go-autocomplete helm-c-yasnippet yasnippet sql-indent closql company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+ '(tool-bar-mode nil))
+
+

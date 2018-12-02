@@ -1,3 +1,0 @@
-(
- (:id "sha1:6d4eb958390599243ba9f5035cb671fa8dd6a93a" :fingerprint "sha1:24:41:12:07:52:a8:07:91:5f:c4:bc:fa:37:d8:a2:85:8b:0b:da:45" :host "elpa.gnu.org:443" :conditions (:unknown-ca :invalid))
-)
