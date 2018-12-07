@@ -131,10 +131,10 @@
 ;; (setq jedi:use-shortcuts t)
 (add-hook 'python-mode-hook 'jedi:setup)
 
-;; virtualenvwapper
-(require 'virtualenvwrapper)
-(require 'auto-virtualenvwrapper)
-(add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
+;; ;; virtualenvwapper
+;; (require 'virtualenvwrapper)
+;; (require 'auto-virtualenvwrapper)
+;; (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
 
 
 ;; golang
