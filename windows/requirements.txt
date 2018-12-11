@@ -1,0 +1,7 @@
+ipython
+jupyter
+jedi
+autopep8
+flake8
+yapf
+isort
