@@ -22,8 +22,14 @@
 (set-keyboard-coding-system 'cp932)
 (set-terminal-coding-system 'cp932)
 
+
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
+
+;; tramp
+(setenv "PATH" (concat "c:/Users/tsukuda/tools/PuTTY" ";" (getenv "PATH")))
+(setq tramp-default-method "plink")
 
 
 ;; company-mode
