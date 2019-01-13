@@ -16,6 +16,9 @@
 ;; encoding
 (prefer-coding-system 'utf-8)
 
+;; backspace using C-h
+(global-set-key "\C-h" 'delete-backward-char)
+
 ;; flycheck
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
@@ -70,8 +73,20 @@
   (setq default-input-method "japanese-skk")
   (require 'skk-study))
 
+;; yasnippet
+(require 'yasnippet)
+(setq yas-snippet-dirs
+      '("~/.emacs.d/mysnippets"
+       yas-installed-snippets-dir))
+(require 'helm-c-yasnippet)
+(setq helm-yas-space-match-any-greedy t)
+(global-set-key (kbd "C-c y") 'helm-yas-complete)
+(push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
+(yas-global-mode 1)
+
 ;; python-mode
-(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/cnn/lib/python3.6/site-packages")
+(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/kaggle/lib/python3.6/site-packages")
+(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/pytorch_book/lib/python3.6/site-packages")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
   (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
   (setq interpreter-mode-alist (cons '("python" . python-mode)
@@ -92,9 +107,9 @@
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 
-;; autopep8 settings
-(require 'py-autopep8)
-(add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+;; ;; autopep8 settings
+;; (require 'py-autopep8)
+;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; yapf settings
 (require 'py-yapf)
@@ -195,6 +210,7 @@
 ;; eshell-mode
 (add-hook 'eshell-mode-hook 'company-mode)
 
+;; toolbar settings
 (tool-bar-mode -1)
 
 ;; keyboard macro
