@@ -129,3 +129,9 @@ cargo install racer --force
 cp Downloads/flycheck-cargo.el ~/.emacs.d/elpa/
 git clone https://github.com/rust-lang/rust.git ~/lib/src/rust
 
+# R
+brew install r
+brew cask install rstudio
+
+# julia
+brew cask install julia
