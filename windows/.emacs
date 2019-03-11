@@ -22,9 +22,25 @@
 (set-keyboard-coding-system 'cp932)
 (set-terminal-coding-system 'cp932)
 
+;; backspace using C-h
+(keyboard-translate ?\C-h ?\C-?)
+
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+
+;; tramp
+(setenv "PATH" (concat "c:/Users/tsukuda/tools/PuTTY" ";" (getenv "PATH")))
+(setq tramp-default-method "plink")
+
+;; ;; ssh-mode(shell) TODO
+;; (ssh-program "c:/Users/tsukuda/tools/PuTTY")
+;; (tramp-default-method "c:/Users/tsukuda/tools/PuTTY")
+;; (add-hook 'ssh-mode-hook
+;; 	  (lambda ()
+;; 	    (setq ssh-directory-tracking-mode t)
+;; 	    (shell-dirtrack-mode t)
+;; 	    (setq dirtrackp nil)))
 
 ;; company-mode
 (require 'company)
@@ -95,7 +111,8 @@
 
 
 ;; python-mode
-(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/anomaly_detection/Lib/site-packages")
+(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/ml/Lib/site-packages")
+(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/jpnlp32/Lib/site-packages")
 ;; (setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/crawler/Lib/site-packages")
 ;; (setenv "PYTHONPATH" "c:/Users/tsukuda/lib/opencv/modules/python/src2")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -131,10 +148,10 @@
 ;; (setq jedi:use-shortcuts t)
 (add-hook 'python-mode-hook 'jedi:setup)
 
-;; virtualenvwapper
-(require 'virtualenvwrapper)
-(require 'auto-virtualenvwrapper)
-(add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
+;; ;; virtualenvwapper
+;; (require 'virtualenvwrapper)
+;; (require 'auto-virtualenvwrapper)
+;; (add-hook 'python-mode-hook #'auto-virtualenvwrapper-activate)
 
 
 ;; golang
@@ -179,22 +196,24 @@
 ;;   (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
 
 
-;; ;; c, c++
-;; (require 'irony)
-;; (add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'company-mode)
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c++-mode-hook 'company-mode)
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-;; (add-to-list 'company-backends 'company-irony)
-;; ;; (setq irony-lang-compile-option-alist
-;; ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
-;; ;;         (c-mode . ("c"))))
-;; (defun irony--loang-compile-option ()
-;;   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
-;;     (append '("-x") it)))
-;; (setq w32-pipe-read-delay 0)
+;; c, c++
+(require 'irony)
+(add-hook 'c-mode-hook (lambda () (auto-complete-mode -1)))
+(add-hook 'c++-mode-hook (lambda () (auto-complete-mode -1)))
+(add-to-list 'exec-path "C:/Users/tsukuda/tools/LLVM/bin")
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony)
+;; (setq irony-lang-compile-option-alist
+;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
+;;         (c-mode . ("c"))))
+(defun irony--loang-compile-option ()
+  (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
+    (append '("-x") it)))
+(setq w32-pipe-read-delay 0)
 
 ;; ;; c#
 ;; (add-hook 'csharp-mode-hook 'omnisharp-mode)
@@ -229,9 +248,22 @@
 
   (when (require 'flycheck)
      (flycheck-add-mode 'javascript-eslint 'js2-mode))
-)
+  )
 
+;; typescript
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(require 'tide)
+(add-hook 'typescript-mode-hook
+	  (lambda ()
+	    (tide-setup)
+	    (flycheck-mode t)
+	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	    (eldoc-mode t)
+	    (company-mode-on)))
+(setq typescript-indent-level 2)
 
+;; toolbar settings
 (tool-bar-mode -1)
 
 
@@ -266,5 +298,5 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (tern-auto-complete company-tern py-autopep8 py-yapf py-isort yasnippet-snippets go-autocomplete company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
+    (tide typescript-mode irony ssh tern-auto-complete company-tern py-autopep8 py-yapf py-isort yasnippet-snippets go-autocomplete company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
  '(tool-bar-mode nil))
