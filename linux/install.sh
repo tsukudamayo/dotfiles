@@ -161,3 +161,8 @@ sudo add-apt-repository \
 sudo apt-get update
 sudo apt-get install -y docker-ce
 
+# node.js install
+sudo apt install -y nodejs npm
+sudo npm install n -g
+sudo n stable
+
