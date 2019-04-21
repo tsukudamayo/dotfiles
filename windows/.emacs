@@ -23,6 +23,10 @@
 (set-terminal-coding-system 'cp932)
 
 
+;; indent
+(setq indent-tabs-mode nil
+      js-indent-level 2)
+
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
