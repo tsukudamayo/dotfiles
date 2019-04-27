@@ -22,14 +22,11 @@
 (set-keyboard-coding-system 'cp932)
 (set-terminal-coding-system 'cp932)
 
-
-;; indent
-(setq indent-tabs-mode nil
-      js-indent-level 2)
+;; backspace using C-h
+(global-set-key "\C-h" 'delete-backward-char)
 
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
-
 
 ;; tramp
 (setenv "PATH" (concat "c:/Users/tsukuda/tools/PuTTY" ";" (getenv "PATH")))
@@ -238,24 +235,10 @@
 
 
   (when (require 'flycheck)
-     (flycheck-add-mode 'javascript-eslint 'js2-mode)))
+     (flycheck-add-mode 'javascript-eslint 'js2-mode))
+)
 
-;; web-mode
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;; vue-mode
-(require 'vue-mode)
-(require 'flycheck)
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-(eval-after-load 'vue-mode
-  '(add-hook 'vue-mode-hook #'add-node-modules-path))
-(flycheck-add-mode 'javascript-eslint 'vue-mode)
-(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
-(flycheck-add-mode 'javascript-eslint 'css-mode)
-(add-hook 'vue-mode-hook 'flycheck-mode)
-
-;; tool-bar setting
 (tool-bar-mode -1)
 
 
@@ -265,18 +248,12 @@
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
-(add-hook 'emacs-lisp-mode-hook
-	  (lambda () (auto-complete-mode -1)))
 
 ;; shell-mode
 (add-hook 'shell-mode-hook 'company-mode)
-(add-hook 'shell-mode-hook
-	  (lambda () (auto-complete-mode -1)))
 
 ;; eshell-mode
 (add-hook 'eshell-mode-hook 'company-mode)
-(add-hook 'eshell-mode-hook
-	  (lambda () (auto-complete-mode -1)))
 
 
 (custom-set-faces
