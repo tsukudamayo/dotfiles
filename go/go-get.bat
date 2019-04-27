@@ -24,3 +24,4 @@ go get -u github.com\tsenart\vegeta
 go get -u github.com\derekparker\delve\cmd\dlv 
 
 go get -u github.com\gorilla\mux
+go get -u github.com\gorilla\handlers
