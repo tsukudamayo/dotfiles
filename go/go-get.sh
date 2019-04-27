@@ -26,3 +26,4 @@ go get -u github.com/tsenart/vegeta
 go get github.com/derekparker/delve/cmd/dlv 
 
 go get github.com/PuerkitoBio/goquery 
+go get -u github.com/gorilla/mux
