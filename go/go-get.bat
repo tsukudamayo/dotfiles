@@ -6,19 +6,21 @@ mkdir %GOPATH%\src
 go get github.com\motemen\ghq
 git config --global ghq.root %GOPATH%\src
 
-go get github.com\motemen\gore
-go get github.\nsf\gocode
-go get github.com\k0kubun\pp
-go get golang.org\x\tools\cmd\godoc
-go get github.com\golang\lint\golint
-go get golang.org\x\tools\cmd\gorename
-go get golang.org\x\tools\cmd\guru
-go get github.com\nsf\gocode
-go get github.com\rogpeppe\godef
-go get github.com\jstemmer\gotags
-go get github.com\kisielk\errcheck
-go get github.com/julienschmidt/httprouter
-go get golang.org/x/net/http2
+go get -u github.com\motemen\gore
+go get -u github.\nsf\gocode
+go get -u github.com\k0kubun\pp
+go get -u golang.org\x\tools\cmd\godoc
+go get -u github.com\golang\lint\golint
+go get -u golang.org\x\tools\cmd\gorename
+go get -u golang.org\x\tools\cmd\guru
+go get -u github.com\nsf\gocode
+go get -u github.com\rogpeppe\godef
+go get -u github.com\jstemmer\gotags
+go get -u github.com\kisielk\errcheck
+go get -u github.com\julienschmidt\httprouter
+go get -u golang.org\x\net\http2
 
 go get -u github.com\tsenart\vegeta
-go get github.com\derekparker\delve\cmd\dlv 
+go get -u github.com\derekparker\delve\cmd\dlv 
+
+go get -u github.com\gorilla\mux
