@@ -1,7 +1,7 @@
-mkdir %HOMEPATH%\.vimfiles
-mkdir %HOMEPATH%\.vimfiles\undo
-mkdir %HOMEPATH%\.vimfiles\backup
-mkdir %HOMEPATH%\.vimfiles\swp
+mkdir %HOMEPATH%\vimfiles
+mkdir %HOMEPATH%\vimfiles\undo
+mkdir %HOMEPATH%\vimfiles\backup
+mkdir %HOMEPATH%\vimfiles\swp
 
 mkdir %HOMEPATH%\AppData\Roaming\.emacs.d
 mkdir %HOMEPATH%\AppData\Roaming\.emacs.d\backup
