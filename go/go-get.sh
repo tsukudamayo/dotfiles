@@ -30,3 +30,5 @@ go get -u github.com/gorilla/mux
 go get -u github.com/gorilla/handlers
 go get -u github.com/gorilla/schema
 go get -u github.com/gorilla/sessions
+
+go get -u gopkg.in/boj/redistore.v1
