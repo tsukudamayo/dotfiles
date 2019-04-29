@@ -53,5 +53,8 @@ set PATH=%HOMEPATH%\tools\kubectl;%PATH%
 :node
 set PATH=%HOMEPATH%\AppData\Roaming\npm\node_modules;%PATH%
 
+:redis
+set PATH=%HOMEPATH%\tools\Redis;%PATH%
+
 :VisualStudio
 %HOMEPATH%\tools\"Microsoft Visual Studio"\2017\Community\VC\Auxiliary\Build\vcvarsall amd64
