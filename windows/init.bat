@@ -56,5 +56,11 @@ set PATH=%HOMEPATH%\AppData\Roaming\npm\node_modules;%PATH%
 :redis
 set PATH=%HOMEPATH%\tools\Redis;%PATH%
 
+:hugo
+set PATH=%HOMEPATH%\tools\Hugo\bin;%PATH%
+
+:R
+set PATH=%HOMEPATH%\tools\R-3.6.0\bin;%PATH%
+
 :VisualStudio
 %HOMEPATH%\tools\"Microsoft Visual Studio"\2017\Community\VC\Auxiliary\Build\vcvarsall amd64
