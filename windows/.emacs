@@ -239,6 +239,55 @@
 )
 
 
+;; R
+(require 'ess-site)
+(add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
+(autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
+(autoload 'R "ess-site" "start R" t)
+(setq ess-loaded-p nil)
+(defun ess-load-hook (&optional from-iess-p)
+  (setq ess-indent-level 2)
+  (setq ess-arg-function-offset-new-line (list ess-indent-level))
+  (make-variable-buffer-local 'comment-add)
+  (setq comment-add 0)
+  (when (not ess-loaded-p)
+    (setq ess-use-auto-complete t)
+    (setq ess-use-ido nil)
+    (setq ess-eldoc-show-on-symbol t)
+    (setq ess-ask-for-ess-directory nil)
+    (setq ess-fancy-comments nil)
+    (setq ess-loaded-p t)
+    (unless from-iess-p
+
+      (when (one-window-p)
+        (split-window-below)
+        (let ((buf (current-buffer)))
+          (ess-switch-to-ESS nil)
+          (switch-to-buffer-other-window buf)))
+      (when (and ess-use-auto-complete (require 'auto-complete nil t))
+        (add-to-list 'ac-modes 'ess-mode)
+        (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
+                '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
+        (setq ac-sources '(ac-source-acr
+                           ac-source-R
+                           ac-source-filename
+                           ac-source-yasnippet)))))
+
+  (if from-iess-p
+      (if (> (length ess-process-name-list) 0)
+          (when (one-window-p)
+            (split-window-horizontally)
+            (other-window 1)))
+    (ess-force-buffer-current "Process to load into: ")))
+
+(add-hook 'R-mode-hook 'ess-load-hook)
+
+(defun ess-pre-run-hooks ()
+  (ess-load-hook t))
+(add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
+;; ;; auto-complete-acr
+;; (require 'auto-complete-acr)
+
 (tool-bar-mode -1)
 
 
