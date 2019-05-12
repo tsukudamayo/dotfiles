@@ -145,8 +145,8 @@
 
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "c:/Users/tsukuda/tools/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "c:/Users/tsukuda/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "c:/Users/USER/tools/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "c:/Users/USER/go/bin/"))
 (require 'go-mode)
 
 ;; ;; golang company-go
@@ -290,7 +290,8 @@
 (require 'ess-R-object-popup)
 (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
-;; julia
+;; ;; julia
+;; (setq inferior-julia-program-name "c:/Users/USER/tools/Julia-1.1.0/bin/julia.exe")
 
 (tool-bar-mode -1)
 
@@ -301,18 +302,18 @@
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
-(add-hook 'emacs-lisp-mode-hook ()
-	  (lambda auto-complete-mode -1))
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; shell-mode
 (add-hook 'shell-mode-hook 'company-mode)
-(add-hook 'shell-mode-hook ()
-	  (lambda auto-complete-mode -1))
+(add-hook 'shell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; eshell-mode
 (add-hook 'eshell-mode-hook 'company-mode)
-(add-hook 'eshell-mode-hook ()
-	  (lambda auto-complete-mode -1))
+(add-hook 'eshell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
