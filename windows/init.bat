@@ -61,6 +61,10 @@ set PATH=%HOMEPATH%\tools\Hugo\bin;%PATH%
 
 :R
 set PATH=%HOMEPATH%\tools\R-3.6.0\bin;%PATH%
+set PATH=%HOMEPATH%\tools\R-3.6.0\bin\x64;%PATH%
+
+:julia
+set PATH=%HOMEPATH%\tools\Julia-1.1.0\bin;%PATH%
 
 :VisualStudio
 %HOMEPATH%\tools\"Microsoft Visual Studio"\2017\Community\VC\Auxiliary\Build\vcvarsall amd64
