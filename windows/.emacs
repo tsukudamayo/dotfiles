@@ -285,8 +285,10 @@
 (defun ess-pre-run-hooks ()
   (ess-load-hook t))
 (add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
-;; ;; auto-complete-acr
-;; (require 'auto-complete-acr)
+;; auto-complete-acr
+(require 'auto-complete-acr)
+(require 'ess-R-object-popup)
+(define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
 (tool-bar-mode -1)
 
@@ -322,5 +324,5 @@
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (tern-auto-complete company-tern py-autopep8 py-yapf py-isort yasnippet-snippets go-autocomplete company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
+    (ess-R-data-view tern-auto-complete company-tern py-autopep8 py-yapf py-isort yasnippet-snippets go-autocomplete company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
  '(tool-bar-mode nil))
