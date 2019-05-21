@@ -293,6 +293,10 @@
 ;; ;; julia
 ;; (setq inferior-julia-program-name "c:/Users/USER/tools/Julia-1.1.0/bin/julia.exe")
 
+;; web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
+
 (tool-bar-mode -1)
 
 
