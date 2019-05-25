@@ -219,6 +219,7 @@
   (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
 
   (add-hook 'js2-mode-hook 'company-mode)
+  (setq js-indent-level 2)
 
   (setq company-tern-property-marker "")
   (defun company-tern-depth (candidate)
