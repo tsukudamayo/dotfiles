@@ -29,3 +29,4 @@ go get -u github.com\gorilla\schema
 go get -u github.com\gorilla\sessions
 
 go get -u gopkg.in\boj\redistore.v1
+go get -u github.com\labstack\echo
