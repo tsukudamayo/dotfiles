@@ -239,6 +239,35 @@
 )
 
 
+;; typescript
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(require 'tide)
+(add-hook 'typescript-mode-hook
+	  (lambda ()
+	    (tide-setup)
+	    (flycheck-mode t)
+	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	    (eldoc-mode t)
+	    (company-mode-on)))
+(setq typescript-indent-level 2)
+
+;; web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+;; vue-mode
+(require 'vue-mode)
+(require 'flycheck)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+(eval-after-load 'vue-mode
+  '(add-hook 'vue-mode-hook #'add-node-modules-path))
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+(flycheck-add-mode 'javascript-eslint 'css-mode)
+(add-hook 'vue-mode-hook 'flycheck-mode)
+
+
 ;; R
 (require 'ess-site)
 (add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
