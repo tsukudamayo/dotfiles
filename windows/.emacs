@@ -195,6 +195,10 @@
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-to-list 'company-backends 'company-irony)
+(add-hook 'c-mode-hook
+	  (lambda () (auto-complete-mode -1)))
+(add-hook 'c++-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 ;; (setq irony-lang-compile-option-alist
 ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
 ;;         (c-mode . ("c"))))
