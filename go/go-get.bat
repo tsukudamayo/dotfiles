@@ -31,5 +31,6 @@ go get -u github.com\gorilla\sessions
 go get -u gopkg.in\boj\redistore.v1
 go get -u github.com\labstack\echo
 
+go-get -u google.golang.org\grpc
 go-get -u golang.org\x\sys\unix
 go get -u github.com\golang\protobuf\protoc-gen-go
