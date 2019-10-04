@@ -35,3 +35,4 @@ go get -u github.com\labstack\echo\middleware
 go-get -u google.golang.org\grpc
 go-get -u golang.org\x\sys\unix
 go get -u github.com\golang\protobuf\protoc-gen-go
+go get -u google.golang.org\grpc
