@@ -203,12 +203,18 @@
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; shell-mode
 (add-hook 'shell-mode-hook 'company-mode)
+(add-hook 'shell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; eshell-mode
 (add-hook 'eshell-mode-hook 'company-mode)
+(add-hook 'eshell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; toolbar settings
 (tool-bar-mode -1)
