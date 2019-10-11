@@ -50,6 +50,15 @@
 (require 'helm-config)
 (helm-mode 1)
 
+;; ;; ivy-mode
+counsel: M-x
+(require 'swiper-helm)
+(ivy-mode 1)
+
+;; M-x dumb-jump-go
+(require 'dumb-jump)
+(setq dumb-jump-mode t)
+
 ;; ;; projectile
 ;; (require 'projectile)
 ;; (projectile-global-mode)
@@ -192,14 +201,82 @@
 ;;     (append '("-x") it)))
 ;; (setq w32-pipe-read-delay 0)
 
-;; ;; js
-;; (setq company-tern-property-marker "")
-;; (defun company-tern-depth (candidate)
-;;   "Return depth attribute for CANDIDATE. 'nil' entries are treated as 0."
-;;   (let ((depth (get-text-property 0 'depth candidate)))
-;;     (if (eq depth nil) 0 depth)))
-;; (add-hook 'js2-mode-hook 'tern-mode)
-;; (add-to-list 'company-backends 'company-tern)
+;; js
+(when (require 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.es$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.es6$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+
+  (add-hook 'js2-mode-hook 'company-mode)
+  (setq js-indent-level 2)
+
+  (setq company-tern-property-marker "")
+  (defun company-tern-depth (candidate)
+    "Return depth attribute for CANDIDATE. 'nil' entries are treated as 0."
+    (let ((depth (get-text-property 0 'depth candidate)))
+      (if (eq depth nil) 0 depth)))
+
+  (add-hook 'js2-mode-hook
+            '(lambda ()
+               (setq tern-command '("tern" "--no-port-file"))
+               (tern-mode t)))
+
+  (add-to-list 'company-backends 'company-tern)
+
+
+  (when (require 'flycheck)
+     (flycheck-add-mode 'javascript-eslint 'js2-mode))
+)
+
+
+;; typescript
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(require 'tide)
+(add-hook 'typescript-mode-hook
+	  (lambda ()
+	    (tide-setup)
+	    (flycheck-mode t)
+	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	    (eldoc-mode t)
+	    (company-mode-on)))
+(setq typescript-indent-level 2)
+
+;; web-mode
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
+
+;; vue-mode
+(require 'vue-mode)
+(require 'flycheck)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+(eval-after-load 'vue-mode
+  '(add-hook 'vue-mode-hook #'add-node-modules-path))
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+(flycheck-add-mode 'javascript-eslint 'css-mode)
+(add-hook 'vue-mode-hook 'flycheck-mode)
+
+;; rjsx-mode
+(require 'rjsx-mode)
+(add-to-list 'auto-mode-alist '(".*\\.js\\'" . rjsx-mode))
+(add-hook 'rjsx-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq js-indent-level 2)
+            (setq js2-strict-missing-semi-warning nil)))
+
+;; eslint-auto
+(defun eslint-fix-file ()
+  (interactive)
+  (call-process-shell-command
+   (mapconcat 'shell-quote-argument
+              (list "eslint" "--fix" (buffer-file-name)) " ") nil 0))
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
