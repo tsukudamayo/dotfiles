@@ -63,6 +63,18 @@
 (require 'helm-config)
 (helm-mode 1)
 
+;; ;; ivy-mode
+;; counsel: M-x
+;; swiper: M-x swiper
+;; find-file: C-x C-f
+(require 'ivy)
+(require 'swiper-helm)
+(ivy-mode 1)
+
+
+;; M-x dumb-jump-go
+(require 'dumb-jump)
+(setq dumb-jump-mode t)
 
 ;; yasnippet
 (require 'yasnippet)
@@ -272,6 +284,25 @@
 (flycheck-add-mode 'javascript-eslint 'css-mode)
 (add-hook 'vue-mode-hook 'flycheck-mode)
 
+;; rjsx-mode
+(require 'rjsx-mode)
+(add-to-list 'auto-mode-alist '(".*\\.js\\'" . rjsx-mode))
+(add-hook 'rjsx-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq js-indent-level 2)
+            (setq js2-strict-missing-semi-warning nil)))
+
+;; eslint-auto
+(defun eslint-fix-file ()
+  (interactive)
+  (call-process-shell-command
+   (mapconcat 'shell-quote-argument
+              (list "eslint" "--fix" (buffer-file-name)) " ") nil 0))
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
 
 ;; R
 (require 'ess-site)
