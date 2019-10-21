@@ -1,6 +1,36 @@
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(setq package-archives
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
+
+(defun require-package (package &optional min-version no-refresh)
+    "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+    (if (package-installed-p package min-version)
+	t
+      (if (or (assoc package package-archive-contents) no-refresh)
+	  (if (boundp 'package-selected-packages)
+	      ;; Record this as a package the user installed explicitly
+	      (package-install package nil)
+	    (package-install package))
+	(progn
+	  (package-refresh-contents)
+	  (require-package package min-version t)))))
+
+(defun maybe-require-package (package &optional min-version no-refresh)
+    "Try to install PACKAGE, and return non-nil if successful.
+In the event of failure, return nil and print a warning message.
+Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
+available package lists will not be re-downloaded in order to
+locate PACKAGE."
+    (condition-case err
+	(require-package package min-version no-refresh)
+      (error
+       (message "Couldn't install optional package `%s': %S" package err)
+             nil)))
 
 ;; settings load-path
 (add-to-list 'load-path "~/.emacs.d/elisp")
@@ -24,6 +54,7 @@
 
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
+(require-package 'company)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -38,6 +69,7 @@
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
 ;; auto-complete
+(require-package 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
 (setq ac-use-menu-map t)
@@ -46,16 +78,19 @@
 (setq ac-auto-show-menu 0.05)
 
 ;; helm
+(require-package 'helm)
 (require 'helm)
 (require 'helm-config)
 (helm-mode 1)
 
 ;; ;; ivy-mode
-counsel: M-x
+;; counsel: M-x
+(require-package 'swiper-helm)
 (require 'swiper-helm)
 (ivy-mode 1)
 
 ;; M-x dumb-jump-go
+(require-package 'dumb-jump)
 (require 'dumb-jump)
 (setq dumb-jump-mode t)
 
@@ -73,16 +108,20 @@ counsel: M-x
 ;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
 ;; markdown
+(require-package 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; ddskk settings
+(require-package 'ddskk)
 (when (require 'skk nil t)
   (global-set-key (kbd "C-x C-j") 'skk-auto-fill-mode)
   (setq default-input-method "japanese-skk")
   (require 'skk-study))
 
 ;; yasnippet
+(require-package 'yasnippet)
+(require-package 'helm-c-yasnippet)
 (require 'yasnippet)
 (setq yas-snippet-dirs
       '("~/.emacs.d/mysnippets"
@@ -94,6 +133,7 @@ counsel: M-x
 (yas-global-mode 1)
 
 ;; python-mode
+(require-package 'python-mode)
 (setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/kaggle/lib/python3.6/site-packages")
 (setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/pytorch_book/lib/python3.6/site-packages")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -102,6 +142,7 @@ counsel: M-x
 				     interpreter-mode-alist)))
 
 ;; ein(emacs ipython notebook)
+(require-package 'ein)
 (require 'ein)
 
 ;; ;; company-jedi settings
@@ -112,6 +153,7 @@ counsel: M-x
 ;; (add-to-list 'company-backends 'company-jedi)
 
 ;; jedi settings
+(require-package 'jedi)
 (require 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
@@ -121,10 +163,12 @@ counsel: M-x
 ;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
 
 ;; yapf settings
+(require-package 'py-yapf)
 (require 'py-yapf)
 (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
 
 ;; isort settings
+(require-package 'py-isort)
 (require 'py-isort)
 (add-hook 'python-mode-hook
 	 '(lambda()
@@ -133,7 +177,9 @@ counsel: M-x
 ;; golang
 (add-to-list 'exec-path (expand-file-name "/usr/lib/go-1.10/bin"))
 (add-to-list 'exec-path (expand-file-name "~/go/bin"))
+(require-package 'go-mode)
 (require 'go-mode)
+(require-package 'go-autocomplete)
 
 ;; ;; company-go
 ;; (require 'company-go)
@@ -155,6 +201,7 @@ counsel: M-x
 	(setq tab-width 4)))
 
 ;; go-eldoc
+(require-package 'go-eldoc)
 (require 'go-eldoc)
 (add-hook 'go-mode-hook 'go-eldoc-setup)
 (set-face-attribute 'eldoc-highlight-function-argument nil
@@ -202,6 +249,7 @@ counsel: M-x
 ;; (setq w32-pipe-read-delay 0)
 
 ;; js
+(require-package 'js2-mode)
 (when (require 'js2-mode)
   (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
   (add-to-list 'auto-mode-alist '("\\.es$" . js2-mode))
@@ -231,8 +279,10 @@ counsel: M-x
 
 
 ;; typescript
+(require-package 'typescript-mode)
 (require 'typescript-mode)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(require-package 'tide)
 (require 'tide)
 (add-hook 'typescript-mode-hook
 	  (lambda ()
@@ -244,10 +294,12 @@ counsel: M-x
 (setq typescript-indent-level 2)
 
 ;; web-mode
+(require-package 'web-mode)
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
 ;; vue-mode
+(require-package 'vue-mode)
 (require 'vue-mode)
 (require 'flycheck)
 (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
@@ -259,6 +311,7 @@ counsel: M-x
 (add-hook 'vue-mode-hook 'flycheck-mode)
 
 ;; rjsx-mode
+(require-package 'rjsx-mode)
 (require 'rjsx-mode)
 (add-to-list 'auto-mode-alist '(".*\\.js\\'" . rjsx-mode))
 (add-hook 'rjsx-mode-hook
