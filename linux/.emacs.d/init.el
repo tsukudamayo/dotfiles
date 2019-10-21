@@ -50,11 +50,12 @@ locate PACKAGE."
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;; flycheck
+(require-package 'company)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
-(require-package 'company)
+(require-package 'flycheck)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
