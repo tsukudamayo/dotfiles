@@ -45,7 +45,8 @@ RUN TORCH_CUDA_ARCH_LIST="3.5 5.2 6.0 6.1 7.0+PTX" TORCH_NVCC_FLAGS="-Xfatbin -c
 
 RUN git clone https://github.com/pytorch/vision.git && cd vision && pip install -v .
 
-RUN pip install virtualenv janome mecab-python3 torchtext spacy
+RUN pip install virtualenv janome mecab-python3 torchtext spacy \
+    && conda install -c anaconda swig
 
 WORKDIR /workspace
 RUN chmod -R a+w .
