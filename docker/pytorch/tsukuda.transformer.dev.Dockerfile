@@ -22,6 +22,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
      && apt-get clean \
      && rm -rf /var/lib/apt/lists/*
 
+RUN git clone https://github.com/tsukudamayo/dotfiles.git \
+    && cp -r ./dotfiles/linux/.emacs.d ~/ \
+    && cp -r ./dotfiles/.fonts ~/
 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
      chmod +x ~/miniconda.sh && \
@@ -32,11 +35,6 @@ RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-la
      /opt/conda/bin/conda clean -ya
 ENV PATH /opt/conda/bin:$PATH
 # This must be done before pip so that requirements.txt is available
-WORKDIR ~
-RUN git clone https://github.com/tsukudamayo/dotfiles.git \
-    && cp -r dotfiles/linux/.emacs.d ./ \
-    && cp -r dotfiles/.fonts ./
-
 WORKDIR /opt/pytorch
 COPY . .
 
