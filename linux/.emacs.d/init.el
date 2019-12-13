@@ -232,22 +232,23 @@ locate PACKAGE."
 ;; (unless (getenv "RUST_SRC_PATH")
 ;;   (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
 
-;; ;; c, c++
-;; (require 'irony)
-;; ;; (add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
-;; (add-hook 'c-mode-hook 'irony-mode)
-;; (add-hook 'c-mode-hook 'company-mode)
-;; (add-hook 'c++-mode-hook 'irony-mode)
-;; (add-hook 'c++-mode-hook 'company-mode)
-;; (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
-;; (add-to-list 'company-backends 'company-irony)
-;; ;; (setq irony-lang-compile-option-alist
-;; ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
-;; ;;         (c-mode . ("c"))))
-;; (defun irony--loang-compile-option ()
-;;   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
-;;     (append '("-x") it)))
-;; (setq w32-pipe-read-delay 0)
+;; c, c++
+(require-package 'irony)
+(require 'irony)
+;; (add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
+(add-hook 'c-mode-hook 'irony-mode)
+(add-hook 'c-mode-hook 'company-mode)
+(add-hook 'c++-mode-hook 'irony-mode)
+(add-hook 'c++-mode-hook 'company-mode)
+(add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(add-to-list 'company-backends 'company-irony)
+;; (setq irony-lang-compile-option-alist
+;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
+;;         (c-mode . ("c"))))
+(defun irony--loang-compile-option ()
+  (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
+    (append '("-x") it)))
+(setq w32-pipe-read-delay 0)
 
 ;; js
 (require-package 'js2-mode)
