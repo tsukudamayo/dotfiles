@@ -241,6 +241,8 @@ locate PACKAGE."
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(require-package 'company-irony)
+(require 'irony)
 (add-to-list 'company-backends 'company-irony)
 ;; (setq irony-lang-compile-option-alist
 ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
@@ -249,6 +251,8 @@ locate PACKAGE."
   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
     (append '("-x") it)))
 (setq w32-pipe-read-delay 0)
+(add-hook 'irony-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; js
 (require-package 'js2-mode)
