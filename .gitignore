@@ -10,3 +10,4 @@ macosx/.emacs.d/network-security.data
 macosx/.emacs.d/request
 macosx/.emacs.d/irony
 macosx/.emacs.d/eshell
+.DS_Store

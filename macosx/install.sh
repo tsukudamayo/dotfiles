@@ -86,16 +86,10 @@ brew install cmake
 # llvm
 brew install llvm
 
-# protobuf(object_detection)
-brew install protoc
-
-# opencv
-brew install opencv3 --with-contrib --with-python3 --without-python
-ln -s /usr/local/Cellar/opencv/3.4.2/lib/python3.7/site-packages/cv2.cpython-37m-darwin.so ~/lib/miniconda3/envs/ssd/lib/python3.6/site-packages
-
 # miniconda(python)
-chmod +x Miniconda3-latest-MacOSX-x86_64.sh
-./Downloads/Miniconda3-latest-MacOSX-x86_64.sh
+wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
+bash ~/miniconda.sh -b -p $HOME/miniconda
+conda init
 
 # leveldb(for neo-python)
 brew install leveldb
@@ -119,7 +113,9 @@ nodebrew list | awk -F'\t' '{print $1}' | xargs nodebrew use
 npm install -g tern
 
 # common lisp
-brew install clisp
+brew install rowsell
+ros setup
+ros install clisp
 
 # rust
 curl https://sh.rustup.rs -sSf | sh
