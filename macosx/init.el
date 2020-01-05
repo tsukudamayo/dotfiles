@@ -1,35 +1,61 @@
 (require 'package)
-(add-to-list 'package-archives '("melpa" . "http://melpa.org/packages/") t)
+(setq package-archives
+      '(("gnu" . "https://elpa.gnu.org/packages/")
+	("melpa" . "https://melpa.org/packages/")
+	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
+
+(defun require-package (package &optional min-version no-refresh)
+    "Install given PACKAGE, optionally requiring MIN-VERSION.
+If NO-REFRESH is non-nil, the available package lists will not be
+re-downloaded in order to locate PACKAGE."
+    (if (package-installed-p package min-version)
+	t
+      (if (or (assoc package package-archive-contents) no-refresh)
+	  (if (boundp 'package-selected-packages)
+	      ;; Record this as a package the user installed explicitly
+	      (package-install package nil)
+	    (package-install package))
+	(progn
+	  (package-refresh-contents)
+	  (require-package package min-version t)))))
+
+(defun maybe-require-package (package &optional min-version no-refresh)
+    "Try to install PACKAGE, and return non-nil if successful.
+In the event of failure, return nil and print a warning message.
+Optionally require MIN-VERSION.  If NO-REFRESH is non-nil, the
+available package lists will not be re-downloaded in order to
+locate PACKAGE."
+    (condition-case err
+	(require-package package min-version no-refresh)
+      (error
+       (message "Couldn't install optional package `%s': %S" package err)
+             nil)))
 
 ;; settings load-path
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
-
-;; auto-install
-(require 'auto-install)
-(setq auto-install-directory "~/.emacs.d/elpa")
-(auto-install-update-emacswiki-package-name t)
-(auto-install-compatibility-setup)
 
 ;; settings backup directory
 (setq backup-directory-alist
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
         backup-directory-alist))
 (setq auto-save-file-name-transforms
-      `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
-
-;; using backspace C-h
-(define-key global-map "\C-h" 'delete-backward-char)
+  `((".*", (expand-file-name "~/.emacs.d/backup/") t)))
 
 ;; encoding
 (prefer-coding-system 'utf-8)
 
+;; backspace using C-h
+(global-set-key "\C-h" 'delete-backward-char)
+
 ;; flycheck
+(require-package 'company)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
+(require-package 'flycheck)
 (require 'company)
 (with-eval-after-load 'company
   (setq company-transformers '(company-sort-by-backend-importance))
@@ -44,7 +70,7 @@
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
 ;; auto-complete
-(require 'auto-complete)
+(require-package 'auto-complete)
 (require 'auto-complete-config)
 (ac-config-default)
 (setq ac-use-menu-map t)
@@ -53,9 +79,21 @@
 (setq ac-auto-show-menu 0.05)
 
 ;; helm
+(require-package 'helm)
 (require 'helm)
 (require 'helm-config)
 (helm-mode 1)
+
+;; ;; ivy-mode
+;; counsel: M-x
+(require-package 'swiper-helm)
+(require 'swiper-helm)
+(ivy-mode 1)
+
+;; M-x dumb-jump-go
+(require-package 'dumb-jump)
+(require 'dumb-jump)
+(setq dumb-jump-mode t)
 
 ;; ;; projectile
 ;; (require 'projectile)
@@ -65,22 +103,32 @@
 ;; ;; (helm-projectile-on)
 
 ;; ;; slime
+(load (expand-file-name "~/.roswell/helper.el"))
 ;; (setq inferior-lisp-program "clisp")
 ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
 ;; (require 'slime)
 ;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
+;; ;; geiser
+(require-package 'geiser)
+(load-file "~/.emacs.d/elpa/geiser-20200103.1329/geiser.el")
+(setq geiser-active-implementations '(racket))
+
 ;; markdown
+(require-package 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
 
 ;; ddskk settings
+(require-package 'ddskk)
 (when (require 'skk nil t)
   (global-set-key (kbd "C-x C-j") 'skk-auto-fill-mode)
   (setq default-input-method "japanese-skk")
   (require 'skk-study))
 
 ;; yasnippet
+(require-package 'yasnippet)
+(require-package 'helm-c-yasnippet)
 (require 'yasnippet)
 (setq yas-snippet-dirs
       '("~/.emacs.d/mysnippets"
@@ -92,13 +140,16 @@
 (yas-global-mode 1)
 
 ;; python-mode
-(setenv "PYTHONPATH" "~/lib/python")
+(require-package 'python-mode)
+(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/kaggle/lib/python3.6/site-packages")
+(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/pytorch_book/lib/python3.6/site-packages")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
   (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
   (setq interpreter-mode-alist (cons '("python" . python-mode)
 				     interpreter-mode-alist)))
 
 ;; ein(emacs ipython notebook)
+(require-package 'ein)
 (require 'ein)
 
 ;; ;; company-jedi settings
@@ -109,67 +160,95 @@
 ;; (add-to-list 'company-backends 'company-jedi)
 
 ;; jedi settings
+(require-package 'jedi)
 (require 'jedi)
 (add-hook 'python-mode-hook 'jedi:setup)
 (setq jedi:complete-on-dot t)
 
+;; ;; autopep8 settings
+;; (require 'py-autopep8)
+;; (add-hook 'python-mode-hook 'py-autopep8-enable-on-save)
+
 ;; yapf settings
+(require-package 'py-yapf)
 (require 'py-yapf)
 (add-hook 'python-mode-hook 'py-yapf-enable-on-save)
 
 ;; isort settings
+(require-package 'py-isort)
 (require 'py-isort)
 (add-hook 'python-mode-hook
 	 '(lambda()
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "c:/tools/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "c:/Users/USER/lib/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "/usr/lib/go-1.10/bin"))
+(add-to-list 'exec-path (expand-file-name "~/go/bin"))
+(require-package 'go-mode)
 (require 'go-mode)
+(require-package 'go-autocomplete)
 
 ;; ;; company-go
 ;; (require 'company-go)
 ;; (add-hook 'go-mode-hook 'company-mode)
+;; (add-hook 'go-mode-hook 'flycheck-mode)
 
-;; auto-complete-go
+;; go-autocomplete
 (eval-after-load "go-mode"
   '(progn
      (require 'go-autocomplete)))
-
-(add-hook 'go-mode-hook 'flycheck-mode)
 (add-hook 'go-mode-hook (lambda ()
-	(add-hook 'before-save-hook' 'gogmt-before-save)
+	(add-hook 'before-save-hook' 'gofmt-before-save)
 	(local-set-key (kbd "M-.") 'godef-jump)
+	(local-set-key (kbd "C-f C-m") 'gofmt)
 	(set (make-local-variable 'compamy-backends) '(company-go))
 	(company-mode)
 	(setq indent-tabs-mode nil)
 	(setq c-basic-offset 4)
 	(setq tab-width 4)))
 
-;; rust-mode
-(add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
-(eval-after-load "rust-mode"
-  '(setq-default rust-format-on-save t))
-(require 'company-racer)
-(eval-after-load 'company-mode
-  (add-to-list 'company-backends 'company-racer))
-(add-hook 'rust-mode-hook #'racer-mode)
-(add-hook 'racer-mode-hook #'company-mode)
-(add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-(unless (getenv "RUST_SRC_PATH")
-  (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
+;; go-eldoc
+(require-package 'go-eldoc)
+(require 'go-eldoc)
+(add-hook 'go-mode-hook 'go-eldoc-setup)
+(set-face-attribute 'eldoc-highlight-function-argument nil
+		    :underline t :foreground "green"
+		    :weight 'bold)
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-go-expand-arguments-into-snippets nil)
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(package-selected-packages
+   (quote
+    (rjsx-mode vue-mode web-mode tide typescript-mode py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+
+;; ;; rust-mode
+;; (add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
+;; (eval-after-load "rust-mode"
+;;   '(setq-default rust-format-on-save t))
+;; (require 'company-racer)
+;; (eval-after-load 'company-mode
+;;   (add-to-list 'company-backends 'company-racer))
+;; (add-hook 'rust-mode-hook #'racer-mode)
+;; (add-hook 'racer-mode-hook #'company-mode)
+;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
+;; (unless (getenv "RUST_SRC_PATH")
+;;   (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
 
 ;; c, c++
+(require-package 'irony)
 (require 'irony)
 ;; (add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
-(add-hook 'c-mode-hook (lambda () (auto-complete-mode -1)))
-(add-hook 'c++-mode-hook (lambda () (auto-complete-mode -1)))
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(require-package 'company-irony)
+(require 'irony)
 (add-to-list 'company-backends 'company-irony)
 ;; (setq irony-lang-compile-option-alist
 ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
@@ -178,110 +257,108 @@
   (irony--awhen (cdr-safe (assq major-mode irony-lang-compile-option-alist))
     (append '("-x") it)))
 (setq w32-pipe-read-delay 0)
+(add-hook 'irony-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; js
-(setq company-tern-property-marker "")
-(defun company-tern-depth (candidate)
-  "Return depth attribute for CANDIDATE. 'nil' entries are treated as 0."
-  (let ((depth (get-text-property 0 'depth candidate)))
-    (if (eq depth nil) 0 depth)))
-(add-hook 'js2-mode-hook 'tern-mode)
-(add-to-list 'company-backends 'company-tern)
+(require-package 'js2-mode)
+(when (require 'js2-mode)
+  (add-to-list 'auto-mode-alist '("\\.js$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.es$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.es6$" . js2-mode))
+  (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
+
+  (add-hook 'js2-mode-hook 'company-mode)
+  (setq js-indent-level 2)
+
+  (setq company-tern-property-marker "")
+  (defun company-tern-depth (candidate)
+    "Return depth attribute for CANDIDATE. 'nil' entries are treated as 0."
+    (let ((depth (get-text-property 0 'depth candidate)))
+      (if (eq depth nil) 0 depth)))
+
+  (add-hook 'js2-mode-hook
+            '(lambda ()
+               (setq tern-command '("tern" "--no-port-file"))
+               (tern-mode t)))
+
+  (add-to-list 'company-backends 'company-tern)
 
 
-;; R
-(require 'ess-site)
-(add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
-(autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
-(add-hook 'R-mode-hook (lambda () (auto-complete-mode -1)))
-(add-hook 'R-mode-hook 'company-mode)
-(define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
-(setq ess-ask-for-ess-directory nil)
-(ess-toggle-underscore nil)
+  (when (require 'flycheck)
+     (flycheck-add-mode 'javascript-eslint 'js2-mode))
+)
 
 
-;; (setq ess-loaded-p nil)
-;; (defun ess-load-hook (&optional from-iess-p)
-;;   (setq ess-indent-level 2)
-;;   (setq ess-arg-function-offset-new-line (list ess-indent-level))
-;;   (make-variable-buffer-local 'comment-add)
-;;   (setq comment-add 0)
+;; typescript
+(require-package 'typescript-mode)
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(require-package 'tide)
+(require 'tide)
+(add-hook 'typescript-mode-hook
+	  (lambda ()
+	    (tide-setup)
+	    (flycheck-mode t)
+	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	    (eldoc-mode t)
+	    (company-mode-on)))
+(setq typescript-indent-level 2)
 
-;;   (when (not ess-loaded-p)
-;;     (setq ess-use-auto-complete t)
-;;     (setq ess-use-ido nil)
-;;     (setq ess-eldoc-show-on-symbol t)
-;;     (setq ess-ask-for-ess-directory nil)
-;;     (setq ess-fancy-comments nil)
-;;     (setq ess-loaded-p t)
-;;     (unless from-iess-p
-;;       (when (one-window-p)
-;;         (split-window-below)
-;;         (let ((buf (current-buffer)))
-;;           (ess-switch-to-ESS nil)
-;;           (switch-to-buffer-other-window buf)))
-;;       (when (and ess-use-auto-complete (require 'auto-complete nil t))
-;;         (add-to-list 'ac-modes 'ess-mode)
-;;         (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
-;;                 '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
-;;         (setq ac-sources '(ac-source-acr
-;;                            ac-source-R
-;;                            ac-source-filename
-;;                            ac-source-yasnippet)))))
+;; web-mode
+(require-package 'web-mode)
+(require 'web-mode)
+(add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;;   (if from-iess-p
-;;       (if (> (length ess-process-name-list) 0)
-;;           (when (one-window-p)
-;;             (split-window-horizontally)
-;;             (other-window 1)))
-;;     (ess-force-buffer-current "Process to load into: ")))
+;; vue-mode
+(require-package 'vue-mode)
+(require 'vue-mode)
+(require 'flycheck)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+(eval-after-load 'vue-mode
+  '(add-hook 'vue-mode-hook #'add-node-modules-path))
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+(flycheck-add-mode 'javascript-eslint 'css-mode)
+(add-hook 'vue-mode-hook 'flycheck-mode)
 
-;; (add-hook 'R-mode-hook 'ess-load-hook)
+;; rjsx-mode
+(require-package 'rjsx-mode)
+(require 'rjsx-mode)
+(add-to-list 'auto-mode-alist '(".*\\.js\\'" . rjsx-mode))
+(add-hook 'rjsx-mode-hook
+          (lambda ()
+            (setq indent-tabs-mode nil)
+            (setq js-indent-level 2)
+            (setq js2-strict-missing-semi-warning nil)))
 
-;; (defun ess-pre-run-hooks ()
-;;   (ess-load-hook t))
-;; (add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
-
-;; auto-complete-acr
-;; (require 'auto-complete)
-;; (require 'auto-complete-yasnippet)
-;; (require 'auto-complete-acr)
-
-;; julia
-(require 'julia-mode)
-;; (autoload 'julia-mode "julia-mode" "Emacs mode for Julia" t)
-;; (add-to-list 'auto-mode-alist '("\\.jl'" . julia-mode)
-(autoload 'julia-mode "julia-mode" "Emacs mode for Julia" t)
-(add-to-list 'auto-mode-alist '("\\.jl\\'" . julia-mode))
-(add-hook 'julia-mode-hook (lambda () (auto-complete-mode -1)))
-(add-hook 'julia-mode-hook 'company-mode)
-(define-key company-active-map (kbd "M-h") 'company-show-doc-buffer)
-
-;; SQL
-(eval-after-load "sql"
-  '(load-library "sql-indent"))
-
-(defun sql-mode-hooks()
-  (setq sql-indent-offset 2)
-  (setq indennt-tabs-mode nil)
-  (sql-set-product "postgres"))
-
-(add-hook 'sql-mode-hook 'sql-mode-hooks)
-
-;; markdown
-(autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
-(add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+;; eslint-auto
+(defun eslint-fix-file ()
+  (interactive)
+  (call-process-shell-command
+   (mapconcat 'shell-quote-argument
+              (list "eslint" "--fix" (buffer-file-name)) " ") nil 0))
+(defun eslint-fix-file-and-revert ()
+  (interactive)
+  (eslint-fix-file)
+  (revert-buffer t t))
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
+(add-hook 'emacs-lisp-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; shell-mode
 (add-hook 'shell-mode-hook 'company-mode)
+(add-hook 'shell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
 ;; eshell-mode
 (add-hook 'eshell-mode-hook 'company-mode)
+(add-hook 'eshell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
 
-;; tool-bar setting
+;; toolbar settings
 (tool-bar-mode -1)
 
 ;; keyboard macro
@@ -293,7 +370,6 @@
    (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
 
 
-
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
 ;; highlight flymake error and warnings
 (custom-set-faces
@@ -303,17 +379,3 @@
  ;; If there is more than one, they won't work right.
  '(flycheck-error ((((class color)) (:foreground "yellow" :bold t :background "red"))))
  '(flycheck-warning ((((class color)) (:foreground "red" :bold t :background "yellow")))))
-
-
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(custom-enabled-themes (quote (manoj-dark)))
- '(package-selected-packages
-   (quote
-    (ess go-autocomplete helm-c-yasnippet yasnippet sql-indent closql company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
- '(show-paren-mode t)
- '(tool-bar-mode nil))

@@ -1,5 +1,3 @@
-#!/usr/bin/bash
-
 mkdir lib
 mkdir local
 mkdir etc
@@ -25,11 +23,11 @@ git clone https://github.com/tsukudamayo/dotfiles.git
 cp -r ~/dotfiles/.emacs.d ~/
 cp ~/dotfiles/.vimrc ~/
 cp -r .vim/ ~/
-chmod +x ~/dotfiles/.go/go-get.sh
-.~/dotfiles/.go/go-get.sh
 
 # docker
+brew install docker
 brew cask install docker
+open /Applications/Docker.app
 
 # iterm2
 brew cask install iterm2
@@ -88,7 +86,9 @@ brew install llvm
 
 # miniconda(python)
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
+chmod +x ~/miniconda.sh
 bash ~/miniconda.sh -b -p $HOME/miniconda
+source ~/miniconda/bin/activate
 conda init
 
 # leveldb(for neo-python)
@@ -103,6 +103,10 @@ brew install postgresql
 # go
 brew install go
 mkdir ~/go
+echo 'export GOPATH=~/go' >> ~/.bash_profile
+source ~/.bash_profile
+chmod +x ~/dotfiles/go/go-get.sh
+./dotfiles/go/go-get.sh
 
 # nodejs
 brew install nodebrew
@@ -113,16 +117,23 @@ nodebrew list | awk -F'\t' '{print $1}' | xargs nodebrew use
 npm install -g tern
 
 # common lisp
-brew install rowsell
+brew install roswell
 ros setup
 ros install clisp
+ros install slime
+
+# scheme
+brew cask install racket
+raco pkg install sicp
 
 # rust
 curl https://sh.rustup.rs -sSf | sh
 source $HOME/.cargo/env
 cargo install rustfmt --force
 cargo install racer --force
-cp Downloads/flycheck-cargo.el ~/.emacs.d/elpa/
+git clone https://github.com/hugoduncan/flycheck-cargo.git
+cp flycheck-cargo/flycheck-cargo.el ~/.emacs.d/elpa/
+rm -rf flycheck-cargo
 git clone https://github.com/rust-lang/rust.git ~/lib/src/rust
 
 # R
