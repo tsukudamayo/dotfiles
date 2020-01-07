@@ -116,6 +116,8 @@
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
+(require-package 'company-irony)
+(require 'company-irony)
 (add-to-list 'company-backends 'company-irony)
 ;; (setq irony-lang-compile-option-alist
 ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
