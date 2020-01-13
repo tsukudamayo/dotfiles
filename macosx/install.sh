@@ -139,6 +139,7 @@ git clone https://github.com/rust-lang/rust.git ~/lib/src/rust
 # R
 brew install r
 brew cask install rstudio
+git clone https://https://github.com/myuhe/auto-complete-acr.el.git ~/dotfiles/.emacs.d/elpa
 
 # julia
 brew cask install julia
