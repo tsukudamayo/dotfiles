@@ -345,6 +345,7 @@ locate PACKAGE."
   (package-refresh-contents)
   (package-install 'use-package))
 
+(require-package 'use-package)
 (require 'use-package)
 
 ;; Enable defer and ensure by default for use-package
