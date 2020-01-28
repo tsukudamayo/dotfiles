@@ -356,9 +356,11 @@ locate PACKAGE."
       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
 ;; Enable scala-mode and sbt-mode
-(use-package scala-mode
+(require-package scala-mode)
+(use-package 'scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
 
+(require-package 'sbt-mode)
 (use-package sbt-mode
   :commands sbt-start sbt-command
   :config
@@ -376,11 +378,13 @@ locate PACKAGE."
 (use-package flycheck
   :init (global-flycheck-mode))
 
+(require-package 'lsp-mode)
 (use-package lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
   :hook (scala-mode . lsp)
   :config (setq lsp-prefer-flymake nil))
 
+(require-package 'lsp-ui)
 (use-package lsp-ui)
 
 ;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
@@ -389,9 +393,12 @@ locate PACKAGE."
 (use-package yasnippet)
 
 ;; Add company-lsp backend for metals
+(require-package 'company-lsp)
 (use-package company-lsp)
 
+(require-package 'scala-bootstrap)
 (require 'scala-bootstrap)
+(require-package 'lsp-mode)
 (require 'lsp-mode)
 
 (add-hook 'scala-mode-hook
