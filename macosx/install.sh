@@ -32,6 +32,9 @@ open /Applications/Docker.app
 # iterm2
 brew cask install iterm2
 
+# tmux
+brew install tmux
+
 # emacs
 brew cask install emacs
 
