@@ -22,16 +22,30 @@
 (set-keyboard-coding-system 'cp932)
 (set-terminal-coding-system 'cp932)
 
+;; indent
+(setq-default indent-tabs-mode nil)
+(setq indent-tabs-mode nil
+      js-indent-level 2)
+
 ;; backspace using C-h
-(global-set-key "\C-h" 'delete-backward-char)
+(keyboard-translate ?\C-h ?\C-?)
 
 ;; fly-check
 (add-hook 'after-init-hook #'global-flycheck-mode)
+
 
 ;; tramp
 (setenv "PATH" (concat "c:/Users/tsukuda/tools/PuTTY" ";" (getenv "PATH")))
 (setq tramp-default-method "plink")
 
+;; ;; ssh-mode(shell) TODO
+;; (ssh-program "c:/Users/tsukuda/tools/PuTTY")
+;; (tramp-default-method "c:/Users/tsukuda/tools/PuTTY")
+;; (add-hook 'ssh-mode-hook
+;; 	  (lambda ()
+;; 	    (setq ssh-directory-tracking-mode t)
+;; 	    (shell-dirtrack-mode t)
+;; 	    (setq dirtrackp nil)))
 
 ;; company-mode
 (require 'company)
@@ -71,7 +85,6 @@
 (require 'swiper-helm)
 (ivy-mode 1)
 
-
 ;; M-x dumb-jump-go
 (require 'dumb-jump)
 (setq dumb-jump-mode t)
@@ -103,6 +116,8 @@
 ;; (require 'slime)
 ;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
+;; slime
+(load (expand-file-name "C:/Users/tsukuda/.roswell/helper.el"))
 
 ;; ddskk
 (global-set-key (kbd "C-x C-j") 'skk-mode)
@@ -114,7 +129,8 @@
 
 
 ;; python-mode
-(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/anomaly_detection/Lib/site-packages")
+(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/ml/Lib/site-packages")
+(setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/jpnlp32/Lib/site-packages")
 ;; (setenv "PYTHONPATH" "c:/Users/tsukuda/tools/Miniconda3/envs/crawler/Lib/site-packages")
 ;; (setenv "PYTHONPATH" "c:/Users/tsukuda/lib/opencv/modules/python/src2")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
@@ -157,8 +173,8 @@
 
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "c:/Users/USER/tools/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "c:/Users/USER/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "c:/Users/tsukuda/tools/go/bin/"))
+(add-to-list 'exec-path (expand-file-name "c:/Users/tsukuda/go/bin/"))
 (require 'go-mode)
 
 ;; ;; golang company-go
@@ -183,34 +199,29 @@
 	(setq c-basic-offset 4)
 	(setq tab-width 4)))
 
+;; rust-mode
+(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
+(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
 
-;; ;; rust-mode
-;; (add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
-;; (eval-after-load "rust-mode"
-;;   '(setq-default rust-format-on-save t))
-;; (require 'company-racer)
-;; (eval-after-load 'company-mode
-;;   (add-to-list 'company-backends 'company-racer))
-;; (add-hook 'rust-mode-hook #'racer-mode)
-;; (add-hook 'racer-mode-hook #'company-mode)
-;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-;; (unless (getenv "RUST_SRC_PATH")
-;;   (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
+(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
+  (pop-to-buffer buffer-or-name action norecord)
+  (other-window -1)
+  )
 
+(custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
 ;; c, c++
 (require 'irony)
-(add-to-list 'exec-path "C:/Users/USER/tools/LLVM/bin")
+(add-hook 'c-mode-hook (lambda () (auto-complete-mode -1)))
+(add-hook 'c++-mode-hook (lambda () (auto-complete-mode -1)))
+(add-to-list 'exec-path "C:/Users/tsukuda/tools/LLVM/bin")
 (add-hook 'c-mode-hook 'irony-mode)
 (add-hook 'c-mode-hook 'company-mode)
 (add-hook 'c++-mode-hook 'irony-mode)
 (add-hook 'c++-mode-hook 'company-mode)
 (add-hook 'irony-mode-hook 'irony-cdb-autosetup-compile-options)
 (add-to-list 'company-backends 'company-irony)
-(add-hook 'c-mode-hook
-	  (lambda () (auto-complete-mode -1)))
-(add-hook 'c++-mode-hook
-	  (lambda () (auto-complete-mode -1)))
 ;; (setq irony-lang-compile-option-alist
 ;;       '((c++-mode . ("c++" "-std=c++11" "-lstdc++" "-lm"))
 ;;         (c-mode . ("c"))))
@@ -235,7 +246,6 @@
   (add-to-list 'auto-mode-alist '("\\.jsx$" . js2-mode))
 
   (add-hook 'js2-mode-hook 'company-mode)
-  (setq js-indent-level 2)
 
   (setq company-tern-property-marker "")
   (defun company-tern-depth (candidate)
@@ -253,8 +263,7 @@
 
   (when (require 'flycheck)
      (flycheck-add-mode 'javascript-eslint 'js2-mode))
-)
-
+  )
 
 ;; typescript
 (require 'typescript-mode)
@@ -272,17 +281,17 @@
 ;; web-mode
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-
-;; vue-mode
-(require 'vue-mode)
-(require 'flycheck)
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-(eval-after-load 'vue-mode
-  '(add-hook 'vue-mode-hook #'add-node-modules-path))
-(flycheck-add-mode 'javascript-eslint 'vue-mode)
-(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
-(flycheck-add-mode 'javascript-eslint 'css-mode)
-(add-hook 'vue-mode-hook 'flycheck-mode)
+;; (add-to-list 'auto-mode-alist '("\\.js[x]?$" . web-mode))
+(defvar web-mode-content-types-alist
+  '(("jsx" . "\\.js[x]?\\'")))
+(add-hook 'web-mode-hook
+          '(lambda ()
+             (add-to-list 'web-mode-comment-formats '("jsx" . "//"))))
+(setq web-mode-html-offset 2)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(flycheck-add-mode 'javascript-eslint 'web-mode)
+(eval-after-load 'web-mode
+  '(add-hook 'web-mode-hook #'add-node-modules-path))
 
 ;; rjsx-mode
 (require 'rjsx-mode)
@@ -303,6 +312,17 @@
   (interactive)
   (eslint-fix-file)
   (revert-buffer t t))
+
+;; vue-mode
+(require 'vue-mode)
+(require 'flycheck)
+(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+(eval-after-load 'vue-mode
+  '(add-hook 'vue-mode-hook #'add-node-modules-path))
+(flycheck-add-mode 'javascript-eslint 'vue-mode)
+(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+(flycheck-add-mode 'javascript-eslint 'css-mode)
+(add-hook 'vue-mode-hook 'flycheck-mode)
 
 ;; R
 (require 'ess-site)
@@ -355,18 +375,74 @@
 (require 'ess-R-object-popup)
 (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
-;; ;; julia
-;; (setq inferior-julia-program-name "c:/Users/USER/tools/Julia-1.1.0/bin/julia.exe")
+;; julia
+(setq inferior-julia-program-name "c:/Users/USER/tools/Julia-1.1.0/bin/julia.exe")
 
-;; web-mode
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.html$" . web-mode))
-(setq web-mode-markup-indent-offset 2)
+;; scala
+;; Install use-package if not already installed
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
+(require 'use-package)
+
+;; Enable defer and ensure by default for use-package
+;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
+(setq use-package-always-defer t
+      use-package-always-ensure t
+      backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+
+;; Enable scala-mode and sbt-mode
+(use-package scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
+
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false"))
+)
+
+;; Enable nice rendering of diagnostics like compile errors.
+(use-package flycheck
+  :init (global-flycheck-mode))
+
+(use-package lsp-mode
+  ;; Optional - enable lsp-mode automatically in scala files
+  :hook (scala-mode . lsp)
+  :config (setq lsp-prefer-flymake nil))
+
+(use-package lsp-ui)
+
+;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
+;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
+;;   to avoid odd behavior with snippets and indentation
+(use-package yasnippet)
+
+;; Add company-lsp backend for metals
+(use-package company-lsp)
+
+(require 'scala-bootstrap)
+(require 'lsp-mode)
+
+(add-hook 'scala-mode-hook
+          '(lambda ()
+             (scala-bootstrap:with-metals-installed
+              (scala-bootstrap:with-bloop-server-started
+               (lsp)))))
+
+;; toolbar settings
 (tool-bar-mode -1)
 
 
-;; ;; python keyboard macro
+;; python keyboard macro
 (fset 'importpy
       [return ?\C-  ?\C-  ?\C-p ?\C-  ?\C-e ?\C-w ?\M-< return ?\C-p ?\C-y ?\C-u ?\C-  ?\C-u ?\C- ])
 
@@ -385,6 +461,7 @@
 (add-hook 'eshell-mode-hook
 	  (lambda () (auto-complete-mode -1)))
 
+
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -394,13 +471,18 @@
  '(flycheck-error ((((class color)) (:foreground "yellow" :bold t :background "red"))))
  '(flycheck-warning ((((class color)) (:foreground "red" :bold t :background "yellow")))))
 
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(ansi-color-faces-vector
+   [default default default italic underline success warning error])
+ '(ansi-color-names-vector
+   ["black" "red3" "ForestGreen" "yellow3" "blue" "magenta3" "DeepSkyBlue" "gray50"])
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (ess-R-data-view tern-auto-complete company-tern py-autopep8 py-yapf py-isort yasnippet-snippets go-autocomplete company-jedi 0blayout company-irony flycheck-rust rust-mode auto-complete-c-headers projectile helm omnisharp company-go ein flycheck python-mode markdown-mode jedi flymake-python-pyflakes flymake-cursor)))
+    (eglot rustic flycheck-rust toml-mode racer ac-slime rjsx-mode swiper-helm dumb-jump ivy web-mode vue-mode tide ssh python-mode markdown-mode jedi helm-c-yasnippet go-eldoc go-autocomplete ess-R-data-view ein ddskk company-tern company-irony add-node-modules-path)))
  '(tool-bar-mode nil))
