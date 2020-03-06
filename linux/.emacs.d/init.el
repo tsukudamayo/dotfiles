@@ -221,6 +221,7 @@ locate PACKAGE."
     (py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
 
 ;; rust-mode
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require-package 'rust-mode)
 (require-package 'rustic)
 (require 'rust-mode)
