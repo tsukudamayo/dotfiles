@@ -222,7 +222,7 @@ locate PACKAGE."
 
 ;; rust-mode
 (require-package 'rust-mode)
-(require-package 'rustic-mode)
+(require-package 'rustic)
 (require 'rust-mode)
 (require 'rustic)
 (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
