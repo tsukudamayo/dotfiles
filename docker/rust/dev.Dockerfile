@@ -1,4 +1,4 @@
-FROM rust:1-stretch
+FROM rust:1-buster
 
 RUN  mkdir -p /workspace
 WORKDIR /workspace
