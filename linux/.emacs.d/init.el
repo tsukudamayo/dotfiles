@@ -84,6 +84,7 @@ locate PACKAGE."
 (require 'helm-config)
 (helm-mode 1)
 
+
 ;; ;; ivy-mode
 ;; counsel: M-x
 (require-package 'swiper-helm)
@@ -223,7 +224,7 @@ locate PACKAGE."
 (require-package 'rust-mode)
 (require-package 'rustic-mode)
 (require 'rust-mode)
-(require 'rustic-mode)
+(require 'rustic)
 (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
 (cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
 (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
@@ -234,6 +235,7 @@ locate PACKAGE."
   )
 
 (custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
+
 
 ;; c, c++
 (require-package 'irony)
