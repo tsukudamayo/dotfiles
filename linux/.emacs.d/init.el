@@ -219,18 +219,21 @@ locate PACKAGE."
    (quote
     (py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
 
-;; ;; rust-mode
-;; (add-to-list 'exec-path 'expand-file-name "c:/Program Files/Rust stable GNU 1.24/bin/")
-;; (eval-after-load "rust-mode"
-;;   '(setq-default rust-format-on-save t))
-;; (require 'company-racer)
-;; (eval-after-load 'company-mode
-;;   (add-to-list 'company-backends 'company-racer))
-;; (add-hook 'rust-mode-hook #'racer-mode)
-;; (add-hook 'racer-mode-hook #'company-mode)
-;; (add-hook 'flycheck-mode-hook #'flycheck-rust-setup)
-;; (unless (getenv "RUST_SRC_PATH")
-;;   (setenv "RUST_SRC_PATH" (expand-file-name "lib/src/rust/src")))
+;; rust-mode
+(require-package 'rust-mode)
+(require-package 'rustic-mode)
+(require 'rust-mode)
+(require 'rustic-mode)
+(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
+(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+
+(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
+  (pop-to-buffer buffer-or-name action norecord)
+  (other-window -1)
+  )
+
+(custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
 ;; c, c++
 (require-package 'irony)
