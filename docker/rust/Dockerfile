@@ -5,15 +5,11 @@ WORKDIR /home
 ENV HOME /home
 
 RUN apt-get update \
-    && apt-get -y install emacs \
-    llvm \
+    && apt-get -y install llvm \
     clang \
     libclang-dev \
     git \
-    curl \
-    && git clone https://github.com/tsukudamayo/dotfiles.git \
-    && cp -r ./dotfiles/linux/.emacs.d ~/ \
-    && cp -r ./dotfiles/.fonts ~/
+    curl 
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 ENV PATH $PATH:$HOME/.cargo/bin
