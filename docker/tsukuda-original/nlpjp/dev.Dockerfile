@@ -53,8 +53,7 @@ RUN apt-get install -y mecab \
 
 WORKDIR /mecab/mecab-ipadic-neologd
 RUN ./bin/install-mecab-ipadic-neologd -n -a \
-    && sed -i 's/dicdir.*/dicdir = \/usr\/lib\/x86_64-linux-gnu\/mecab\/dic\/mecab-ipadic-neologd/' /etc/mecabrc
+    && sed -i 's/dicdir.*/dicdir = \/usr\/lib\/x86_64-linux-gnu\/mecab\/dic\/mecab-ipadic-neologd/' /etc/mecabrc \
     && pip install mecab-python3
-    
 
 CMD ["bin/bash"]
