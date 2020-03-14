@@ -11,6 +11,8 @@ RUN apt-get update \
     libclang-dev \
     git \
     curl \
+    lldb \
+    gdb \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
@@ -21,5 +23,8 @@ ENV PATH $PATH:$HOME/.cargo/bin
 RUN rustup component add rustfmt-preview
 RUN rustup component add rls-preview rust-analysis rust-src
 RUN cargo install racer
+
+RUN mkdir -p /workspace
+WORKDIR /workspace
 
 CMD ["/bin/bash"]
