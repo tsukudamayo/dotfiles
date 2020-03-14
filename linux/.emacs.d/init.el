@@ -103,17 +103,17 @@ locate PACKAGE."
 ;; ;; (setq projectile-completion-system 'helm)
 ;; ;; (helm-projectile-on)
 
-;; ;; slime
-(load (expand-file-name "~/.roswell/helper.el"))
-;; (setq inferior-lisp-program "clisp")
-;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
-;; (require 'slime)
-;; (slime-setup '(slime-repl slime-fancy slime-banner))
+;; ;; ;; slime
+;; (load (expand-file-name "~/.roswell/helper.el"))
+;; ;; (setq inferior-lisp-program "clisp")
+;; ;; (add-to-list 'load-path (expand-file-name "~/.emacs.d/slime"))
+;; ;; (require 'slime)
+;; ;; (slime-setup '(slime-repl slime-fancy slime-banner))
 
-;; ;; geiser
-(require-package 'geiser)
-(load-file "~/.emacs.d/elpa/geiser-20200103.1329/geiser.el")
-(setq geiser-active-implementations '(racket))
+;; ;; ;; geiser
+;; (require-package 'geiser)
+;; (load-file "~/.emacs.d/elpa/geiser-20200103.1329/geiser.el")
+;; (setq geiser-active-implementations '(racket))
 
 ;; markdown
 (require-package 'markdown-mode)
@@ -228,9 +228,11 @@ locate PACKAGE."
 
 ;; rust-mode
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(require-package 'spinner)
 (require-package 'rust-mode)
 (require-package 'rustic)
 (require 'rust-mode)
+(require 'spinner)
 (require 'rustic)
 (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
 (cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
@@ -349,126 +351,128 @@ locate PACKAGE."
   (eslint-fix-file)
   (revert-buffer t t))
 
-;; scala
-;; Install use-package if not already installed
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
+;; ;; scala
+;; ;; Install use-package if not already installed
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
 
-(require-package 'use-package)
-(require 'use-package)
+;; (require-package 'use-package)
+;; (require 'use-package)
 
-;; Enable defer and ensure by default for use-package
-;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
-(setq use-package-always-defer t
-      use-package-always-ensure t
-      backup-directory-alist `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; ;; Enable defer and ensure by default for use-package
+;; ;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
+;; (setq use-package-always-defer t
+;;       use-package-always-ensure t
+;;       backup-directory-alist `((".*" . ,temporary-file-directory))
+;;       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-;; Enable scala-mode and sbt-mode
-(require-package scala-mode)
-(use-package 'scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$")
+;; ;; Enable scala-mode and sbt-mode
+;; (require-package 'scala-mode)
+;; (use-package 'scala-mode
+;;   :mode "\\.s\\(cala\\|bt\\)$")
 
-(require-package 'sbt-mode)
-(use-package sbt-mode
-  :commands sbt-start sbt-command
-  :config
-  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-   (setq sbt:program-options '("-Dsbt.supershell=false"))
-)
+;; (require-package 'sbt-mode)
+;; (use-package sbt-mode
+;;   :commands sbt-start sbt-command
+;;   :config
+;;   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+;;   ;; allows using SPACE when in the minibuffer
+;;   (substitute-key-definition
+;;    'minibuffer-complete-word
+;;    'self-insert-command
+;;    minibuffer-local-completion-map)
+;;    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+;;    (setq sbt:program-options '("-Dsbt.supershell=false"))
+;; )
 
-;; Enable nice rendering of diagnostics like compile errors.
-(use-package flycheck
-  :init (global-flycheck-mode))
+;; ;; Enable nice rendering of diagnostics like compile errors.
+;; (use-package flycheck
+;;   :init (global-flycheck-mode))
 
-(require-package 'lsp-mode)
-(use-package lsp-mode
-  ;; Optional - enable lsp-mode automatically in scala files
-  :hook (scala-mode . lsp)
-  :config (setq lsp-prefer-flymake nil))
+;; (require-package 'lsp-mode)
+;; (require 'lsp-mode)
+;; (use-package lsp-mode
+;;   ;; Optional - enable lsp-mode automatically in scala files
+;;   :hook (scala-mode . lsp)
+;;   :config (setq lsp-prefer-flymake nil))
 
-(require-package 'lsp-ui)
-(use-package lsp-ui)
+;; (require-package 'lsp-ui)
+;; (use-package lsp-ui)
 
-;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
-;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
-;;   to avoid odd behavior with snippets and indentation
-(use-package yasnippet)
+;; ;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
+;; ;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
+;; ;;   to avoid odd behavior with snippets and indentation
+;; (use-package yasnippet)
 
-;; Add company-lsp backend for metals
-(require-package 'company-lsp)
-(use-package company-lsp)
+;; ;; Add company-lsp backend for metals
+;; (require-package 'company-lsp)
+;; (use-package company-lsp)
 
-(require-package 'scala-bootstrap)
-(require 'scala-bootstrap)
-(require-package 'lsp-mode)
-(require 'lsp-mode)
+;; (require-package 'scala-bootstrap)
+;; (use-package 'scala-bootstrap)
+;; (require 'scala-bootstrap)
+;; (require-package 'lsp-mode)
+;; (require 'lsp-mode)
 
-(add-hook 'scala-mode-hook
-          '(lambda ()
-             (scala-bootstrap:with-metals-installed
-              (scala-bootstrap:with-bloop-server-started
-               (lsp)))))
+;; (add-hook 'scala-mode-hook
+;;           '(lambda ()
+;;              (scala-bootstrap:with-metals-installed
+;;               (scala-bootstrap:with-bloop-server-started
+;;                (lsp)))))
 
-;; R
-(require-package 'ess)
-(require 'ess-site)
-(add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
-(autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
-(autoload 'R "ess-site" "start R" t)
-(setq ess-loaded-p nil)
-(defun ess-load-hook (&optional from-iess-p)
-  (setq ess-indent-level 2)
-  (setq ess-arg-function-offset-new-line (list ess-indent-level))
-  (make-variable-buffer-local 'comment-add)
-  (setq comment-add 0)
-  (when (not ess-loaded-p)
-    (setq ess-use-auto-complete t)
-    (setq ess-use-ido nil)
-    (setq ess-eldoc-show-on-symbol t)
-    (setq ess-ask-for-ess-directory nil)
-    (setq ess-fancy-comments nil)
-    (setq ess-loaded-p t)
-    (unless from-iess-p
+;; ;; R
+;; (require-package 'ess)
+;; (require 'ess-site)
+;; (add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
+;; (autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
+;; (autoload 'R "ess-site" "start R" t)
+;; (setq ess-loaded-p nil)
+;; (defun ess-load-hook (&optional from-iess-p)
+;;   (setq ess-indent-level 2)
+;;   (setq ess-arg-function-offset-new-line (list ess-indent-level))
+;;   (make-variable-buffer-local 'comment-add)
+;;   (setq comment-add 0)
+;;   (when (not ess-loaded-p)
+;;     (setq ess-use-auto-complete t)
+;;     (setq ess-use-ido nil)
+;;     (setq ess-eldoc-show-on-symbol t)
+;;     (setq ess-ask-for-ess-directory nil)
+;;     (setq ess-fancy-comments nil)
+;;     (setq ess-loaded-p t)
+;;     (unless from-iess-p
 
-      (when (one-window-p)
-        (split-window-below)
-        (let ((buf (current-buffer)))
-          (ess-switch-to-ESS nil)
-          (switch-to-buffer-other-window buf)))
-      (when (and ess-use-auto-complete (require 'auto-complete nil t))
-        (add-to-list 'ac-modes 'ess-mode)
-        (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
-                '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
-        (setq ac-sources '(ac-source-acr
-                           ac-source-R
-                           ac-source-filename
-                           ac-source-yasnippet)))))
+;;       (when (one-window-p)
+;;         (split-window-below)
+;;         (let ((buf (current-buffer)))
+;;           (ess-switch-to-ESS nil)
+;;           (switch-to-buffer-other-window buf)))
+;;       (when (and ess-use-auto-complete (require 'auto-complete nil t))
+;;         (add-to-list 'ac-modes 'ess-mode)
+;;         (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
+;;                 '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
+;;         (setq ac-sources '(ac-source-acr
+;;                            ac-source-R
+;;                            ac-source-filename
+;;                            ac-source-yasnippet)))))
 
-  (if from-iess-p
-      (if (> (length ess-process-name-list) 0)
-          (when (one-window-p)
-            (split-window-horizontally)
-            (other-window 1)))
-    (ess-force-buffer-current "Process to load into: ")))
+;;   (if from-iess-p
+;;       (if (> (length ess-process-name-list) 0)
+;;           (when (one-window-p)
+;;             (split-window-horizontally)
+;;             (other-window 1)))
+;;     (ess-force-buffer-current "Process to load into: ")))
 
-(add-hook 'R-mode-hook 'ess-load-hook)
+;; (add-hook 'R-mode-hook 'ess-load-hook)
 
-(defun ess-pre-run-hooks ()
-  (ess-load-hook t))
-(add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
-;; auto-complete-acr
-(require 'auto-complete-acr) ;; donwload from github
-(require-package 'ess-R-object-popup)
-(require 'ess-R-object-popup)
-(define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
+;; (defun ess-pre-run-hooks ()
+;;   (ess-load-hook t))
+;; (add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
+;; ;; auto-complete-acr
+;; (require 'auto-complete-acr) ;; donwload from github
+;; (require-package 'ess-R-object-popup)
+;; (require 'ess-R-object-popup)
+;; (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
