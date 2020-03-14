@@ -9,7 +9,9 @@ RUN apt-get update \
     clang \
     libclang-dev \
     git \
-    curl 
+    curl \
+    lldb \
+    gdb
 
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 ENV PATH $PATH:$HOME/.cargo/bin

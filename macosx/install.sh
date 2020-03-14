@@ -133,11 +133,14 @@ raco pkg install sicp
 curl https://sh.rustup.rs -sSf | sh
 source $HOME/.cargo/env
 cargo install rustfmt --force
-cargo install racer --force
-git clone https://github.com/hugoduncan/flycheck-cargo.git
-cp flycheck-cargo/flycheck-cargo.el ~/.emacs.d/elpa/
-rm -rf flycheck-cargo
-git clone https://github.com/rust-lang/rust.git ~/lib/src/rust
+rustup install nightly
+cargo +nightly install racer --force
+rustup component add rls-preview rust-analysis rust-src
+
+# git clone https://github.com/hugoduncan/flycheck-cargo.git
+# cp flycheck-cargo/flycheck-cargo.el ~/.emacs.d/elpa/
+# rm -rf flycheck-cargo
+# git clone https://github.com/rust-lang/rust.git ~/lib/src/rust
 
 # R
 brew install r
