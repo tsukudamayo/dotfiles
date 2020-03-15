@@ -224,10 +224,19 @@ locate PACKAGE."
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))))
+    (eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+ '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
 ;; rust-mode
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(require-package 'eglot)
+(require-package 'flymake)
+(require 'eglot)
+(require 'flymake)
+(with-eval-after-load 'eglot
+  (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
+  (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
+  )
 (require-package 'spinner)
 (require-package 'rust-mode)
 (require-package 'rustic)
@@ -243,7 +252,6 @@ locate PACKAGE."
   (other-window -1)
   )
 
-(custom-set-variables '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
 
 ;; c, c++
