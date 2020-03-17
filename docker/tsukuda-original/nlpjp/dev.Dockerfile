@@ -48,7 +48,35 @@ WORKDIR /mecab
 RUN apt-get install -y mecab \
     libmecab-dev \
     mecab-ipadic-utf8 \
-    && git clone --depth 1 https://github.com/neologd/mecab-ipadic-neologd.git \
+    && git clone https://github.com/neologd/mecab-ipadic-neologd.git \
+    && sed -i -e 's/sudo make install/make install/' ./mecab-ipadic-neologd/libexec/install-mecab-ipadic-neologd.sh
+RUN echo yes | ./mecab-ipadic-neologd/bin/install-mecab-ipadic-neologd -a -n \
     && pip install mecab-python3
+
+# juman knp
+RUN mkdir -p /juman
+WORKDIR /juman
+RUN wget https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz
+RUN tar xf jumanpp-2.0.0-rc3.tar.xz
+WORKDIR /juman/jumanpp-2.0.0-rc3
+RUN mkdir /juman/jumanpp-2.0.0-rc3/build
+WORKDIR /juman/jumanpp-2.0.0-rc3/build
+RUN cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local
+RUN make
+RUN make install
+RUN pip install pyknp
+ 
+
+# GINZA(SUDACHI)
+RUN mkdir -p /ginza
+WORKDIR /ginza
+RUN pip install "https://github.com/megagonlabs/ginza/releases/download/latest/ginza-latest.tar.gz"
+
+
+RUN mkdir /workspace
+WORKDIR /workspace
+
+# janome
+RUN pip install janome
 
 CMD ["bin/bash"]
