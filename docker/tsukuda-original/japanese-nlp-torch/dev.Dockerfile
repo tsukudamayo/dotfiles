@@ -1,10 +1,13 @@
+# build at https://github.com/pytorch/pytorch 
+
 FROM nvidia/cuda:10.1-cudnn7-devel-ubuntu16.04
-ARG PYTHON_VERSION=3.8
+ARG PYTHON_VERSION=3.7
 RUN apt-get update && apt-get install -y --no-install-recommends \
          build-essential \
          cmake \
          git \
          curl \
+	 wget \
          ca-certificates \
          libjpeg-dev \
          libpng-dev \
@@ -12,9 +15,7 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
          language-pack-ja \
          locales \
          file \
-         mecab \
-         libmecab-dev \
-         mecab-ipadic-utf8 \
+	 libssl-dev \
      && add-apt-repository ppa:kelleyk/emacs \
      && apt-get update && apt-get install -y --no-install-recommends emacs26 \
      && locale-gen ja_JP.UTF-8 \
@@ -26,6 +27,73 @@ RUN git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
+
+# ----- #
+# cmake #
+# ----- #
+WORKDIR /opt
+RUN wget https://github.com/Kitware/CMake/releases/download/v3.16.1/cmake-3.16.1.tar.gz \ 
+     && tar xvf cmake-3.16.1.tar.gz \
+     && rm cmake-3.16.1.tar.gz
+WORKDIR /opt/cmake-3.16.1
+RUN ./bootstrap && make && make install
+
+
+# ----- #
+# kytea #
+# ----- #
+RUN mkdir -p /opt/kytea
+WORKDIR /opt/kytea
+RUN apt-get update \
+    && apt-get -y install emacs \
+    llvm \
+    clang \
+    libclang-dev
+RUN wget http://www.phontron.com/kytea/download/kytea-0.4.7.tar.gz \
+    && tar xzf kytea-0.4.7.tar.gz
+WORKDIR kytea-0.4.7
+RUN ./configure \
+    && make \
+    && make install \
+    && ldconfig
+RUN wget http://www.ar.media.kyoto-u.ac.jp/mori/research/topics/NER/2014-05-28-RecipeNE-sample.tar.gz \
+    && tar xvf 2014-05-28-RecipeNE-sample.tar.gz
+RUN mkdir -p model
+WORKDIR model
+RUN wget http://www.phontron.com/kytea/download/model/jp-0.4.7-1.mod.gz \
+    && gzip -d jp-0.4.7-1.mod.gz
+
+
+# ----- #
+# mecab #
+# ----- #
+RUN mkdir -p /opt/mecab
+WORKDIR /opt/mecab
+RUN apt-get install -y mecab \
+    libmecab-dev \
+    mecab-ipadic-utf8 \
+    && git clone https://github.com/neologd/mecab-ipadic-neologd.git \
+    && sed -i -e 's/sudo make install/make install/' ./mecab-ipadic-neologd/libexec/install-mecab-ipadic-neologd.sh
+RUN echo yes | ./mecab-ipadic-neologd/bin/install-mecab-ipadic-neologd -a -n
+
+
+# --------- #
+# juman knp #
+# --------- #
+RUN mkdir -p /opt/juman
+WORKDIR /opt/juman
+RUN wget https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz
+RUN tar xf jumanpp-2.0.0-rc3.tar.xz
+WORKDIR /opt/juman/jumanpp-2.0.0-rc3
+RUN mkdir /opt/juman/jumanpp-2.0.0-rc3/build
+WORKDIR /opt/juman/jumanpp-2.0.0-rc3/build
+RUN cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local
+RUN make
+RUN make install
+
+# ---------------- # 
+# python conda pip # 
+# ---------------- # 
 RUN curl -o ~/miniconda.sh -O  https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh  && \
      chmod +x ~/miniconda.sh && \
      ~/miniconda.sh -b -p /opt/conda && \
@@ -45,8 +113,8 @@ RUN TORCH_CUDA_ARCH_LIST="3.5 5.2 6.0 6.1 7.0+PTX" TORCH_NVCC_FLAGS="-Xfatbin -c
 
 RUN git clone https://github.com/pytorch/vision.git && cd vision && pip install -v .
 
-RUN pip install virtualenv janome mecab-python3 torchtext spacy \
-    && conda install -c anaconda swig
+RUN pip install virtualenv epc torchtext spacy mecab-python3 pyknp janome sentencepiece tinysegmenter3 "https://github.com/megagonlabs/ginza/releases/download/latest/ginza-latest.tar.gz" \
+    && conda install -c anaconda swig 
 
 WORKDIR /workspace
 RUN chmod -R a+w .
