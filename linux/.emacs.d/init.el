@@ -153,13 +153,6 @@ locate PACKAGE."
 (require-package 'ein)
 (require 'ein)
 
-;; ;; company-jedi settings
-;; (require 'jedi-core)
-;; (setq jedi:complete-on-dot t)
-;; (setq jedi:use-shortcuts t)
-;; (add-hook 'python-mode-hook 'jedi:setup)
-;; (add-to-list 'company-backends 'company-jedi)
-
 ;; jedi settings
 (require-package 'jedi)
 (require 'jedi)
@@ -188,11 +181,6 @@ locate PACKAGE."
 (require-package 'go-mode)
 (require 'go-mode)
 (require-package 'go-autocomplete)
-
-;; ;; company-go
-;; (require 'company-go)
-;; (add-hook 'go-mode-hook 'company-mode)
-;; (add-hook 'go-mode-hook 'flycheck-mode)
 
 ;; go-autocomplete
 (eval-after-load "go-mode"
@@ -251,7 +239,6 @@ locate PACKAGE."
   (pop-to-buffer buffer-or-name action norecord)
   (other-window -1)
   )
-
 
 
 ;; c, c++
@@ -326,17 +313,17 @@ locate PACKAGE."
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 
-;; vue-mode
-(require-package 'vue-mode)
-(require 'vue-mode)
-(require 'flycheck)
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
-(eval-after-load 'vue-mode
-  '(add-hook 'vue-mode-hook #'add-node-modules-path))
-(flycheck-add-mode 'javascript-eslint 'vue-mode)
-(flycheck-add-mode 'javascript-eslint 'vue-html-mode)
-(flycheck-add-mode 'javascript-eslint 'css-mode)
-(add-hook 'vue-mode-hook 'flycheck-mode)
+;; ;; vue-mode
+;; (require-package 'vue-mode)
+;; (require 'vue-mode)
+;; (require 'flycheck)
+;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+;; (eval-after-load 'vue-mode
+;;   '(add-hook 'vue-mode-hook #'add-node-modules-path))
+;; (flycheck-add-mode 'javascript-eslint 'vue-mode)
+;; (flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+;; (flycheck-add-mode 'javascript-eslint 'css-mode)
+;; (add-hook 'vue-mode-hook 'flycheck-mode)
 
 ;; rjsx-mode
 (require-package 'rjsx-mode)
@@ -478,7 +465,6 @@ locate PACKAGE."
 (add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
 ;; auto-complete-acr
 (require 'auto-complete-acr) ;; donwload from github
-(require-package 'ess-R-object-popup)
 (require 'ess-R-object-popup)
 (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
