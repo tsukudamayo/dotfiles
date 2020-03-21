@@ -429,58 +429,59 @@ locate PACKAGE."
 ;;               (scala-bootstrap:with-bloop-server-started
 ;;                (lsp)))))
 
-;; ;; R
-;; (require-package 'ess)
-;; (require 'ess-site)
-;; (add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
-;; (autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
-;; (autoload 'R "ess-site" "start R" t)
-;; (setq ess-loaded-p nil)
-;; (defun ess-load-hook (&optional from-iess-p)
-;;   (setq ess-indent-level 2)
-;;   (setq ess-arg-function-offset-new-line (list ess-indent-level))
-;;   (make-variable-buffer-local 'comment-add)
-;;   (setq comment-add 0)
-;;   (when (not ess-loaded-p)
-;;     (setq ess-use-auto-complete t)
-;;     (setq ess-use-ido nil)
-;;     (setq ess-eldoc-show-on-symbol t)
-;;     (setq ess-ask-for-ess-directory nil)
-;;     (setq ess-fancy-comments nil)
-;;     (setq ess-loaded-p t)
-;;     (unless from-iess-p
+;; R
+(require-package 'ess)
+(require 'ess-site)
+(add-to-list 'auto-mode-alist '("\\.[rR]$" . R-mode))
+(autoload 'R-mode "ess-site" "Emacs Speaks Statistics mode" t)
+(autoload 'R "ess-site" "start R" t)
+(setq ess-loaded-p nil)
+(defun ess-load-hook (&optional from-iess-p)
+  (setq ess-indent-level 2)
+  (setq ess-arg-function-offset-new-line (list ess-indent-level))
+  (make-variable-buffer-local 'comment-add)
+  (setq comment-add 0)
+  (when (not ess-loaded-p)
+    (setq ess-use-auto-complete t)
+    (setq ess-use-ido nil)
+    (setq ess-eldoc-show-on-symbol t)
+    (setq ess-ask-for-ess-directory nil)
+    (setq ess-fancy-comments nil)
+    (setq ess-loaded-p t)
+    (unless from-iess-p
 
-;;       (when (one-window-p)
-;;         (split-window-below)
-;;         (let ((buf (current-buffer)))
-;;           (ess-switch-to-ESS nil)
-;;           (switch-to-buffer-other-window buf)))
-;;       (when (and ess-use-auto-complete (require 'auto-complete nil t))
-;;         (add-to-list 'ac-modes 'ess-mode)
-;;         (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
-;;                 '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
-;;         (setq ac-sources '(ac-source-acr
-;;                            ac-source-R
-;;                            ac-source-filename
-;;                            ac-source-yasnippet)))))
+      (when (one-window-p)
+        (split-window-below)
+        (let ((buf (current-buffer)))
+          (ess-switch-to-ESS nil)
+          (switch-to-buffer-other-window buf)))
+      (when (and ess-use-auto-complete (require 'auto-complete nil t))
+        (add-to-list 'ac-modes 'ess-mode)
+        (mapcar (lambda (el) (add-to-list 'ac-trigger-commands el))
+                '(ess-smart-comma smart-operator-comma skeleton-pair-insert-maybe))
+        (setq ac-sources '(ac-source-acr
+                           ac-source-R
+                           ac-source-filename
+                           ac-source-yasnippet)))))
 
-;;   (if from-iess-p
-;;       (if (> (length ess-process-name-list) 0)
-;;           (when (one-window-p)
-;;             (split-window-horizontally)
-;;             (other-window 1)))
-;;     (ess-force-buffer-current "Process to load into: ")))
+  (if from-iess-p
+      (if (> (length ess-process-name-list) 0)
+          (when (one-window-p)
+            (split-window-horizontally)
+            (other-window 1)))
+    (ess-force-buffer-current "Process to load into: ")))
 
-;; (add-hook 'R-mode-hook 'ess-load-hook)
+(add-hook 'R-mode-hook 'ess-load-hook)
 
-;; (defun ess-pre-run-hooks ()
-;;   (ess-load-hook t))
-;; (add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
-;; ;; auto-complete-acr
-;; (require 'auto-complete-acr) ;; donwload from github
-;; (require-package 'ess-R-object-popup)
-;; (require 'ess-R-object-popup)
-;; (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
+(defun ess-pre-run-hooks ()
+  (ess-load-hook t))
+(add-hook 'ess-pre-run-hook 'ess-pre-run-hooks)
+;; auto-complete-acr
+(require 'auto-complete-acr) ;; donwload from github
+(require-package 'ess-R-object-popup)
+(require 'ess-R-object-popup)
+(define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
+
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
