@@ -29,6 +29,9 @@ brew install docker
 brew cask install docker
 open /Applications/Docker.app
 
+# x11 client
+brew cask install xquartz
+
 # iterm2
 brew cask install iterm2
 
