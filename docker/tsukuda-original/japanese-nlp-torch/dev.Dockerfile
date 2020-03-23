@@ -77,19 +77,41 @@ RUN apt-get install -y mecab \
 RUN echo yes | ./mecab-ipadic-neologd/bin/install-mecab-ipadic-neologd -a -n
 
 
+# ------- #
+# juman++ #
+# ------- #
+RUN mkdir -p /opt/jumanpp
+WORKDIR /opt/jumanpp
+RUN wget https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz
+RUN tar xf jumanpp-2.0.0-rc3.tar.xz
+WORKDIR /opt/jumanpp/jumanpp-2.0.0-rc3
+RUN mkdir /opt/jumanpp/jumanpp-2.0.0-rc3/build
+WORKDIR /opt/jumanpp/jumanpp-2.0.0-rc3/build
+RUN cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local
+RUN make
+RUN make install
+
 # --------- #
 # juman knp #
 # --------- #
 RUN mkdir -p /opt/juman
 WORKDIR /opt/juman
-RUN wget https://github.com/ku-nlp/jumanpp/releases/download/v2.0.0-rc3/jumanpp-2.0.0-rc3.tar.xz
-RUN tar xf jumanpp-2.0.0-rc3.tar.xz
-WORKDIR /opt/juman/jumanpp-2.0.0-rc3
-RUN mkdir /opt/juman/jumanpp-2.0.0-rc3/build
-WORKDIR /opt/juman/jumanpp-2.0.0-rc3/build
-RUN cmake .. -DCMAKE_BUILD_TYPE=Release -DCMAKE_INSTALL_PREFIX=/usr/local
+RUN wget http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/juman/juman-7.01.tar.bz2
+RUN tar xvf juman-7.01.tar.bz2
+WORKDIR juman-7.01
+RUN ./configure
 RUN make
 RUN make install
+
+RUN mkdir -p /opt/knp
+WORKDIR /opt/knp
+RUN wget http://nlp.ist.i.kyoto-u.ac.jp/nl-resource/knp/knp-4.19.tar.bz2
+RUN tar xvf knp-4.19.tar.bz2
+WORKDIR knp-4.19
+RUN ./configure
+RUN make
+RUN make install
+
 
 # ---------------- # 
 # python conda pip # 
