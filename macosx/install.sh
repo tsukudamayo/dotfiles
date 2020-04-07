@@ -32,6 +32,12 @@ open /Applications/Docker.app
 # x11 client
 brew cask install xquartz
 
+# skype
+brew cask install skype
+
+# line
+brew cask install line
+
 # iterm2
 brew cask install iterm2
 
