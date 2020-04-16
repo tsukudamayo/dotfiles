@@ -1,9 +1,9 @@
-mkdir lib
-mkdir local
-mkdir etc
-mkdir opt
-mkdir .fonts
-mkdir lib/src
+mkdir ~/lib
+mkdir ~/local
+mkdir ~/etc
+mkdir ~/opt
+mkdir ~/.fonts
+mkdir ~/lib/src
 
 # homebrew
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
@@ -22,7 +22,7 @@ git congig --global user.email "tsukudamayo@gmail.com"
 git clone https://github.com/tsukudamayo/dotfiles.git
 cp -r ~/dotfiles/.emacs.d ~/
 cp ~/dotfiles/.vimrc ~/
-cp -r .vim/ ~/
+cp -r ~/dotfiles/.vim/ ~/
 
 # docker
 brew install docker
@@ -63,10 +63,10 @@ brew cask install libreoffice
 brew install lua
 
 # vim
-mkdir vimfiles
-mkdir vimfiles/swp
-mkdir vimfiles/backup
-mkdir vimfiles/undo
+mkdir ~/vimfiles
+mkdir ~/vimfiles/swp
+mkdir ~/vimfiles/backup
+mkdir ~/vimfiles/undo
 
 brew install vim ¥
 --with-lua
