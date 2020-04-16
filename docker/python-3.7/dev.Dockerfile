@@ -13,6 +13,8 @@ RUN apt-get update \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
+RUN useradd -G sudo -u 1000 --create-home emacs
+
 WORKDIR /workspace
 
 CMD ["/bin/bash"]
