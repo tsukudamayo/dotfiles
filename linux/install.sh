@@ -35,7 +35,10 @@ killall ibus-daemon
 ibus-daemon -d -x &
 
 # html5 video
-sudo apt-get install ubuntu-restricted-extras
+sudo apt-get -y install ubuntu-restricted-extras
+
+# x11 client
+sudo apt-get -y install x11-apps
 
 # install terminator
 sudo apt-get -y install terminator
@@ -166,3 +169,7 @@ sudo apt install -y nodejs npm
 sudo npm install n -g
 sudo n stable
 
+# gcp sdk
+curl https://sdk.cloud.google.com > install.sh
+bash install.sh --disable-prompts
+rm install.sh
