@@ -158,3 +158,8 @@ git clone https://https://github.com/myuhe/auto-complete-acr.el.git ~/dotfiles/.
 
 # julia
 brew cask install julia
+
+# gcp sdk
+curl https://sdk.cloud.google.com > install.sh
+bash install.sh --disable-prompts
+rm install.sh
