@@ -176,3 +176,13 @@ echo "deb http://packages.cloud.google.com/apt cloud-sdk main" | sudo tee -a /et
 curl https://packages.cloud.google.com/apt/doc/apt-key.gpg | sudo apt-key add -
 # Update the package list and install the Cloud SDK
 sudo apt-get update && sudo apt-get install google-cloud-sdk
+
+# direnv
+git clone https://github.com/direnv/direnv
+cd direnv/
+sudo make install
+cd ~
+rm -rf direnv/
+echo 'eval "$(direnv hook bash)"' >> ~/.bashrc
+
+
