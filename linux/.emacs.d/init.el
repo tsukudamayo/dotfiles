@@ -4,6 +4,7 @@
 	("melpa" . "https://melpa.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
 (package-initialize)
+(package-refresh-contents)
 
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
