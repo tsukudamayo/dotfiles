@@ -50,8 +50,6 @@ locate PACKAGE."
 (global-set-key "\C-h" 'delete-backward-char)
 
 ;; flycheck
-(require-package 'flycheck)
-(require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
