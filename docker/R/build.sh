@@ -1,6 +1,6 @@
 #!/bin/bash
 
-xhost +local:
+xhost +localhost:
 if [[ "$OSTYPE" == "darwin"* ]]; then
     docker run -it --rm \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
@@ -13,4 +13,4 @@ else
         r-dev \
         /bin/bash
 fi
-xhost -local:
+xhost -localhost:
