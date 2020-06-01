@@ -121,10 +121,12 @@ chmod +x ~/dotfiles/go/go-get.sh
 ./dotfiles/go/go-get.sh
 
 # nodejs
-brew install nodebrew
-mkdir -p ~/.nodebrew/src
-nodebrew install-binary latest
-nodebrew list | awk -F'\t' '{print $1}' | xargs nodebrew use
+brew install anyenv
+anyenv init
+echo 'eval "$(anyenv init -)"' >> ~/.bash_profile
+exec $SHELL -l
+anyenv install --force-init
+anyenv install nodenv
 
 npm install -g tern
 
@@ -160,6 +162,6 @@ git clone https://https://github.com/myuhe/auto-complete-acr.el.git ~/dotfiles/.
 brew cask install julia
 
 # gcp sdk
-curl https://sdk.cloud.google.com > install.sh
-bash install.sh --disable-prompts
-rm install.sh
+curl https://sdk.cloud.google.com > gcp-sdk-install.sh
+bash gcp-sdk-install.sh --disable-prompts
+rm gpc-sdk-install.sh 
