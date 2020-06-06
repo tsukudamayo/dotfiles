@@ -1,4 +1,4 @@
-FROM r-base:latest
+FROM rokerjp/verse:latest
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
