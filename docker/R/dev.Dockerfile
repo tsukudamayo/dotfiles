@@ -1,4 +1,4 @@
-FROM rokerjp/verse:latest
+FROM rockerjp/verse:latest
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
