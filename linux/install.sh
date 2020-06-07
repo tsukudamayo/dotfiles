@@ -33,6 +33,7 @@ echo $LANG
 sudo apt-get -y install ibus-mozc
 killall ibus-daemon
 ibus-daemon -d -x &
+sudo apt-get install -y fcitx fcitx-mozc
 
 # html5 video
 sudo apt-get -y install ubuntu-restricted-extras
@@ -40,8 +41,6 @@ sudo apt-get -y install ubuntu-restricted-extras
 # x11 client
 sudo apt-get -y install x11-apps
 
-# install terminator
-sudo apt-get -y install terminator
 
 # install tmux
 sudo apt-get -y install tmux
