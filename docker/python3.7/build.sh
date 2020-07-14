@@ -1,12 +1,12 @@
 #!/bin/bash
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
-    xhost +localhost:
+    xhost +localhost
     docker run -it --rm \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         python3.7 \
         /bin/bash
-    xhost -localhost:
+    xhost -localhost
 else
     xhost +local:
     docker run -it --rm \
