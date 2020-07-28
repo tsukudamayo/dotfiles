@@ -470,6 +470,9 @@ locate PACKAGE."
 (require 'ess-R-object-popup)
 (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
+;; julia                                                                        
+(require-package 'julia-mode)
+(require 'julia-mode)  
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)

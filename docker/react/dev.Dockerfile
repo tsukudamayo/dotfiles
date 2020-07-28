@@ -12,8 +12,8 @@ RUN apt-get update \
     && wget https://github.com/Kitware/CMake/releases/download/v3.16.1/cmake-3.16.1.tar.gz \ 
     && tar xvf cmake-3.16.1.tar.gz 
 
-    RUN mkdir -p /app
-    WORKDIR /app
+RUN mkdir -p /app
+WORKDIR /app
 
-    EXPOSE 3000
-    CMD ["/bin/bash"]
+EXPOSE 3000
+CMD ["/bin/bash"]
