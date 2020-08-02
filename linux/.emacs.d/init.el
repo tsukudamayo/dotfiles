@@ -414,7 +414,7 @@ locate PACKAGE."
 
 ;; Enable scala-mode and sbt-mode
 (require-package 'scala-mode)
-(use-package 'scala-mode
+(use-package scala-mode
   :mode "\\.s\\(cala\\|bt\\)$")
 
 (require-package 'sbt-mode)
@@ -454,8 +454,6 @@ locate PACKAGE."
 (require-package 'company-lsp)
 (use-package company-lsp)
 
-(require-package 'scala-bootstrap)
-(use-package 'scala-bootstrap)
 (require 'scala-bootstrap)
 (require-package 'lsp-mode)
 (require 'lsp-mode)
