@@ -26,6 +26,9 @@ RUN ./bootstrap \
     && make \
     && make install
 
+RUN rm -rf /var/lib/apt/lists/* \
+    && rm -rf roswell/
+
 WORKDIR /workspace
     
 CMD ["/bin/bash"]
