@@ -11,6 +11,14 @@ RUN apt-get update \
     && cp -r ./dotfiles/.fonts ~/
 
 RUN go get -u golang.org/x/tools/gopls \
-    && go get -u golang.org/x/tools/cmd/goimports
+    && go get -u golang.org/x/tools/cmd/goimports \
+    && go get -u golang.org/x/tools/cmd/godoc \
+    && go get -u golang.org/x/tools/cmd/godoc \
+    && go get -u github.com/stamblerre/gocode \
+    && go get -u github.com/golang/golint \
+    && go get -u github.com/rogpeppe/godef \
+    && go get -u github.com/jstemmer/gotags \
+    && go get -u github.com/kisielk/errcheck \
+    && go get github.com/derekparker/delve/cmd/dlv 
 
 CMD ["/bin/bash"]

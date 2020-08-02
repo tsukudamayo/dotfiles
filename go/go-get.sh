@@ -7,7 +7,7 @@ go get github.com/motemen/ghq
 git config --global ghq.root $GOPATH/src
 
 go get github.com/motemen/gore
-go get github./nsf/gocode
+go get github.com/nsf/gocode
 go get github.com/k0kubun/pp
 go get golang.org/x/tools/cmd/godoc
 go get github.com/golang/lint/golint
