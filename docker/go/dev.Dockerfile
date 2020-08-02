@@ -1,4 +1,4 @@
-FROM golang:buster
+FROM golang:rc-buster
 #ENV GO111MODULE on
 
 RUN apt-get update \

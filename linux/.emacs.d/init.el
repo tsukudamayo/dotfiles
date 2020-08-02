@@ -265,11 +265,11 @@ locate PACKAGE."
 
 ;; rust-mode
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(require-package 'eglot)
 (require-package 'jsonrpc)
+(require-package 'eglot)
 (require-package 'flymake)
-(require 'eglot)
 (require 'jsonrpc)
+(require 'eglot)
 (require 'flymake)
 (with-eval-after-load 'eglot
   (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
