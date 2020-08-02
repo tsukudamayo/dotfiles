@@ -6,6 +6,8 @@
 (package-initialize)
 (package-refresh-contents)
 
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -18,7 +20,7 @@ re-downloaded in order to locate PACKAGE."
 	      (package-install package nil)
 	    (package-install package))
 	(progn
-	  (package-refresh-contents)
+  (package-refresh-contents)
 	  (require-package package min-version t)))))
 
 (defun maybe-require-package (package &optional min-version no-refresh)
@@ -32,6 +34,10 @@ locate PACKAGE."
       (error
        (message "Couldn't install optional package `%s': %S" package err)
              nil)))
+
+;; use-package
+(require-package 'use-package)
+(require 'use-package)
 
 ;; settings load-path
 (add-to-list 'load-path "~/.emacs.d/elisp")
@@ -178,33 +184,69 @@ locate PACKAGE."
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "/usr/lib/go-1.10/bin"))
-(add-to-list 'exec-path (expand-file-name "~/go/bin"))
+;; (add-to-list 'exec-path (expand-file-name "/usr/lib/go-1.10/bin"))
+;; (add-to-list 'exec-path (expand-file-name "~/go/bin"))
+;; (require-package 'go-mode)
+;; (require 'go-mode)
+;; (require-package 'go-autocomplete)
+
+;; ;; go-autocomplete
+;; (eval-after-load "go-mode"
+;;   '(progn
+;;      (require 'go-autocomplete)))
+;; (add-hook 'go-mode-hook (lambda ()
+;; 	(add-hook 'before-save-hook' 'gofmt-before-save)
+;; 	(local-set-key (kbd "M-.") 'godef-jump)
+;; 	(local-set-key (kbd "C-f C-m") 'gofmt)
+;; 	(set (make-local-variable 'compamy-backends) '(company-go))
+;; 	(company-mode)
+;; 	(setq indent-tabs-mode nil)
+;; 	(setq c-basic-offset 4)
+;; 	(setq tab-width 4)))
+
+;; ;; go-eldoc
+;; (require-package 'go-eldoc)
+;; (require 'go-eldoc)
+;; (add-hook 'go-mode-hook 'go-eldoc-setup)
+;; (set-face-attribute 'eldoc-highlight-function-argument nil
+;; 		    :underline t :foreground "green"
+;; 		    :weight 'bold)
+(defun lsp-go-install-save-hooks()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
+
 (require-package 'go-mode)
 (require 'go-mode)
-(require-package 'go-autocomplete)
+(use-package go-mode
+  :ensure t
+  :mode (("\\.go\\'" . go-mode))
+  :init
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 
-;; go-autocomplete
-(eval-after-load "go-mode"
-  '(progn
-     (require 'go-autocomplete)))
-(add-hook 'go-mode-hook (lambda ()
-	(add-hook 'before-save-hook' 'gofmt-before-save)
-	(local-set-key (kbd "M-.") 'godef-jump)
-	(local-set-key (kbd "C-f C-m") 'gofmt)
-	(set (make-local-variable 'compamy-backends) '(company-go))
-	(company-mode)
-	(setq indent-tabs-mode nil)
-	(setq c-basic-offset 4)
-	(setq tab-width 4)))
+(require-package 'lsp-mode)
+(require 'lsp-mode)
+(use-package lsp-mode
+  :ensure t
+  :hook
+  (go-mode . lsp-deferred)
+  :commands (lsp lsp-deferred))
 
-;; go-eldoc
-(require-package 'go-eldoc)
-(require 'go-eldoc)
-(add-hook 'go-mode-hook 'go-eldoc-setup)
-(set-face-attribute 'eldoc-highlight-function-argument nil
-		    :underline t :foreground "green"
-		    :weight 'bold)
+(require-package 'lsp-ui)
+(require 'lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
+
+(require-package 'company-lsp)
+(require 'company-lsp)
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
+
+(add-hook 'eshell-mode-hook 'company-mode)
+(add-hook 'eshell-mode-hook
+	  (lambda () (auto-complete-mode -1)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
@@ -214,7 +256,7 @@ locate PACKAGE."
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+    (julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
  '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
 ;; ;; rust-mode
