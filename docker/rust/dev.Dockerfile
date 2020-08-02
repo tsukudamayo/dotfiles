@@ -20,6 +20,7 @@ RUN apt-get update \
 RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
 ENV PATH $PATH:$HOME/.cargo/bin
 
+RUN rustup update
 RUN rustup component add rustfmt-preview
 RUN rustup component add rls-preview rust-analysis rust-src
 RUN cargo install racer
