@@ -392,75 +392,77 @@ locate PACKAGE."
   (eslint-fix-file)
   (revert-buffer t t))
 
-;; ;; scala
-;; ;; Install use-package if not already installed
-;; (unless (package-installed-p 'use-package)
-;;   (package-refresh-contents)
-;;   (package-install 'use-package))
+;; scala
+;; Install use-package if not already installed
+(unless (package-installed-p 'use-package)
+  (package-refresh-contents)
+  (package-install 'use-package))
 
-;; (require-package 'use-package)
-;; (require 'use-package)
+(require-package 'use-package)
+(require 'use-package)
+(require-package 'spinner)
+(require 'spinner)
 
-;; ;; Enable defer and ensure by default for use-package
-;; ;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
-;; (setq use-package-always-defer t
-;;       use-package-always-ensure t
-;;       backup-directory-alist `((".*" . ,temporary-file-directory))
-;;       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; Enable defer and ensure by default for use-package
+;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
+(setq use-package-always-defer t
+      use-package-always-ensure t
+      backup-directory-alist `((".*" . ,temporary-file-directory))
+      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
 
-;; ;; Enable scala-mode and sbt-mode
-;; (require-package 'scala-mode)
-;; (use-package 'scala-mode
-;;   :mode "\\.s\\(cala\\|bt\\)$")
+;; Enable scala-mode and sbt-mode
+(require-package 'scala-mode)
+(use-package 'scala-mode
+  :mode "\\.s\\(cala\\|bt\\)$")
 
-;; (require-package 'sbt-mode)
-;; (use-package sbt-mode
-;;   :commands sbt-start sbt-command
-;;   :config
-;;   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-;;   ;; allows using SPACE when in the minibuffer
-;;   (substitute-key-definition
-;;    'minibuffer-complete-word
-;;    'self-insert-command
-;;    minibuffer-local-completion-map)
-;;    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-;;    (setq sbt:program-options '("-Dsbt.supershell=false"))
-;; )
+(require-package 'sbt-mode)
+(use-package sbt-mode
+  :commands sbt-start sbt-command
+  :config
+  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+  ;; allows using SPACE when in the minibuffer
+  (substitute-key-definition
+   'minibuffer-complete-word
+   'self-insert-command
+   minibuffer-local-completion-map)
+   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+   (setq sbt:program-options '("-Dsbt.supershell=false"))
+)
 
-;; ;; Enable nice rendering of diagnostics like compile errors.
-;; (use-package flycheck
-;;   :init (global-flycheck-mode))
+;; Enable nice rendering of diagnostics like compile errors.
+(use-package flycheck
+  :init (global-flycheck-mode))
 
-;; (require-package 'lsp-mode)
-;; (require 'lsp-mode)
-;; (use-package lsp-mode
-;;   ;; Optional - enable lsp-mode automatically in scala files
-;;   :hook (scala-mode . lsp)
-;;   :config (setq lsp-prefer-flymake nil))
+(require-package 'lsp-mode)
+(require 'lsp-mode)
+(use-package lsp-mode
+  ;; Optional - enable lsp-mode automatically in scala files
+  :hook (scala-mode . lsp)
+  :config (setq lsp-prefer-flymake nil))
 
-;; (require-package 'lsp-ui)
-;; (use-package lsp-ui)
+(require-package 'lsp-ui)
+(use-package lsp-ui)
 
-;; ;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
-;; ;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
-;; ;;   to avoid odd behavior with snippets and indentation
-;; (use-package yasnippet)
+;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
+;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
+;;   to avoid odd behavior with snippets and indentation
+(use-package yasnippet)
 
-;; ;; Add company-lsp backend for metals
-;; (require-package 'company-lsp)
-;; (use-package company-lsp)
+;; Add company-lsp backend for metals
+(require-package 'company-lsp)
+(use-package company-lsp)
 
-;; (require-package 'scala-bootstrap)
-;; (use-package 'scala-bootstrap)
-;; (require 'scala-bootstrap)
-;; (require-package 'lsp-mode)
-;; (require 'lsp-mode)
+(require-package 'scala-bootstrap)
+(use-package 'scala-bootstrap)
+(require 'scala-bootstrap)
+(require-package 'lsp-mode)
+(require 'lsp-mode)
 
-;; (add-hook 'scala-mode-hook
-;;           '(lambda ()
-;;              (scala-bootstrap:with-metals-installed
-;;               (scala-bootstrap:with-bloop-server-started
-;;                (lsp)))))
+(add-hook 'scala-mode-hook
+          '(lambda ()
+             (scala-bootstrap:with-metals-installed
+              (scala-bootstrap:with-bloop-server-started
+               (lsp)))))
 
 ;; R
 (require-package 'ess)

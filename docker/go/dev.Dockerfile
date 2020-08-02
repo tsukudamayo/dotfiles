@@ -13,9 +13,8 @@ RUN apt-get update \
 RUN go get -u golang.org/x/tools/gopls \
     && go get -u golang.org/x/tools/cmd/goimports \
     && go get -u golang.org/x/tools/cmd/godoc \
-    && go get -u golang.org/x/tools/cmd/godoc \
+    && go get -u golang.org/x/lint/golint \
     && go get -u github.com/stamblerre/gocode \
-    && go get -u github.com/golang/golint \
     && go get -u github.com/rogpeppe/godef \
     && go get -u github.com/jstemmer/gotags \
     && go get -u github.com/kisielk/errcheck \
