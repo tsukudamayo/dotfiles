@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
@@ -21,5 +21,7 @@ RUN apt-get update \
 
 WORKDIR /workspace/cmake-3.16.1
 RUN ./bootstrap && make && make install
+
+WORKDIR /workspace
 
 CMD ["bin/bash"]
