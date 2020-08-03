@@ -184,9 +184,6 @@ locate PACKAGE."
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "/usr/local/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "~/go/bin/"))
 (require-package 'go-mode)
 (require 'go-mode)
 (require-package 'go-autocomplete)
