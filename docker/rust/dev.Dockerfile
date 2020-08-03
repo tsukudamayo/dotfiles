@@ -1,4 +1,4 @@
-FROM debian:buster 
+FROM debian:bullseye 
 
 RUN  mkdir -p /home
 WORKDIR /home
@@ -17,15 +17,18 @@ RUN apt-get update \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
-RUN curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain nightly
+RUN curl https://sh.rustup.rs -sSf | sh -s -- -y
 ENV PATH $PATH:$HOME/.cargo/bin
 
-RUN rustup update
-RUN rustup component add rustfmt-preview
-RUN rustup component add rls-preview rust-analysis rust-src
-RUN cargo install racer
+RUN rustup toolchain add nightly
+RUN rustup update 
+RUN rustup component add rustfmt
+RUN rustup component add rls rust-analysis rust-src
+RUN cargo +nightly install racer
 
 RUN mkdir -p /workspace
 WORKDIR /workspace
 
 CMD ["/bin/bash"]
+# XXX USER
+# emacs -nw --user ''
