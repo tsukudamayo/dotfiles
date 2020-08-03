@@ -1,4 +1,5 @@
 FROM golang:rc-buster
+ENV GOROOT /usr/local/go
 #ENV GO111MODULE on
 
 RUN apt-get update \
