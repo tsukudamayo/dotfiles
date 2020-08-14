@@ -261,7 +261,7 @@ locate PACKAGE."
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+    (highlight-indentation flymake-yaml yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
  '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
 ;; rust-mode
@@ -537,6 +537,17 @@ locate PACKAGE."
 (add-hook 'eshell-mode-hook 'company-mode)
 (add-hook 'eshell-mode-hook
 	  (lambda () (auto-complete-mode -1)))
+
+;; yaml-mode
+(require-package 'yaml-mode)
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+(require-package 'highlight-indentation)
+(require 'highlight-indentation)
+(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+(add-hook 'yaml-mode-hook 'highlight-indentation-current-column-mode)
+(add-hook 'yaml-mode-hook '(lambda () (setq highlight-indentation-offset 2)))
 
 ;; toolbar settings
 (tool-bar-mode -1)
