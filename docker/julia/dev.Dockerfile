@@ -15,11 +15,20 @@ RUN apt-get update \
     wget \
     curl \
     libx11-dev \
+    make \
+    libssl-dev \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
-    && cp -r ./dotfiles/.fonts ~/
+    && cp -r ./dotfiles/.fonts ~/ \
+    && wget https://github.com/kitware/cmake/releases/download/v3.16.1/cmake-3.16.1.tar.gz \ 
+    && tar xvf cmake-3.16.1.tar.gz \
+    && rm cmake-3.16.1.tar.gz
+
+workdir /workspace/cmake-3.16.1
+run ./bootstrap && make && make install
 
 # python
+WORKDIR /workspace
 RUN curl -o ~/miniconda.sh -O https://repo.anaconda.com/miniconda/Miniconda3-latest-Linux-x86_64.sh && \
     chmod +x ~/miniconda.sh && \
     ~/miniconda.sh -b -p /opt/conda && \
