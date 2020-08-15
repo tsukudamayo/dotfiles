@@ -14,7 +14,8 @@ RUN apt-get update \
 RUN mkdir -p /app
 WORKDIR /app
 RUN npm install -g @vue/cli \
-    @vue/cli-service-global
+    @vue/cli-service-global \
+    vls
 
 ENV HOST 0.0.0.0
 EXPOSE 3000
