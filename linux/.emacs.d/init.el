@@ -360,10 +360,28 @@ locate PACKAGE."
 (setq typescript-indent-level 2)
 
 ;; web-mode
+(require-package 'web-mode)
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-hook 'web-mode-hook (lambda ()
                            (setq web-mode-markup-indent-offset 2)))
+(custom-set-faces
+ '(web-mode-doctype-face           ((t (:foreground "#4A8ACA"))))
+ '(web-mode-html-tag-face          ((t (:foreground "#4A8ACA"))))
+ '(web-mode-html-tag-bracket-face  ((t (:foreground "#4A8ACA"))))
+ '(web-mode-html-attr-name-face    ((t (:foreground "#87CEEB"))))
+ '(web-mode-html-attr-equal-face   ((t (:foreground "#FFFFFF"))))
+ '(web-mode-html-attr-value-face   ((t (:foreground "#D78181"))))
+ '(web-mode-comment-face           ((t (:foreground "#587F35"))))
+ '(web-mode-server-comment-face    ((t (:foreground "#587F35"))))
+
+ '(web-mode-css-at-rule-face       ((t (:foreground "#DFCF44"))))
+ '(web-mode-comment-face           ((t (:foreground "#587F35"))))
+ '(web-mode-css-selector-face      ((t (:foreground "#DFCF44"))))
+ '(web-mode-css-pseudo-class       ((t (:foreground "#DFCF44"))))
+ '(web-mode-css-property-name-face ((t (:foreground "#87CEEB"))))
+ '(web-mode-css-string-face        ((t (:foreground "#D78181"))))
+ )
 
 ;; vue-mode
 (require-package 'lsp-mode)
