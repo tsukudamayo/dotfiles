@@ -364,7 +364,11 @@ locate PACKAGE."
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-hook 'web-mode-hook (lambda ()
-                           (setq web-mode-markup-indent-offset 2)))
+                           (setq web-mode-markup-indent-offset 2)
+			   (setq web-mode-script-padding 0)
+			   (setq web-mode-style-padding 0)
+			   (setq web-mode-block-padding 0)))
+
 (custom-set-faces
  '(web-mode-doctype-face           ((t (:foreground "#4A8ACA"))))
  '(web-mode-html-tag-face          ((t (:foreground "#4A8ACA"))))
