@@ -1,5 +1,6 @@
 FROM node:buster
 ENV LANG ja_JP.UTF-8
+ENV DISPLAY=host.docker.internal:0.0
 
 RUN apt-get update \
     && apt-get -y install emacs \
