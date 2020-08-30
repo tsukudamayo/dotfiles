@@ -1,6 +1,7 @@
 FROM node:buster
 ENV LANG ja_JP.UTF-8
-ENV DISPLAY=host.docker.internal:0.0
+
+RUN mkdir -p /workspace
 
 RUN apt-get update \
     && apt-get -y install emacs \
@@ -12,12 +13,6 @@ RUN apt-get update \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
-RUN mkdir -p /app
 WORKDIR /app
-RUN npm install -g @vue/cli \
-    @vue/cli-service-global \
-    vls
 
-ENV HOST 0.0.0.0
-EXPOSE 3000
 CMD ["/bin/bash"]

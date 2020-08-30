@@ -1,23 +1,21 @@
-FROM node:buster
-ENV LANG ja_JP.UTF-8
+FROM postgres:latest
+
 ENV DISPLAY=host.docker.internal:0.0
+
+RUN mkdir -p /workspace
 
 RUN apt-get update \
     && apt-get -y install emacs \
+    git \
     llvm \
     clang \
     libclang-dev \
-    vim \
+    curl \
+    && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
-RUN mkdir -p /app
-WORKDIR /app
-RUN npm install -g @vue/cli \
-    @vue/cli-service-global \
-    vls
+WORKDIR /workspace
 
-ENV HOST 0.0.0.0
-EXPOSE 3000
 CMD ["/bin/bash"]
