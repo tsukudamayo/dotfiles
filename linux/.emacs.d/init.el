@@ -364,6 +364,7 @@ locate PACKAGE."
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
 (add-hook 'web-mode-hook (lambda ()
+			   (setq-default indent-tabs-mode nil)
                            (setq web-mode-markup-indent-offset 2)
 			   (setq web-mode-script-padding 0)
 			   (setq web-mode-style-padding 0)
