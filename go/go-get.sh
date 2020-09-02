@@ -41,3 +41,5 @@ go get -u github.com/golang/protobuf/protoc-gen-go
 go get -u google.golang.org/grpc
 
 go get -u github.com/go-sql-driver/mysql
+go get -u github.com/lib/pq
+go get -u github.com/jinzhu/gorm
