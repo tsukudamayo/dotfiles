@@ -32,15 +32,6 @@ open /Applications/Docker.app
 # x11 client
 brew cask install xquartz
 
-# skype
-brew cask install skype
-
-# line
-brew cask install line
-
-# iterm2
-brew cask install iterm2
-
 # tmux
 brew install tmux
 
@@ -87,8 +78,8 @@ brew cask install google-chrome
 # firefox
 brew cask install firefox
 
-# skype
-brew install skype
+# pandoce
+brew install pandoc 
 
 # cmake
 brew install cmake
