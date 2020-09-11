@@ -6,7 +6,7 @@
 (package-initialize)
 (package-refresh-contents)
 
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(setq gnutls-algoanrithm-priority "NORMAL:-VERS-TLS1.3")
 
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
@@ -189,68 +189,70 @@ locate PACKAGE."
 (add-to-list 'exec-path (expand-file-name "~/go/bin/"))
 (require-package 'go-mode)
 (require 'go-mode)
-(require-package 'go-autocomplete)
+;; (require-package 'go-autocomplete)
 
-;; go-autocomplete
-(eval-after-load "go-mode"
-  '(progn
-     (require 'go-autocomplete)))
-(add-hook 'go-mode-hook (lambda ()
-	(add-hook 'before-save-hook' 'gofmt-before-save)
-	(local-set-key (kbd "M-.") 'godef-jump)
-	(local-set-key (kbd "C-f C-m") 'gofmt)
-	(set (make-local-variable 'compamy-backends) '(company-go))
-	(company-mode)
-	(setq indent-tabs-mode nil)
-	(setq c-basic-offset 4)
-	(setq tab-width 4)))
+;; ;; go-autocomplete
+;; (eval-after-load "go-mode"
+;;   '(progn
+;;      (require 'go-autocomplete)))
+;; (add-hook 'go-mode-hook (lambda ()
+;; 	(add-hook 'before-save-hook' 'gofmt-before-save)
+;; 	(local-set-key (kbd "M-.") 'godef-jump)
+;; 	(local-set-key (kbd "C-f C-m") 'gofmt)
+;; 	(set (make-local-variable 'compamy-backends) '(company-go))
+;; 	(company-mode)
+;; 	(setq indent-tabs-mode nil)
+;; 	(setq c-basic-offset 4)
+;; 	(setq tab-width 4)))
 
-;; go-eldoc
-(require-package 'go-eldoc)
-(require 'go-eldoc)
-(add-hook 'go-mode-hook 'go-eldoc-setup)
-(set-face-attribute 'eldoc-highlight-function-argument nil
-		    :underline t :foreground "green"
-		    :weight 'bold)
+;; ;; go-eldoc
+;; (require-package 'go-eldoc)
+;; (require 'go-eldoc)
+;; (add-hook 'go-mode-hook 'go-eldoc-setup)
+;; (set-face-attribute 'eldoc-highlight-function-argument nil
+;; 		    :underline t :foreground "green"
+;; 		    :weight 'bold)
 
-;; ;; XXX golang lsp-mode
-;; (require-package 'spinner)
-;; (require 'spinner)
-;; (defun lsp-go-install-save-hooks()
-;;   (add-hook 'before-save-hook #'lsp-format-buffer t t)
-;;   (add-hook 'before-save-hook #'lsp-organize-imports t t))
+;; XXX golang lsp-mode
+(require-package 'spinner)
+(require 'spinner)
+(defun lsp-go-install-save-hooks()
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
-;; (require-package 'go-mode)
-;; (require 'go-mode)
-;; (use-package go-mode
-;;   :ensure t
-;;   :mode (("\\.go\\'" . go-mode))
-;;   :init
-;;   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+(require-package 'go-mode)
+(require 'go-mode)
+(use-package go-mode
+  :ensure t
+  :mode (("\\.go\\'" . go-mode))
+  :init
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
 
-;; (require-package 'lsp-mode)
-;; (require 'lsp-mode)
-;; (use-package lsp-mode
-;;   :ensure t
-;;   :hook
-;;   (go-mode . lsp-deferred)
-;;   :commands (lsp lsp-deferred))
+(require-package 'lsp-mode)
+(require 'lsp-mode)
+(use-package lsp-mode
+  :ensure t
+  :hook
+  (go-mode . lsp-deferred)
+  :commands (lsp lsp-deferred))
 
-;; (require-package 'lsp-ui)
-;; (require 'lsp-ui)
-;; (use-package lsp-ui
-;;   :ensure t
-;;   :commands lsp-ui-mode)
+(require-package 'lsp-ui)
+(require 'lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :commands lsp-ui-mode)
 
-;; (require-package 'company-lsp)
-;; (require 'company-lsp)
-;; (use-package company-lsp
-;;   :ensure t
-;;   :commands company-lsp)
+(require-package 'company-lsp)
+(require 'company-lsp)
+(use-package company-lsp
+  :ensure t
+  :commands company-lsp)
 
-;; (add-hook 'go-mode-hook 'company-mode)
-;; (add-hook 'go-mode-hook
-;; 	  (lambda () (auto-complete-mode -1)))
+(add-hook 'go-mode-hook (lambda () (auto-complete-mode -1)))
+
+(add-hook 'go-mode-hook #'lsp-deferred)
+(with-eval-after-load 'lsp-mode
+  (setq lsp-enable-snippet nil))
 
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
@@ -261,35 +263,35 @@ locate PACKAGE."
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (highlight-indentation flymake-yaml yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+    (company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
  '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
-;; rust-mode
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-(require-package 'jsonrpc)
-(require-package 'eglot)
-(require-package 'flymake)
-(require 'jsonrpc)
-(require 'eglot)
-(require 'flymake)
-(with-eval-after-load 'eglot
-  (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
-  (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
-  )
-(require-package 'spinner)
-(require-package 'rust-mode)
-(require-package 'rustic)
-(require 'rust-mode)
-(require 'spinner)
-(require 'rustic)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+;; ;; rust-mode
+;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+;; (require-package 'jsonrpc)
+;; (require-package 'eglot)
+;; (require-package 'flymake)
+;; (require 'jsonrpc)
+;; (require 'eglot)
+;; (require 'flymake)
+;; (with-eval-after-load 'eglot
+;;   (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
+;;   (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
+;;   )
+;; (require-package 'spinner)
+;; (require-package 'rust-mode)
+;; (require-package 'rustic)
+;; (require 'rust-mode)
+;; (require 'spinner)
+;; (require 'rustic)
+;; (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
+;; (cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
+;; (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
 
-(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
-  (pop-to-buffer buffer-or-name action norecord)
-  (other-window -1)
-  )
+;; (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
+;;   (pop-to-buffer buffer-or-name action norecord)
+;;   (other-window -1)
+;;   )
 
 
 ;; c, c++
@@ -363,41 +365,18 @@ locate PACKAGE."
 (require-package 'web-mode)
 (require 'web-mode)
 (add-to-list 'auto-mode-alist '("\\.html?\\'" . web-mode))
-(add-hook 'web-mode-hook (lambda ()
-			   (setq-default indent-tabs-mode nil)
-                           (setq web-mode-markup-indent-offset 2)
-			   (setq web-mode-script-padding 0)
-			   (setq web-mode-style-padding 0)
-			   (setq web-mode-block-padding 0)))
 
-(custom-set-faces
- '(web-mode-doctype-face           ((t (:foreground "#4A8ACA"))))
- '(web-mode-html-tag-face          ((t (:foreground "#4A8ACA"))))
- '(web-mode-html-tag-bracket-face  ((t (:foreground "#4A8ACA"))))
- '(web-mode-html-attr-name-face    ((t (:foreground "#87CEEB"))))
- '(web-mode-html-attr-equal-face   ((t (:foreground "#FFFFFF"))))
- '(web-mode-html-attr-value-face   ((t (:foreground "#D78181"))))
- '(web-mode-comment-face           ((t (:foreground "#587F35"))))
- '(web-mode-server-comment-face    ((t (:foreground "#587F35"))))
-
- '(web-mode-css-at-rule-face       ((t (:foreground "#DFCF44"))))
- '(web-mode-comment-face           ((t (:foreground "#587F35"))))
- '(web-mode-css-selector-face      ((t (:foreground "#DFCF44"))))
- '(web-mode-css-pseudo-class       ((t (:foreground "#DFCF44"))))
- '(web-mode-css-property-name-face ((t (:foreground "#87CEEB"))))
- '(web-mode-css-string-face        ((t (:foreground "#D78181"))))
- )
-
-;; vue-mode
-(require-package 'lsp-mode)
-(require-package 'use-package)
-(require-package 'web-mode)
-(require 'web-mode)
-(add-to-list 'auto-mode-alist '("\\.vue\\'" . web-mode))
-(use-package lsp-mode
-  :ensure t
-  :hook (web-mode . lsp)
-  :commands lsp)
+;; ;; vue-mode
+;; (require-package 'vue-mode)
+;; (require 'vue-mode)
+;; (require 'flycheck)
+;; (add-to-list 'auto-mode-alist '("\\.vue\\'" . vue-mode))
+;; (eval-after-load 'vue-mode
+;;   '(add-hook 'vue-mode-hook #'add-node-modules-path))
+;; (flycheck-add-mode 'javascript-eslint 'vue-mode)
+;; (flycheck-add-mode 'javascript-eslint 'vue-html-mode)
+;; (flycheck-add-mode 'javascript-eslint 'css-mode)
+;; (add-hook 'vue-mode-hook 'flycheck-mode)
 
 ;; rjsx-mode
 (require-package 'rjsx-mode)
@@ -560,17 +539,6 @@ locate PACKAGE."
 (add-hook 'eshell-mode-hook 'company-mode)
 (add-hook 'eshell-mode-hook
 	  (lambda () (auto-complete-mode -1)))
-
-;; yaml-mode
-(require-package 'yaml-mode)
-(require 'yaml-mode)
-(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
-(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
-(require-package 'highlight-indentation)
-(require 'highlight-indentation)
-(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
-(add-hook 'yaml-mode-hook 'highlight-indentation-current-column-mode)
-(add-hook 'yaml-mode-hook '(lambda () (setq highlight-indentation-offset 2)))
 
 ;; toolbar settings
 (tool-bar-mode -1)
