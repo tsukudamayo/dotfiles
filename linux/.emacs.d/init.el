@@ -75,6 +75,8 @@ locate PACKAGE."
   (define-key company-active-map (kbd "C-p") 'company-select-previous)
   (define-key company-active-map (kbd "C-s") 'company-filter-candidates)
   (define-key company-active-map [tab] 'company-complete-selection)
+  (define-key company-active-map (kbd "C-i") 'company-complete-selection)
+  (define-key company-active-map (kbd "C-h") nil)
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
 ;; auto-complete
@@ -187,8 +189,8 @@ locate PACKAGE."
 (add-to-list 'exec-path (expand-file-name "/usr/local/go/bin/"))
 (add-to-list 'exec-path (expand-file-name "/go/bin/"))
 (add-to-list 'exec-path (expand-file-name "~/go/bin/"))
-(require-package 'go-mode)
-(require 'go-mode)
+;; (require-package 'go-mode)
+;; (require 'go-mode)
 ;; (require-package 'go-autocomplete)
 
 ;; ;; go-autocomplete
@@ -226,7 +228,8 @@ locate PACKAGE."
   :ensure t
   :mode (("\\.go\\'" . go-mode))
   :init
-  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks))
+  (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+  (add-hook 'go-mode-hook 'company-mode))
 
 (require-package 'lsp-mode)
 (require 'lsp-mode)
@@ -263,7 +266,7 @@ locate PACKAGE."
  '(custom-enabled-themes (quote (manoj-dark)))
  '(package-selected-packages
    (quote
-    (company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+    (highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
  '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
 ;; ;; rust-mode
@@ -523,7 +526,18 @@ locate PACKAGE."
 
 ;; julia
 (require-package 'julia-mode)
-(require 'julia-mode)  
+(require 'julia-mode)
+
+;; yaml-mode
+(require-package 'yaml-mode)
+(require 'yaml-mode)
+(add-to-list 'auto-mode-alist '("\\.yml\\'" . yaml-mode))
+(add-to-list 'auto-mode-alist '("\\.yaml\\'" . yaml-mode))
+(require-package 'highlight-indentation)
+(require 'highlight-indentation)
+(add-hook 'yaml-mode-hook 'highlight-indentation-mode)
+(add-hook 'yaml-mode-hook 'highlight-indentation-current-column-mode)
+(add-hook 'yaml-mode-hook '(lambda () (setq highlight-indentation-offset 2)))
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
