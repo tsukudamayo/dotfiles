@@ -61,6 +61,7 @@ locate PACKAGE."
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
+
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
 (require-package 'company)
@@ -79,6 +80,7 @@ locate PACKAGE."
   (define-key company-active-map (kbd "C-h") nil)
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
+
 ;; auto-complete
 (require-package 'auto-complete)
 (require 'auto-complete-config)
@@ -87,6 +89,14 @@ locate PACKAGE."
 (setq ac-use-fuzzy t)
 (setq ac-delay 0)
 (setq ac-auto-show-menu 0.05)
+
+
+;; lsp-mode
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
+(require-package 'jsonrpc)
+(require-package 'spinner)
+(require 'spinner)
+
 
 ;; helm
 (require-package 'helm)
@@ -101,10 +111,12 @@ locate PACKAGE."
 (require 'swiper-helm)
 (ivy-mode 1)
 
+
 ;; M-x dumb-jump-go
 (require-package 'dumb-jump)
 (require 'dumb-jump)
 (setq dumb-jump-mode t)
+
 
 ;; ;; projectile
 ;; (require 'projectile)
@@ -125,10 +137,12 @@ locate PACKAGE."
 ;; (load-file "~/.emacs.d/elpa/geiser-20200103.1329/geiser.el")
 ;; (setq geiser-active-implementations '(racket))
 
+
 ;; markdown
 (require-package 'markdown-mode)
 (autoload 'markdown-mode "markdown-mode.el" "Major mode for editing Markdown files" t)
 (add-to-list 'auto-mode-alist '("\\.md\\'" . markdown-mode))
+
 
 ;; ddskk settings
 (require-package 'ddskk)
@@ -136,6 +150,7 @@ locate PACKAGE."
   (global-set-key (kbd "C-x C-j") 'skk-auto-fill-mode)
   (setq default-input-method "japanese-skk")
   (require 'skk-study))
+
 
 ;; yasnippet
 (require-package 'yasnippet)
@@ -149,6 +164,7 @@ locate PACKAGE."
 (global-set-key (kbd "C-c y") 'helm-yas-complete)
 (push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
 (yas-global-mode 1)
+
 
 ;; python-mode
 (require-package 'python-mode)
@@ -185,39 +201,38 @@ locate PACKAGE."
 	 '(lambda()
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
+
+;; rust-mode
+(require-package 'eglot)
+(require-package 'flymake)
+(require 'jsonrpc)
+(require 'eglot)
+(require 'flymake)
+(with-eval-after-load 'eglot
+  (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
+  (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
+  )
+(require-package 'spinner)
+(require-package 'rust-mode)
+(require-package 'rustic)
+(require 'rust-mode)
+(require 'spinner)
+(require 'rustic)
+(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
+(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
+(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+
+(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
+  (pop-to-buffer buffer-or-name action norecord)
+  (other-window -1)
+  )
+
+
 ;; golang
 (add-to-list 'exec-path (expand-file-name "/usr/local/go/bin/"))
 (add-to-list 'exec-path (expand-file-name "/go/bin/"))
 (add-to-list 'exec-path (expand-file-name "~/go/bin/"))
-;; (require-package 'go-mode)
-;; (require 'go-mode)
-;; (require-package 'go-autocomplete)
 
-;; ;; go-autocomplete
-;; (eval-after-load "go-mode"
-;;   '(progn
-;;      (require 'go-autocomplete)))
-;; (add-hook 'go-mode-hook (lambda ()
-;; 	(add-hook 'before-save-hook' 'gofmt-before-save)
-;; 	(local-set-key (kbd "M-.") 'godef-jump)
-;; 	(local-set-key (kbd "C-f C-m") 'gofmt)
-;; 	(set (make-local-variable 'compamy-backends) '(company-go))
-;; 	(company-mode)
-;; 	(setq indent-tabs-mode nil)
-;; 	(setq c-basic-offset 4)
-;; 	(setq tab-width 4)))
-
-;; ;; go-eldoc
-;; (require-package 'go-eldoc)
-;; (require 'go-eldoc)
-;; (add-hook 'go-mode-hook 'go-eldoc-setup)
-;; (set-face-attribute 'eldoc-highlight-function-argument nil
-;; 		    :underline t :foreground "green"
-;; 		    :weight 'bold)
-
-;; XXX golang lsp-mode
-(require-package 'spinner)
-(require 'spinner)
 (defun lsp-go-install-save-hooks()
   (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
@@ -268,33 +283,6 @@ locate PACKAGE."
    (quote
     (highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
  '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
-
-;; ;; rust-mode
-;; (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-;; (require-package 'jsonrpc)
-;; (require-package 'eglot)
-;; (require-package 'flymake)
-;; (require 'jsonrpc)
-;; (require 'eglot)
-;; (require 'flymake)
-;; (with-eval-after-load 'eglot
-;;   (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
-;;   (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
-;;   )
-;; (require-package 'spinner)
-;; (require-package 'rust-mode)
-;; (require-package 'rustic)
-;; (require 'rust-mode)
-;; (require 'spinner)
-;; (require 'rustic)
-;; (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
-;; (cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
-;; (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
-
-;; (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
-;;   (pop-to-buffer buffer-or-name action norecord)
-;;   (other-window -1)
-;;   )
 
 
 ;; c, c++
