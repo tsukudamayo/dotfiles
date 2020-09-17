@@ -202,30 +202,30 @@ locate PACKAGE."
 	    (add-hook 'before-save-hook 'py-isort-before-save)))
 
 
-;; rust-mode
-(require-package 'eglot)
-(require-package 'flymake)
-(require 'jsonrpc)
-(require 'eglot)
-(require 'flymake)
-(with-eval-after-load 'eglot
-  (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
-  (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
-  )
-(require-package 'spinner)
-(require-package 'rust-mode)
-(require-package 'rustic)
-(require 'rust-mode)
-(require 'spinner)
-(require 'rustic)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+;; ;; rust-mode
+;; (require-package 'eglot)
+;; (require-package 'flymake)
+;; (require 'jsonrpc)
+;; (require 'eglot)
+;; (require 'flymake)
+;; (with-eval-after-load 'eglot
+;;   (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
+;;   (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
+;;   )
+;; (require-package 'spinner)
+;; (require-package 'rust-mode)
+;; (require-package 'rustic)
+;; (require 'rust-mode)
+;; (require 'spinner)
+;; (require 'rustic)
+;; (cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
+;; (cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
+;; (add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
 
-(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
-  (pop-to-buffer buffer-or-name action norecord)
-  (other-window -1)
-  )
+;; (defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
+;;   (pop-to-buffer buffer-or-name action norecord)
+;;   (other-window -1)
+;;   )
 
 
 ;; golang
@@ -515,6 +515,21 @@ locate PACKAGE."
 ;; julia
 (require-package 'julia-mode)
 (require 'julia-mode)
+
+;; php
+(require-package 'php-mode)
+(use-package phpunit
+  :ensure t)
+
+(provide 'long-php)
+
+(require-package 'lsp-mode)
+(use-package lsp-mode
+  :config
+  (setq lsp-prefer-flymake nil)
+  :hook (php-mode . lsp)
+  :commands lsp)
+
 
 ;; yaml-mode
 (require-package 'yaml-mode)
