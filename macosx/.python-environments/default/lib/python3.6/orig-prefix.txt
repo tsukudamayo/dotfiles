@@ -1,1 +1,0 @@
-/Users/user/lib/miniconda3/envs/gan
