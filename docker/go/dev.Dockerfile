@@ -1,7 +1,12 @@
-FROM golang:rc-buster
+FROM golang:buster
 
 RUN apt-get update \
-    && apt-get -y install emacs \
+    && apt-get install -y software-properties-common
+RUN apt-get update
+RUN wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add
+RUN add-apt-repository "deb http://emacs.ganneff.de/ buster main"
+RUN apt-get update \
+    && apt-get install -y emacs-snapshot \
     llvm \
     clang \
     libclang-dev \
