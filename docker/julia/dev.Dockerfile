@@ -24,6 +24,10 @@ RUN apt-get update \
     libx11-dev \
     make \
     libssl-dev \
+    # for Plots.jl #####
+    qt5-default \
+    libqt5gui5 \
+    ####################
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/ \
