@@ -350,7 +350,7 @@ locate PACKAGE."
 	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
 	    (eldoc-mode t)
 	    (company-mode-on)))
-(setq typescript-indent-level 2)
+(setq typescript-indent-level 4)
 
 ;; web-mode
 (require-package 'web-mode)
