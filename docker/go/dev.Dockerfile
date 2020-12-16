@@ -24,4 +24,6 @@ RUN go get -u golang.org/x/tools/gopls \
     && go get -u github.com/kisielk/errcheck \
     && go get github.com/derekparker/delve/cmd/dlv 
 
+EXPOSE 8080
+
 CMD ["/bin/bash"]

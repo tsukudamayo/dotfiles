@@ -341,6 +341,7 @@ locate PACKAGE."
 (require-package 'typescript-mode)
 (require 'typescript-mode)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
 (require-package 'tide)
 (require 'tide)
 (add-hook 'typescript-mode-hook

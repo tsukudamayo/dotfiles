@@ -24,5 +24,6 @@ WORKDIR /workspace/app
 RUN npm install -g typescript \
     tslint \
     && tslint --init
+EXPOSE 3000
 
 CMD ["/bin/bash"]
