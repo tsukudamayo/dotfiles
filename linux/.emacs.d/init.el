@@ -99,13 +99,13 @@ locate PACKAGE."
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
   (lsp)
-  (global-set-key (kbd "M-*") 'xref-pop-marker-stack)
+  (global-set-key (kbd "M-/") 'xref-pop-marker-stack)
   (global-set-key (kbd "M-.") 'xref-find-definitions)
-  (global-set-key (kbd "M-/") 'xref-find-references)
+  (global-set-key (kbd "M-*") 'xref-find-references)
   )
 
 (add-hook 'go-mode-hook 'lsp-mode-init)
-	
+
 
 ;; helm
 (require-package 'helm)
@@ -573,7 +573,7 @@ locate PACKAGE."
       (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 105 109 112 111 114 116 return 67108896 67108896 67108896 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
 ;; frompy
 (fset 'frompy
-   (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
+      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -592,8 +592,9 @@ locate PACKAGE."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ac-go-expand-arguments-into-snippets nil)
- '(custom-enabled-themes (quote (manoj-dark)))
+ '(custom-enabled-themes '(manoj-dark))
  '(package-selected-packages
-   (quote
-    (phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
- '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
+   '(phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
+ '(rustic-format-display-method 'pop-to-buffer-without-switch)
+)
+
