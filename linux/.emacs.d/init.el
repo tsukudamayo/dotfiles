@@ -96,7 +96,16 @@ locate PACKAGE."
 (require-package 'jsonrpc)
 (require-package 'spinner)
 (require 'spinner)
+;; setting xref in lsp-mode
+(defun lsp-mode-init ()
+  (lsp)
+  (global-set-key (kbd "M-*") 'xref-pop-marker-stack)
+  (global-set-key (kbd "M-.") 'xref-find-definitions)
+  (global-set-key (kbd "M-/") 'xref-find-references)
+  )
 
+(add-hook 'go-mode-hook 'lsp-mode-init)
+	
 
 ;; helm
 (require-package 'helm)
@@ -271,18 +280,6 @@ locate PACKAGE."
 (add-hook 'go-mode-hook #'lsp-deferred)
 (with-eval-after-load 'lsp-mode
   (setq lsp-enable-snippet nil))
-
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(ac-go-expand-arguments-into-snippets nil)
- '(custom-enabled-themes (quote (manoj-dark)))
- '(package-selected-packages
-   (quote
-    (phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
- '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
 
 
 ;; c, c++
@@ -588,3 +585,15 @@ locate PACKAGE."
  ;; If there is more than one, they won't work right.
  '(flycheck-error ((((class color)) (:foreground "yellow" :bold t :background "red"))))
  '(flycheck-warning ((((class color)) (:foreground "red" :bold t :background "yellow")))))
+
+(custom-set-variables
+ ;; custom-set-variables was added by Custom.
+ ;; If you edit it by hand, you could mess it up, so be careful.
+ ;; Your init file should contain only one such instance.
+ ;; If there is more than one, they won't work right.
+ '(ac-go-expand-arguments-into-snippets nil)
+ '(custom-enabled-themes (quote (manoj-dark)))
+ '(package-selected-packages
+   (quote
+    (phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper)))
+ '(rustic-format-display-method (quote pop-to-buffer-without-switch)))
