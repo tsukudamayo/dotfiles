@@ -26,6 +26,7 @@ RUN chmod a+x "$HOME/.sdkman/bin/sdkman-init.sh"
 RUN echo "bash $HOME/.sdkman/bin/sdkman-init.sh" >> $HOME/.bashrc
 
 RUN echo "sdk install java" >> $HOME/.bashrc
+RUN echo "sdk install scala" >> $HOME/.bashrc
 RUN echo "sdk install sbt" >> $HOME/.bashrc
 
 RUN mkdir -p /workspace
