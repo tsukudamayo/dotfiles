@@ -6,7 +6,7 @@
 (package-initialize)
 (package-refresh-contents)
 
-(setq gnutls-algoanrithm-priority "NORMAL:-VERS-TLS1.3")
+(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
@@ -595,6 +595,5 @@ locate PACKAGE."
  '(custom-enabled-themes '(manoj-dark))
  '(package-selected-packages
    '(phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
- '(rustic-format-display-method 'pop-to-buffer-without-switch)
-)
+ '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
