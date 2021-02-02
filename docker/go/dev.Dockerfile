@@ -1,5 +1,7 @@
 FROM golang:buster
 
+ENV GO111MODULE=on
+
 RUN apt-get update \
     && apt-get install -y software-properties-common
 RUN apt-get update \
@@ -14,15 +16,15 @@ RUN apt-get update \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
-RUN go get -u golang.org/x/tools/gopls \
-    && go get -u golang.org/x/tools/cmd/goimports \
-    && go get -u golang.org/x/tools/cmd/godoc \
-    && go get -u golang.org/x/lint/golint \
-    && go get -u github.com/stamblerre/gocode \
-    && go get -u github.com/rogpeppe/godef \
-    && go get -u github.com/jstemmer/gotags \
-    && go get -u github.com/kisielk/errcheck \
-    && go get github.com/derekparker/delve/cmd/dlv 
+RUN go get -u golang.org/x/tools/gopls
+RUN go get -u golang.org/x/tools/cmd/goimports
+RUN go get -u golang.org/x/tools/cmd/godoc
+RUN go get -u golang.org/x/lint/golint
+RUN go get -u github.com/stamblerre/gocode
+RUN go get -u github.com/rogpeppe/godef
+RUN go get -u github.com/jstemmer/gotags
+RUN go get -u github.com/kisielk/errcheck
+RUN go get github.com/go-delve/delve/cmd/dlv 
 
 EXPOSE 8080
 
