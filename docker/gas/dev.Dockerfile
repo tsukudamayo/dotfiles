@@ -33,7 +33,7 @@ WORKDIR /workspace/app
 
 # 8sing yarn
 RUN yarn init -y \
-    && yarn add -D @google/clasp \
+    && yarn global add @google/clasp \
     @types/google-apps-script \
     @typescript-eslint/eslint-plugin \
     @types/jest \

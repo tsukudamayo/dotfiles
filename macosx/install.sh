@@ -156,3 +156,6 @@ brew cask install julia
 curl https://sdk.cloud.google.com > gcp-sdk-install.sh
 bash gcp-sdk-install.sh --disable-prompts
 rm gpc-sdk-install.sh 
+
+# circleci/cli
+curl -fLSs https://circle.ci/cli | bash
