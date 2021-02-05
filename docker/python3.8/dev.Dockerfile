@@ -7,12 +7,14 @@ RUN mkdir -p /workspace
 
 RUN apt-get update \
     && apt-get install -y software-properties-common \
-    gnupg2
+    gnupg2 \
+    wget
+
 RUN apt-get update  \
     && wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add
 RUN add-apt-repository "deb http://emacs.ganneff.de/ buster main"
 
-RUN apt-get update \
+RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get -y install emacs-snapshot \
     git \
     llvm \
