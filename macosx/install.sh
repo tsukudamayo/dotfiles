@@ -160,3 +160,6 @@ rm gpc-sdk-install.sh
 
 # circleci/cli
 curl -fLSs https://circle.ci/cli | bash
+
+# stoplight-studio
+brew install --cask stoplight-studio
