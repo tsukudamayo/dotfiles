@@ -26,17 +26,17 @@ cp -r ~/dotfiles/.vim/ ~/
 
 # docker
 brew install docker
-brew cask install docker
+brew install --cask docker
 open /Applications/Docker.app
 
 # x11 client
-brew cask install xquartz
+brew install --cask xquartz
 
 # tmux
 brew install tmux
 
 # emacs
-brew cask install emacs
+brew install --cask emacs
 
 ## for gpu install(cuda, cudnn, bazel, coreutils)
 #brew install coreutils
@@ -45,10 +45,10 @@ brew cask install emacs
 
 
 # vlc
-brew cask install vlc
+brew install --cask vlc
 
 # libreoffice
-brew cask install libreoffice
+brew install --cask libreoffice
 
 # lua
 brew install lua
@@ -59,11 +59,12 @@ mkdir ~/vimfiles/swp
 mkdir ~/vimfiles/backup
 mkdir ~/vimfiles/undo
 
-brew install vim ¥
---with-lua
---with-luajit
---override-system-vi
---with-tcl
+## TODO vim install error
+# brew install vim ¥
+# --with-lua
+# --with-luajit
+# --override-system-vi
+# --with-tcl
 
 # wget
 xcode-select --install
@@ -73,10 +74,10 @@ brew install wget
 git clone https://github.com/vjpr/monaco-bold.git ~/.fonts/
 
 # google-chrome
-brew cask install google-chrome
+brew install --cask google-chrome
 
 # firefox
-brew cask install firefox
+brew install --cask firefox
 
 # pandoce
 brew install pandoc 
@@ -128,7 +129,7 @@ ros install clisp
 ros install slime
 
 # scheme
-brew cask install racket
+brew install --cask racket
 raco pkg install sicp
 
 # rust
@@ -146,11 +147,11 @@ rustup component add rls-preview rust-analysis rust-src
 
 # R
 brew install r
-brew cask install rstudio
+brew install --cask rstudio
 git clone https://https://github.com/myuhe/auto-complete-acr.el.git ~/dotfiles/.emacs.d/elpa
 
 # julia
-brew cask install julia
+brew install --cask julia
 
 # gcp sdk
 curl https://sdk.cloud.google.com > gcp-sdk-install.sh
