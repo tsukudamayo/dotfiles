@@ -549,6 +549,21 @@ locate PACKAGE."
 (add-hook 'yaml-mode-hook 'highlight-indentation-current-column-mode)
 (add-hook 'yaml-mode-hook '(lambda () (setq highlight-indentation-offset 2)))
 
+;; terraform
+(require-package 'terraform-mode)
+(require 'terraform-mode)
+(add-to-list 'lsp-language-id-configuration '(terraform-mode . "terraform"))
+
+(lsp-register-client
+ (make-lsp-client :new-connection (lsp-stdio-connection
+				   '("~/terraform-ls" "serve"))
+                  :major-modes '(terraform-mode)
+                  :server-id 'terraform-ls))
+(add-hook 'terraform-mode-hook #'lsp)
+(require-package 'company-terraform)
+(require 'company-terraform)
+(company-terraform-init)
+
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
 (add-hook 'emacs-lisp-mode-hook
