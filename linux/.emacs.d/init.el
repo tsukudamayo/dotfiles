@@ -563,6 +563,7 @@ locate PACKAGE."
 (require-package 'company-terraform)
 (require 'company-terraform)
 (company-terraform-init)
+(add-hook 'terraform-mode-hook #'terraform-format-on-save-mode)
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
