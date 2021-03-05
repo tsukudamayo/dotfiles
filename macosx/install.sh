@@ -82,6 +82,9 @@ brew install --cask firefox
 # pandoce
 brew install pandoc 
 
+# make
+brew install make
+
 # cmake
 brew install cmake
 
