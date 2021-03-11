@@ -3,6 +3,17 @@
       '(("gnu" . "http://elpa.gnu.org/packages/")
 	("melpa" . "http://melpa.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
+
+;; (setq package-archives
+;;       '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
+;;         ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
+;;         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
+
+;; (setq package-archives
+;;       '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
+;; 	("melpa" . "https://melpa.org/packages/")
+;; 	("org" . "http://orgmode.org/elpa/")))
+
 (package-initialize)
 (package-refresh-contents)
 
@@ -261,6 +272,7 @@ locate PACKAGE."
   :ensure t
   :hook
   (go-mode . lsp-deferred)
+  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
   :commands (lsp lsp-deferred))
 
 (require-package 'lsp-ui)
@@ -268,12 +280,6 @@ locate PACKAGE."
 (use-package lsp-ui
   :ensure t
   :commands lsp-ui-mode)
-
-(require-package 'company-lsp)
-(require 'company-lsp)
-(use-package company-lsp
-  :ensure t
-  :commands company-lsp)
 
 (add-hook 'go-mode-hook (lambda () (auto-complete-mode -1)))
 
@@ -442,7 +448,9 @@ locate PACKAGE."
 (require 'lsp-mode)
 (use-package lsp-mode
   ;; Optional - enable lsp-mode automatically in scala files
-  :hook (scala-mode . lsp)
+  :hook
+  (scala-mode . lsp)
+  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
   :config (setq lsp-prefer-flymake nil))
 
 (require-package 'lsp-ui)
@@ -452,10 +460,6 @@ locate PACKAGE."
 ;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
 ;;   to avoid odd behavior with snippets and indentation
 (use-package yasnippet)
-
-;; Add company-lsp backend for metals
-(require-package 'company-lsp)
-(use-package company-lsp)
 
 (require 'scala-bootstrap)
 (require-package 'lsp-mode)
@@ -610,6 +614,6 @@ locate PACKAGE."
  '(ac-go-expand-arguments-into-snippets nil)
  '(custom-enabled-themes '(manoj-dark))
  '(package-selected-packages
-   '(phpunit php-mode highlight-indentation yaml-mode company-lsp lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
+   '(phpunit php-mode highlight-indentation yaml-mode lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
  '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
