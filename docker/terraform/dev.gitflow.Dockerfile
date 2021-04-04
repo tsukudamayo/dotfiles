@@ -58,6 +58,9 @@ RUN wget https://golang.org/dl/go1.16.linux-amd64.tar.gz \
 # git flow
 RUN wget --no-check-certificate -q -O - https://github.com/nvie/gitflow/raw/develop/contrib/gitflow-installer.sh | bash
 
+# github flow
+RUN curl https://raw.github.com/github-flow/github-flow/v1.1/install.sh | $(which bash)
+
 # git completion
 RUN curl -o ~/.git-prompt.sh \
     https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
