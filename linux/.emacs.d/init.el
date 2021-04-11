@@ -254,7 +254,7 @@ locate PACKAGE."
 (add-to-list 'exec-path (expand-file-name "~/go/bin/"))
 
 (defun lsp-go-install-save-hooks()
-  (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  ;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (require-package 'go-mode)
@@ -264,6 +264,7 @@ locate PACKAGE."
   :mode (("\\.go\\'" . go-mode))
   :init
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
+  (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook 'company-mode))
 
 (require-package 'lsp-mode)
