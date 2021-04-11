@@ -185,6 +185,14 @@ locate PACKAGE."
 (push '("emacs.+/snippets/" . snippet-mode) auto-mode-alist)
 (yas-global-mode 1)
 
+;; magit
+(require-package 'magit)
+(require 'magit)
+(defalias 'magit 'magit-status)
+(global-set-key "\C-xg" 'magit-status)
+(setenv "GIT_EDITOR" "emacsclient")
+(add-hook 'shell-mode-hook 'with-editor-export-git-editor)
+
 
 ;; python-mode
 (require-package 'python-mode)
