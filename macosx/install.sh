@@ -35,8 +35,28 @@ brew install --cask xquartz
 # tmux
 brew install tmux
 
-# emacs
-brew install --cask emacs
+# make
+brew install make
+
+# cmake
+brew install cmake
+
+# llvm
+brew install llvm
+
+# emacs(native compile)
+brew install autoconf gnutls texinfo
+brew install --build-from-source libgccgit automake
+echo 'export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"' > ~/.bash_profile
+echo 'export PATH="/usr/local/opt/texinfo/bin:$PATH"' >  ~/.bash_profile
+cd ~/opt
+git clone git://git.sv.gnu.org/emacs.git
+cd emacs
+./autogen.sh
+./configure --with-native-compilation --with-ns --without-x
+make install
+sudo cp -r nextstep/Emacs.app /Applications/
+ 
 
 ## for gpu install(cuda, cudnn, bazel, coreutils)
 #brew install coreutils
@@ -79,17 +99,8 @@ brew install --cask google-chrome
 # firefox
 brew install --cask firefox
 
-# pandoce
+# pandoc
 brew install pandoc 
-
-# make
-brew install make
-
-# cmake
-brew install cmake
-
-# llvm
-brew install llvm
 
 # miniconda(python)
 wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
