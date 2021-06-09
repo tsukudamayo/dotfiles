@@ -2,6 +2,7 @@ FROM debian:bullseye as base
 
 ENV LANG ja_JP.UTF-8
 ENV LC_CTYPE ja_JP.UTF-8
+ENV DISPLAY=host.docker.internal:0.0
 
 RUN apt-get update \
     && apt-get install -y wget \
@@ -11,6 +12,7 @@ RUN apt-get update \
     make \
     libssl-dev \
     git \
+    xclip \
     locales \
     && locale-gen ja_JP.UTF-8
 
