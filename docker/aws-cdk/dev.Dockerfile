@@ -32,6 +32,7 @@ WORKDIR /workspace/app
 # 8sing yarn
 RUN npm install -g typescript \
     aws-cdk \
+    && cdk init app --language=typescript \
     && npm install -D eslint \
     @typescript-eslint/parser \
     @typescript-eslint/eslint-plugin \
@@ -39,5 +40,6 @@ RUN npm install -g typescript \
     eslint-config-prettier \
     eslint-plugin-prettier
 
+WORKDIR /workspace/app
 
 CMD ["/bin/bash"]
