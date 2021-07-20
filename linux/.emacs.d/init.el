@@ -4,16 +4,6 @@
 	("melpa" . "http://melpa.org/packages/")
 	("org" . "http://orgmode.org/elpa/")))
 
-;; (setq package-archives
-;;       '(("melpa" . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/melpa/")
-;;         ("org"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/org/")
-;;         ("gnu"   . "https://raw.githubusercontent.com/d12frosted/elpa-mirror/master/gnu/")))
-
-;; (setq package-archives
-;;       '(("gnu" . "http://mirrors.163.com/elpa/gnu/")
-;; 	("melpa" . "https://melpa.org/packages/")
-;; 	("org" . "http://orgmode.org/elpa/")))
-
 (package-initialize)
 (package-refresh-contents)
 
@@ -623,6 +613,6 @@ locate PACKAGE."
  '(ac-go-expand-arguments-into-snippets nil)
  '(custom-enabled-themes '(manoj-dark))
  '(package-selected-packages
-   '(phpunit php-mode highlight-indentation yaml-mode lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
+   '(phpunint php-mode highlight-indentation yaml-mode lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
  '(rustic-format-display-method 'pop-to-buffer-without-switch))
 
