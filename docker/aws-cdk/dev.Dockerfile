@@ -27,18 +27,9 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
 
-WORKDIR /workspace/app
+WORKDIR /workspace
 
-# 8sing yarn
-RUN npm install -g typescript \
-    aws-cdk \
-    && cdk init app --language=typescript \
-    && npm install -D eslint \
-    @typescript-eslint/parser \
-    @typescript-eslint/eslint-plugin \
-    prettier \
-    eslint-config-prettier \
-    eslint-plugin-prettier
+RUN git clone https://github.com/tsukudamayo/sample.git
 
 WORKDIR /workspace/app
 
