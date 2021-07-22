@@ -62,7 +62,6 @@ locate PACKAGE."
 (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
-
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
 (require-package 'company)
@@ -183,6 +182,18 @@ locate PACKAGE."
 (setenv "GIT_EDITOR" "emacsclient")
 (add-hook 'shell-mode-hook 'with-editor-export-git-editor)
 
+;; Docker
+(require-package 'docker)
+(require-package 'dockerfile-mode)
+(require-package 'docker-compose-mode)
+(require-package 'docker-tramp)
+(use-package docker)
+(use-package dockerfile-mode)
+(use-package docker-compose-mode)
+(use-package docker-tramp-compat)
+(autoload 'dockerfile-mode "dockerfile-mode" nil t)
+(add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
+(set-variable 'docker-tramp-use-names t)
 
 ;; python-mode
 (require-package 'python-mode)
