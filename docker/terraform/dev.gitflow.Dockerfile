@@ -11,9 +11,8 @@ ENV PATH /root/.tfenv/bin:$PATH
 RUN apt-get update \
     && apt-get install -y software-properties-common \
     gnupg2 \
-    wget
-
-RUN apt-get update \
+    wget \
+    && apt-get update \
     # emacs
     && wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add \
     && add-apt-repository "deb http://emacs.ganneff.de/ buster main" \
@@ -23,9 +22,6 @@ RUN apt-get update \
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y emacs-snapshot \
-    llvm \
-    clang \
-    libclang-dev \
     terraform \
     unzip \
     make \
@@ -56,29 +52,26 @@ RUN wget https://golang.org/dl/go1.16.linux-amd64.tar.gz \
     && go get github.com/go-delve/delve/cmd/dlv
 
 # git flow
-RUN wget --no-check-certificate -q -O - https://github.com/nvie/gitflow/raw/develop/contrib/gitflow-installer.sh | bash
-
+RUN wget --no-check-certificate -q -O - https://github.com/nvie/gitflow/raw/develop/contrib/gitflow-installer.sh | bash \
 # github flow
-RUN curl https://raw.github.com/github-flow/github-flow/v1.1/install.sh | $(which bash)
-
+    && curl https://raw.github.com/github-flow/github-flow/v1.1/install.sh | $(which bash) \
 # git completion
-RUN curl -o ~/.git-prompt.sh \
+    && curl -o ~/.git-prompt.sh \
     https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh \
-    && echo "source /root/.git-prompt.sh" >> /root/.bashrc
-
+    && echo "source /root/.git-prompt.sh" >> /root/.bashrc \
 # git flow completion
-RUN curl -o ~/.git-flow-completion.bash \ 
+    && curl -o ~/.git-flow-completion.bash \ 
     https://raw.github.com/bobthecow/git-flow-completion/master/git-flow-completion.bash \
-    && echo "source /root/.git-flow-completion.bash" >> /root/.bashrc
-
+    && echo "source /root/.git-flow-completion.bash" >> /root/.bashrc \
 # display git branch in terminal
-RUN echo 'PS1="[\u:\W\$(__git_ps1)]\$ "' >> /root/.bashrc
-
+    && echo 'PS1="[\u:\W\$(__git_ps1)]\$ "' >> /root/.bashrc \
 # git-secrets
-RUN git clone https://github.com/awslabs/git-secrets.git
+    && RUN git clone https://github.com/awslabs/git-secrets.git
+
 WORKDIR  git-secrets
-RUN make && make install
-RUN git secrets --register-aws --global \
+
+RUN make && make install \
+    && git secrets --register-aws --global \
     && git secrets --install /root/.git-templates/git-secrets \
     && git config --global init.templatedir '/root/.git-templates/git-secrets'
 

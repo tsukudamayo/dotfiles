@@ -1,4 +1,4 @@
-FROM python:3.9.6-buster
+FROM python:3.9.6-slim-buster
 
 ENV DISPLAY=host.docker.internal:0.0
 ENV PATH $PATH:/root/.poetry/bin
@@ -10,21 +10,17 @@ RUN apt-get update \
     gnupg2 \
     wget
 
-RUN apt-get update  \
-    && wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add
-RUN add-apt-repository "deb http://emacs.ganneff.de/ buster main"
-
-RUN apt-get -o Acquire::Check-Valid-Until=false update \
+RUN wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add \
+    && add-apt-repository "deb http://emacs.ganneff.de/ buster main" \ 
+    && apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get -y install emacs-snapshot \
     git \
-    llvm \
-    clang \
-    libclang-dev \
     curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
-    && cp -r ./dotfiles/.fonts ~/
+    && cp -r ./dotfiles/.fonts ~/ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 

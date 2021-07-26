@@ -1,4 +1,4 @@
-FROM node:buster
+FROM node:16.5-buster-slim
 ENV LANG ja_JP.UTF-8
 
 RUN mkdir -p /workspace/app
@@ -12,9 +12,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get -y install emacs-snapshot \
-    llvm \
-    clang \
-    libclang-dev \
+    git \
     vim \
     yarn \
     curl \
@@ -25,7 +23,8 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && ./aws/install \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
-    && cp -r ./dotfiles/.fonts ~/
+    && cp -r ./dotfiles/.fonts ~/ \
+    && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
 
