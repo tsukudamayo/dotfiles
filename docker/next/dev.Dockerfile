@@ -23,8 +23,6 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && cp -r ./dotfiles/.fonts ~/ \
     && rm -rf /var/lib/apt/lists/*
 
-RUN yarn global add typescript-language-server --prefix /usr/local
-
 WORKDIR /workspace
 
 EXPOSE 3000
