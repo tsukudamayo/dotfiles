@@ -5,6 +5,14 @@ mkdir ~/opt
 mkdir ~/.fonts
 mkdir ~/lib/src
 
+# vim
+mkdir ~/vimfiles
+mkdir ~/vimfiles/swp
+mkdir ~/vimfiles/backup
+mkdir ~/vimfiles/undo
+
+xcode-select --install
+
 # homebrew
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -20,17 +28,28 @@ git congig --global user.email "tsukudamayo@gmail.com"
 
 # dotfiles
 git clone https://github.com/tsukudamayo/dotfiles.git
-cp -r ~/dotfiles/.emacs.d ~/
+cp -r ~/dotfiles/linux/.emacs.d ~/
 cp ~/dotfiles/.vimrc ~/
-cp -r ~/dotfiles/.vim/ ~/
 
-# docker
-brew install docker
-brew install --cask docker
-open /Applications/Docker.app
+# fonts(monaco bold)
+git clone https://github.com/vjpr/monaco-bold.git ~/.fonts/
+
+# google-chrome
+brew install --cask google-chrome
+
+# firefox
+brew install --cask firefox
 
 # x11 client
 brew install --cask xquartz
+
+# docker
+brew install --cask docker
+brew install docker-compose
+open /Applications/Docker.app
+
+# wget
+brew install wget
 
 # tmux
 brew install tmux
@@ -46,7 +65,7 @@ brew install llvm
 
 # emacs(native compile)
 brew install autoconf gnutls texinfo
-brew install --build-from-source libgccgit automake
+brew install --build-from-source libgccjit automake
 echo 'export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"' > ~/.bash_profile
 echo 'export PATH="/usr/local/opt/texinfo/bin:$PATH"' >  ~/.bash_profile
 cd ~/opt
@@ -56,7 +75,9 @@ cd emacs
 ./configure --with-native-compilation --with-ns --without-x
 make install
 sudo cp -r nextstep/Emacs.app /Applications/
- 
+
+## pandoc
+#brew install pandoc 
 
 ## for gpu install(cuda, cudnn, bazel, coreutils)
 #brew install coreutils
@@ -73,34 +94,12 @@ sudo cp -r nextstep/Emacs.app /Applications/
 ## lua
 #brew install lua
 #
-## vim
-#mkdir ~/vimfiles
-#mkdir ~/vimfiles/swp
-#mkdir ~/vimfiles/backup
-#mkdir ~/vimfiles/undo
-
 ## TODO vim install error
 # brew install vim ¥
 # --with-lua
 # --with-luajit
 # --override-system-vi
 # --with-tcl
-
-# wget
-xcode-select --install
-brew install wget
-
-# fonts(monaco bold)
-git clone https://github.com/vjpr/monaco-bold.git ~/.fonts/
-
-# google-chrome
-brew install --cask google-chrome
-
-# firefox
-brew install --cask firefox
-
-# pandoc
-brew install pandoc 
 
 ## miniconda(python)
 #wget https://repo.anaconda.com/miniconda/Miniconda3-latest-MacOSX-x86_64.sh -O ~/miniconda.sh
