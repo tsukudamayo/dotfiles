@@ -24,7 +24,7 @@ brew install git
 brew install git-flow
 
 git config --global user.name "tsukudamayo"
-git congig --global user.email "tsukudamayo@gmail.com"
+git config --global user.email "tsukudamayo@gmail.com"
 
 # dotfiles
 git clone https://github.com/tsukudamayo/dotfiles.git
