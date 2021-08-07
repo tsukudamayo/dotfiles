@@ -11,8 +11,6 @@ mkdir ~/vimfiles/swp
 mkdir ~/vimfiles/backup
 mkdir ~/vimfiles/undo
 
-xcode-select --install
-
 # homebrew
 /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"
 
@@ -30,9 +28,14 @@ git config --global user.email "tsukudamayo@gmail.com"
 git clone https://github.com/tsukudamayo/dotfiles.git
 cp -r ~/dotfiles/linux/.emacs.d ~/
 cp ~/dotfiles/.vimrc ~/
+cp -r ~/dotfiles/go .go
+cp ~/dotfiles/.bash_profile ~/
 
 # fonts(monaco bold)
 git clone https://github.com/vjpr/monaco-bold.git ~/.fonts/
+
+# xcode-select
+xcode-select --install
 
 # google-chrome
 brew install --cask google-chrome
@@ -43,7 +46,7 @@ brew install --cask firefox
 # x11 client
 brew install --cask xquartz
 
-# docker
+# docker (install go)
 brew install --cask docker
 brew install docker-compose
 open /Applications/Docker.app
@@ -66,8 +69,9 @@ brew install llvm
 # emacs(native compile)
 brew install autoconf gnutls texinfo
 brew install --build-from-source libgccjit automake
-echo 'export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"' > ~/.bash_profile
-echo 'export PATH="/usr/local/opt/texinfo/bin:$PATH"' >  ~/.bash_profile
+## setting by .bash_profile
+# echo 'export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"' > ~/.bash_profile
+# echo 'export PATH="/usr/local/opt/texinfo/bin:$PATH"' >  ~/.bash_profile
 cd ~/opt
 git clone git://git.sv.gnu.org/emacs.git
 cd emacs
