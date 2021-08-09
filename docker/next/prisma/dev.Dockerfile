@@ -16,8 +16,6 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     git \
     yarn \
     curl \
-    zip \
-    unzip \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/ \
