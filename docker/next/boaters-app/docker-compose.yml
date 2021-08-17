@@ -1,0 +1,23 @@
+services:
+  web:
+    build:
+      context: "."
+      dockerfile: "dev.Dockerfile"
+    command:
+      ["npm", "run", "dev"]
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: "db"
+    links:
+      - "db"
+  db:
+    image: "gcr.io/cloudsql-docker/gce-proxy:1.19.1"
+    command:
+      ["/cloud_sql_proxy",
+       "-instances=new-business-development:asia-northeast1:boaters-stg=tcp:0.0.0.0:3306",
+       "-credential_file=/config/application_default_credentials.json"]
+    volumes:
+      - "/tmp/workspace/config:/config"
+    ports:
+      - "3306:3306"
