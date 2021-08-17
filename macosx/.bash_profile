@@ -6,3 +6,7 @@ export PATH="$HOME/bin:$PATH"
 # libgccjit path for emacs native compile
 export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"
 export PATH="/usr/local/opt/texinfo/bin:$PATH"
+
+# gcloud
+export PATH="$HOME/google-cloud-sdk:$PATH"
+export PATH="$HOME/google-cloud-sdk/bin:$PATH"
