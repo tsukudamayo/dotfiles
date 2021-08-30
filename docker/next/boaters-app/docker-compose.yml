@@ -3,6 +3,14 @@ services:
     build:
       context: "."
       dockerfile: "dev.Dockerfile"
+      args:
+        - github_username
+        - github_password 
+        - DB_USERNAME
+        - DB_PASSWORD
+        - DB_HOST
+        - DB_TABLENAME
+        - DB_INSTANCE_NAME
     command:
       ["npm", "run", "dev"]
     ports:

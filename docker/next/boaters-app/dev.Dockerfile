@@ -9,6 +9,7 @@ ARG DB_USERNAME
 ARG DB_PASSWORD
 ARG DB_HOST
 ARG DB_TABLENAME
+ARG DB_INSTANCE_NAME
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y software-properties-common \
@@ -34,9 +35,15 @@ WORKDIR /workspace
 RUN git clone https://${github_username}:${github_password}@github.com/zizai-inc/boaters_app.git -b develop
 
 WORKDIR /workspace/boaters_app
-RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
+# deploy local docker-compose
+#RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
+# deploy GCP Cloud Run 
+RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_TABLENAME}?socket=/cloudsql/${DB_INSTANCE_NAME}" > .env`
+
 RUN npm install
 
-EXPOSE 3000
+#EXPOSE 3000
+EXPOSE 8080
 
-CMD ["/bin/bash"]
+# CMD ["/bin/bash"]
+CMD [ "npm", "run", "cloudrun" ]
