@@ -13,16 +13,17 @@ RUN add-apt-repository "deb http://emacs.ganneff.de/ buster main"
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get -y install emacs-snapshot \
-    llvm \
-    clang \
-    libclang-dev \
+#    llvm \
+#    clang \
+#    libclang-dev \
     git \
     wget \
     curl \
-    libx11-dev \
+#    libx11-dev \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
-    && cp -r ./dotfiles/.fonts ~/
+    && cp -r ./dotfiles/.fonts ~/ \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN R -e 'install.packages("rlang", dependencies = TRUE)' \
     && R -e 'install.packages("tidyverse", dependencies = TRUE)'

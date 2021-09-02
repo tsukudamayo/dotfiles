@@ -38,12 +38,12 @@ WORKDIR /workspace/boaters_app
 # deploy local docker-compose
 #RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
 # deploy GCP Cloud Run 
-RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}/${DB_TABLENAME}?socket=/cloudsql/${DB_INSTANCE_NAME}" > .env`
+RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?host=/cloudsql/${DB_INSTANCE_NAME}" > .env`
 
 RUN npm install
 
-#EXPOSE 3000
-EXPOSE 8080
+EXPOSE 3000
+#EXPOSE 8080
 
-# CMD ["/bin/bash"]
-CMD [ "npm", "run", "cloudrun" ]
+CMD ["/bin/bash"]
+#CMD [ "npm", "run", "cloudrun" ]

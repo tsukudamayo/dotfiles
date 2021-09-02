@@ -10,7 +10,7 @@ docker-compose build \
 --build-arg DB_PASSWORD=$3 \
 --build-arg DB_HOST=db \
 --build-arg DB_TABLENAME=boatrace \
-#--build-arg DB_INSTANCE_NAME= \
 --no-cache
+#--build-arg DB_INSTANCE_NAME= \
 
 docker-compose up -d

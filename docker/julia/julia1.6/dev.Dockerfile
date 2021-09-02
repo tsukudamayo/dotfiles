@@ -25,7 +25,8 @@ RUN apt-get update \
     qt5-default \
     libqt5gui5 \
     ####################
-    && julia -e 'Pkg.add("LanguageServer.jl")' \
+    && julia -e 'using Pkg; Pkg.add("LanguageServer")' \
+    && julia -e "using LanguageServer, LanguageServer.SymbolServer; runserver()" \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/ \
