@@ -36,14 +36,16 @@ RUN git clone https://${github_username}:${github_password}@github.com/zizai-inc
 
 WORKDIR /workspace/boaters_app
 # deploy local docker-compose
-#RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
+RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
 # deploy GCP Cloud Run 
-RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?host=/cloudsql/${DB_INSTANCE_NAME}" > .env`
+#RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?host=/cloudsql/${DB_INSTANCE_NAME}" > .env`
 
 RUN npm install
 
 EXPOSE 3000
+# deploy GCP Cloud Run
 #EXPOSE 8080
 
 CMD ["/bin/bash"]
+# deploy GCP Cloud Run
 #CMD [ "npm", "run", "cloudrun" ]
