@@ -350,20 +350,45 @@ locate PACKAGE."
 )
 
 ;; typescript
-(require-package 'typescript-mode)
-(require 'typescript-mode)
-(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
-(require-package 'tide)
-(require 'tide)
-(add-hook 'typescript-mode-hook
-	  (lambda ()
-	    (tide-setup)
-	    (flycheck-mode t)
-	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-	    (eldoc-mode t)
-	    (company-mode-on)))
-(setq typescript-indent-level 4)
+
+(use-package web-mode
+  :init
+  (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+
+  :config
+  (setq web-mode-attr-indent-offset nil)
+
+  (setq web-mode-enable-auto-closing t)
+  (setq web-mode-enable-auto-pairing t)
+
+  (setq web-mode-auto-close-style 2)
+  (setq web-mode-tag-auto-close-style 2)
+
+
+  (setq web-mode-markup-indent-offset 2)
+  (setq web-mode-css-indent-offset 2)
+  (setq web-mode-code-indent-offset 2)
+
+  (setq indent-tabs-mode nil)
+  (setq tab-width 2)
+  )
+(add-hook 'web-mode-hook (lambda () (auto-complete-mode -1)))
+
+;; (require-package 'typescript-mode)
+;; (require 'typescript-mode)
+;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
+;; (require-package 'tide)
+;; (require 'tide)
+;; (add-hook 'typescript-mode-hook
+;; 	  (lambda ()
+;; 	    (tide-setup)
+;; 	    (flycheck-mode t)
+;; 	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;; 	    (eldoc-mode t)
+;; 	    (company-mode-on)))
+;; (setq typescript-indent-level 4)
 
 (setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck company avy which-key helm-xref dap-mode zenburn-theme json-mode))
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
@@ -643,8 +668,37 @@ locate PACKAGE."
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
  '(ac-go-expand-arguments-into-snippets nil)
+ '(ansi-color-names-vector
+   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
+ '(company-quickhelp-color-background "#4F4F4F")
+ '(company-quickhelp-color-foreground "#DCDCCC")
  '(custom-enabled-themes '(manoj-dark))
+ '(fci-rule-color "#383838")
+ '(nrepl-message-colors
+   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
  '(package-selected-packages
    '(phpunint php-mode highlight-indentation yaml-mode lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
- '(rustic-format-display-method 'pop-to-buffer-without-switch))
+ '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(rustic-format-display-method 'pop-to-buffer-without-switch)
+ '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-color-map
+   '((20 . "#BC8383")
+     (40 . "#CC9393")
+     (60 . "#DFAF8F")
+     (80 . "#D0BF8F")
+     (100 . "#E0CF9F")
+     (120 . "#F0DFAF")
+     (140 . "#5F7F5F")
+     (160 . "#7F9F7F")
+     (180 . "#8FB28F")
+     (200 . "#9FC59F")
+     (220 . "#AFD8AF")
+     (240 . "#BFEBBF")
+     (260 . "#93E0E3")
+     (280 . "#6CA0A3")
+     (300 . "#7CB8BB")
+     (320 . "#8CD0D3")
+     (340 . "#94BFF3")
+     (360 . "#DC8CC3")))
+ '(vc-annotate-very-old-color "#DC8CC3"))
 
