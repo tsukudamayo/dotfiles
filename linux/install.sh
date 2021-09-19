@@ -26,7 +26,7 @@ git clone https://github.com/tsukudamayo/dotfiles.git
 # input method japanese
 sudo apt-get install -y ibus-mozc 
 ibus restart 
-gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'jp'), ('ibus', 'mozc-jp')]"
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'en'), ('ibus', 'mozc-jp')]"
 
 #cp -r ~/dotfiles/.emacs.d ~/
 #cp -r ~/dotfiles/go ~/go
