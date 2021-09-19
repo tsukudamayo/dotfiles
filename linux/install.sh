@@ -23,6 +23,11 @@ git config --global user.email "tsukudamayo@gmail.com"
 
 git clone https://github.com/tsukudamayo/dotfiles.git
 
+# input method japanese
+sudo apt install ibus-mozc 
+ibus restart 
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'jp'), ('ibus', 'mozc-jp')]"
+
 #cp -r ~/dotfiles/.emacs.d ~/
 #cp -r ~/dotfiles/go ~/go
 #cp ~/dotfiles/.tern-config ~/
