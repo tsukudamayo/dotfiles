@@ -1,13 +1,13 @@
-# # mkdir
-# mkdir ~/bin
-# mkdir ~/lib
-# mkdir ~/local
-# mkdir ~/opt
-# mkdir ~/etc
-# mkdir ~/vimfiles
-# mkdir ~/vimfiles/undo
-# mkdir ~/vimfiles/backup
-# mkdir ~/vimfiles/swp
+# mkdir
+mkdir ~/bin
+mkdir ~/lib
+mkdir ~/local
+mkdir ~/opt
+mkdir ~/etc
+mkdir ~/.vim
+mkdir ~/.vim/undo
+mkdir ~/.vim/backup
+mkdir ~/.vim/swp
 
 # apt update
 sudo apt-get update
@@ -24,9 +24,9 @@ git config --global user.email "tsukudamayo@gmail.com"
 git clone https://github.com/tsukudamayo/dotfiles.git
 
 # input method japanese
-sudo apt install ibus-mozc 
+sudo apt-get install -y ibus-mozc 
 ibus restart 
-gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'jp'), ('ibus', 'mozc-jp')]"
+gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'en'), ('ibus', 'mozc-jp')]"
 
 #cp -r ~/dotfiles/.emacs.d ~/
 #cp -r ~/dotfiles/go ~/go

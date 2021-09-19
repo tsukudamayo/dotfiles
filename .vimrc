@@ -2,9 +2,9 @@ syntax on
 set nu
 
 " filepath to save file backup undo swp  file
-set backupdir=~/vimfiles/backup
-set directory=~/vimfiles/swp
-set undodir=~/vimfiles/undo
+set backupdir=~/.vim/backup
+set directory=~/.vim/swp
+set undodir=~/.vim/undo
 
 " set encofing fileencoding
 set encoding=utf-8
