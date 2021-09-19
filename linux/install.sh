@@ -1,13 +1,13 @@
-# # mkdir
-# mkdir ~/bin
-# mkdir ~/lib
-# mkdir ~/local
-# mkdir ~/opt
-# mkdir ~/etc
-# mkdir ~/vimfiles
-# mkdir ~/vimfiles/undo
-# mkdir ~/vimfiles/backup
-# mkdir ~/vimfiles/swp
+# mkdir
+mkdir ~/bin
+mkdir ~/lib
+mkdir ~/local
+mkdir ~/opt
+mkdir ~/etc
+mkdir ~/.vim
+mkdir ~/.vim/undo
+mkdir ~/.vim/backup
+mkdir ~/.vim/swp
 
 # apt update
 sudo apt-get update
@@ -31,8 +31,8 @@ gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'en'), ('ibus', 
 #cp -r ~/dotfiles/.emacs.d ~/
 #cp -r ~/dotfiles/go ~/go
 #cp ~/dotfiles/.tern-config ~/
-#cp -r ~/dotfiles/.fonts ~/
-#cp ~/dotfiles/.vimrc ~/
+cp -r ~/dotfiles/.fonts ~/
+cp ~/dotfiles/.vimrc ~/
 
 # # x11 client
 # sudo apt-get -y install x11-apps
