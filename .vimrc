@@ -1,4 +1,4 @@
-syntax on
+" syntax on
 set nu
 
 " filepath to save file backup undo swp  file
