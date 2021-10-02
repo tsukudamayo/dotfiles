@@ -80,7 +80,6 @@ locate PACKAGE."
   (define-key company-active-map (kbd "C-h") nil)
   (define-key emacs-lisp-mode-map (kbd "C-M-i") 'company-complete))
 
-
 ;; auto-complete
 (require-package 'auto-complete)
 (require 'auto-complete-config)
@@ -197,22 +196,24 @@ locate PACKAGE."
 
 ;; python-mode
 (require-package 'python-mode)
-(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/kaggle/lib/python3.6/site-packages")
-(setenv "PYTHONPATH" "/home/tsukudamayo/lib/miniconda3/envs/pytorch_book/lib/python3.6/site-packages")
 (when (autoload 'python-mode "python-mode" "Python editing mode." t)
   (setq auto-mode-alist (cons '("\\.py$" . python-mode) auto-mode-alist))
   (setq interpreter-mode-alist (cons '("python" . python-mode)
 				     interpreter-mode-alist)))
+(add-hook 'python-mode-hook 'company-mode)
+(add-hook 'python-mode-hook
+	  (lambda () (auto-complete-mode -1)))
+
+;; ;; jedi settings
+;; (require-package 'jedi)
+;; (require 'jedi)
+;; (add-hook 'python-mode-hook 'jedi:setup)
+;; (setq jedi:complete-on-dot t)
+
 
 ;; ein(emacs ipython notebook)
 (require-package 'ein)
 (require 'ein)
-
-;; jedi settings
-(require-package 'jedi)
-(require 'jedi)
-(add-hook 'python-mode-hook 'jedi:setup)
-(setq jedi:complete-on-dot t)
 
 ;; ;; autopep8 settings
 ;; (require 'py-autopep8)
