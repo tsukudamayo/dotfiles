@@ -27,6 +27,6 @@ services:
        "-instances=new-business-development:asia-northeast1:boaters-stg=tcp:0.0.0.0:3306",
        "-credential_file=/config/application_default_credentials.json"]
     volumes:
-      - "/tmp/workspace/config:/config"
+      - "/tmp/config:/config"
     ports:
       - "3306:3306"
