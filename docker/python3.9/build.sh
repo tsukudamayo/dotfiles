@@ -4,7 +4,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
     xhost +localhost
     docker run -it --rm \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
-        python38-dev \
+        python39-dev \
         /bin/bash
     xhost -localhost
 else
@@ -12,7 +12,7 @@ else
     docker run -it --rm \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
         -e DISPLAY=$DISPLAY \
-        python38-dev \
+        python39-dev \
         /bin/bash
     xhost -local:
 fi

@@ -17,6 +17,7 @@ RUN wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add \
     git \
     curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
+    && pip install python-lsp-server \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/ \
