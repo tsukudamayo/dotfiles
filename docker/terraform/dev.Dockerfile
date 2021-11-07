@@ -8,6 +8,13 @@ ENV PATH /root/.tfenv/bin:$PATH
 
 RUN apt-get update \
     && apt-get install -y git \
+    gnupg \
+    software-properties-common \
+    curl \
+    && curl -fsSL https://apt.releases.hashicorp.com/gpg | apt-key add - \
+    && apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com $(lsb_release -cs) main" \
+    && apt-get update && apt-get install terraform \
+    terraform-ls \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
@@ -33,6 +40,7 @@ RUN apt-get update && apt-get install -y vim \
     && make install \
     && go get -u golang.org/x/tools/gopls \
     && rm -rf /var/lib/apt/lists/*
+
 
 WORKDIR /go
 
