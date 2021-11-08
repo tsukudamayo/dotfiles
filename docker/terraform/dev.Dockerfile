@@ -23,6 +23,7 @@ RUN apt-get update \
 WORKDIR emacs
 RUN apt-get update && apt-get install -y vim \
     build-essential \
+    libgccjit-10-dev \
     libjansson4 \
     libjansson-dev \
     libmagickcore-dev \
@@ -30,6 +31,7 @@ RUN apt-get update && apt-get install -y vim \
     libgnutls28-dev \
     && ./autogen.sh \
     && ./configure --with-native-compilation \
+    --with-json \
     --with-mailutils \
     --without-makeinfo \
     --with-x-toolkit=no \
