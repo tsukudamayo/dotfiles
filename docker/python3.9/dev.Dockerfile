@@ -28,6 +28,7 @@ RUN apt-get update && apt-get install -y vim \
     libmagickcore-dev \
     libncurses-dev \
     libgnutls28-dev \
+    xsel \
     && ./autogen.sh \
     && ./configure --with-native-compilation \
     --with-mailutils \
