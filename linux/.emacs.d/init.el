@@ -61,9 +61,9 @@ locate PACKAGE."
   (defun xsel-cut-function (text &optional push)
     (with-temp-buffer
       (insert text)
-      (call-shell-region (point-min) (point-max) "env DISPLAY=$DISPLAY xsel -bi")))
+      (call-shell-region (point-min) (point-max) "DISPLAY=$DISPLAY xsel -bi")))
   (defun xsel-paste-function ()
-    (let ((xsel-output (shell-command-to-string "env DISPLAY=$DISPLAY xsel --clipboard --output")))
+    (let ((xsel-output (shell-command-to-string "DISPLAY=$DISPLAY xsel --clipboard --output")))
       (unless (string= (car kill-ring) xsel-output) xsel-output)))
   (setq interprogram-cut-function 'xsel-cut-function)
   (setq interprogram-paste-function 'xsel-paste-function))
