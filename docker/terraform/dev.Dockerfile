@@ -29,6 +29,7 @@ RUN apt-get update && apt-get install -y vim \
     libmagickcore-dev \
     libncurses-dev \
     libgnutls28-dev \
+    xsel \
     && ./autogen.sh \
     && ./configure --with-native-compilation \
     --with-json \
@@ -43,7 +44,7 @@ RUN apt-get update && apt-get install -y vim \
     && go get -u golang.org/x/tools/gopls \
     && rm -rf /var/lib/apt/lists/*
 
-
 WORKDIR /go
+RUN rm -rf emacs && rm -rf dotfiles
 
 CMD ["/bin/bash"]
