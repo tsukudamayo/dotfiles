@@ -22,6 +22,7 @@ COPY --from=builder /go/bin/gopls /go/bin/gopls
 RUN apt-get update \
     && apt-get install -y git \
     gnupg \
+    curl \
     software-properties-common \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \

@@ -1,4 +1,4 @@
-FROM julia:1.6-buster
+FROM julia:1.7-buster
 
 #ENV PATH /opt/conda/bin:$PATH
 ENV PYTHON_VERSION=3.9
@@ -23,6 +23,7 @@ RUN apt-get update \
     ####################
     && julia -e 'using Pkg; Pkg.add("LanguageServer")' \
     && julia -e "using LanguageServer, LanguageServer.SymbolServer; runserver()" \
+    && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/ \
