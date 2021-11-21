@@ -1,7 +1,5 @@
-FROM rockerjp/verse:latest
+FROM rockerjp/tidyverse:latest
 
-RUN mkdir -p /workspace
-WORKDIR /workspace
 ENV DISPLAY=host.docker.internal:0.0
 
 RUN apt-get update \
@@ -14,7 +12,6 @@ RUN apt-get update && apt-get -y install git \
 #    clang \
 #    libclang-dev \
 #    libx11-dev \
-    && apt-get install --reinstall ca-certificates \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
@@ -44,5 +41,7 @@ RUN apt-get update && apt-get install -y vim \
 RUN R -e 'install.packages("rlang", dependencies = TRUE)' \
     && R -e 'install.packages("tidyverse", dependencies = TRUE)'\
     && rm -rf emacs && rm -rf dotfiles
+
+WORKDIR /workspace
 
 CMD ["bin/bash"]
