@@ -1,17 +1,11 @@
-FROM python:3.9.6-slim-buster
+FROM python:3.9.9-slim-bullseye
 
 ENV DISPLAY=host.docker.internal:0.0
 ENV PATH $PATH:/root/.poetry/bin
 
-RUN apt-get update \
-    && apt-get install -y software-properties-common \
-    gnupg2 \
-    wget
-
-RUN wget -q http://emacs.ganneff.de/apt.key -O- | apt-key add \
-    && add-apt-repository "deb http://emacs.ganneff.de/ buster main" \ 
-    && apt-get -o Acquire::Check-Valid-Until=false update \
-    && apt-get install -y git \
+RUN apt-get update && apt-get install -y \
+    git \
+    software-properties-common \
     curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
     && pip install python-lsp-server \
