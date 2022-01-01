@@ -7,8 +7,6 @@
 (package-initialize)
 (package-refresh-contents)
 
-(setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
-
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
 If NO-REFRESH is non-nil, the available package lists will not be
@@ -113,9 +111,6 @@ locate PACKAGE."
   (global-set-key (kbd "M-.") 'xref-find-definitions)
   (global-set-key (kbd "M-*") 'xref-find-references)
   )
-
-(add-hook 'go-mode-hook 'lsp-mode-init)
-
 
 ;; helm
 (require-package 'helm)
@@ -287,6 +282,7 @@ locate PACKAGE."
   (add-hook 'go-mode-hook #'lsp-go-install-save-hooks)
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook 'company-mode))
+(add-hook 'go-mode-hook 'lsp-mode-init)
 
 (require-package 'lsp-mode)
 (require 'lsp-mode)
@@ -594,6 +590,8 @@ locate PACKAGE."
 ;; julia
 (require-package 'julia-mode)
 (require 'julia-mode)
+(require-package 'lsp-julia)
+(require 'lsp-julia)
 
 ;; php
 (require-package 'php-mode)
