@@ -1,5 +1,6 @@
 FROM node:17.1-bullseye-slim
 
+ENV DISPLAY=host.docker.internal:0.0
 ENV LANG ja_JP.UTF-8
 ENV HOST 0.0.0.0
 
