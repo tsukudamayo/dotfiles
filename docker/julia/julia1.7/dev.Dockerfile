@@ -1,8 +1,11 @@
-FROM julia:1.7-buster
+FROM julia:1.7-bullseye
 
 #ENV PATH /opt/conda/bin:$PATH
 ENV PYTHON_VERSION=3.9
 ENV DISPLAY=host.docker.internal:0.0
+ENV LANG=ja_JP.UTF-8
+ENV LANGUAGE=ja_JP:ja
+ENV LC_ALL=ja_JP.UTF-8
 
 RUN apt-get update \
     && apt-get install -y software-properties-common \
@@ -12,17 +15,20 @@ RUN apt-get update \
 #    llvm \
 #    clang \
 #    libclang-dev \
-    wget \
     curl \
     libx11-dev \
     make \
     libssl-dev \
+    locales \
+    dialog \
     # for Plots.jl #####
-    qt5-default \
-    libqt5gui5 \
-    ####################
-    && julia -e 'using Pkg; Pkg.add("LanguageServer")' \
-    && julia -e "using LanguageServer, LanguageServer.SymbolServer; runserver()" \
+    qtbase5-dev \
+    qtchooser \
+    qt5-qmake \
+    qtbase5-dev-tools \
+    #################
+    && dpkg-reconfigure locales \
+    && localedef -f UTF-8 -i ja_JP ja_JP.UTF-8 \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
