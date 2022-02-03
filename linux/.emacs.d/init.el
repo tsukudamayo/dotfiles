@@ -103,6 +103,7 @@ locate PACKAGE."
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require-package 'jsonrpc)
 (require-package 'spinner)
+(require-package 'lsp-mode)
 (require 'spinner)
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
