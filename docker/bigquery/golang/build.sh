@@ -3,26 +3,20 @@
 if [[ "$OSTYPE" == "darwin"* ]]; then
     xhost +localhost
     docker run -it --rm \
-        -v $HOME:$HOME \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e USER=$USER \
-        --name rust-dev \
-        rust-dev \
+        -v ~/local/:/workspace \
+        --name bq-golang-dev \
+        bq-golang-dev \
         /bin/bash
     xhost -localhost
 else
     xhost +local:
     docker run -it --rm \
-        -v $HOME:$HOME \
         -v /tmp/.X11-unix:/tmp/.X11-unix \
-        -e USER=$USER \
+        -v ~/local/:/workspace \
         -e DISPLAY=$DISPLAY \
-        --name rust-dev \
-        rust-dev \
+        --name bq-golang-dev \
+        bq-golang-dev \
         /bin/bash
     xhost -local:
 fi
-
-# docker run -it --rm -e USER=$USER rust-dev /bin/bash
-# XXX
-# emacs -nw --user ''

@@ -1,26 +1,30 @@
 # FROM debian:bullseye 
 FROM rust:slim-bullseye
 
-ENV HOME /home
 ENV PATH $PATH:$HOME/.cargo/bin
+ENV HOME /home
 
 WORKDIR /home
 
 RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && apt-get install -y software-properties-common \
     wget \
+    curl \
     gnupg2 \
     git \
+    libssl-dev \
+    pkg-config \
+    build-essential \
 #     llvm \
 #     clang \
 #     libclang-dev \
 #     lldb \
 #     gdb \
-    && rustup toolchain add nightly \
     && rustup update \
-    && rustup component add rustfmt \
-    && rustup component add rls rust-analysis rust-src \
-    && cargo +nightly install racer \
+    && rustup component add rustfmt clippy rls rust-analysis rust-src  \
+    && mkdir -p ~/.cargo/bin \
+    && curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > ~/.cargo/bin/rust-analyzer \
+    && cargo install cargo-edit \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
