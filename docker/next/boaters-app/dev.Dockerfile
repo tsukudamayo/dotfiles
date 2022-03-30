@@ -32,15 +32,16 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
 WORKDIR /workspace
 
 #RUN npx create-next-app --example https://github.com/nikolasburk/blogr-nextjs-prisma/tree/main boaters_app
-RUN git clone https://${github_username}:${github_password}@github.com/zizai-inc/boaters_app.git -b develop
+RUN git clone https://${github_username}:${github_password}@github.com/zizai-inc/boaters_app.git
 
 WORKDIR /workspace/boaters_app
 # deploy local docker-compose
-RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
+#RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?schema=public" > .env`
+RUN `echo DATABASE_URL="postgresql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:5432/${DB_TABLENAME}?schema=public" > .env`
 # deploy GCP Cloud Run 
 #RUN `echo DATABASE_URL="mysql://${DB_USERNAME}:${DB_PASSWORD}@${DB_HOST}:3306/${DB_TABLENAME}?host=/cloudsql/${DB_INSTANCE_NAME}" > .env`
 
-RUN npm install
+# RUN npm install
 
 EXPOSE 3000
 # deploy GCP Cloud Run
