@@ -15,6 +15,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     libssl-dev \
     pkg-config \
     build-essential \
+    gnutls-bin \
 #     llvm \
 #     clang \
 #     libclang-dev \

@@ -1,4 +1,4 @@
-FROM python:3.9.9-slim-bullseye
+FROM python:3.10.2-slim-bullseye
 
 ENV DISPLAY=host.docker.internal:0.0
 ENV PATH $PATH:/root/.poetry/bin
@@ -7,8 +7,6 @@ RUN apt-get update && apt-get install -y \
     git \
     software-properties-common \
     curl \
-    direnv \
-    && echo 'eval "$(direnv hook bash)"' >> ~/.bashrc \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
     && pip install python-lsp-server \
     && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
@@ -38,3 +36,5 @@ RUN apt-get update && apt-get install -y vim \
     && rm -rf /var/lib/apt/lists/*
 
 WORKDIR /workspace
+
+CMD ["/bin/bash"]
