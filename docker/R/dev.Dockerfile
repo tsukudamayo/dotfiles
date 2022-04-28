@@ -11,7 +11,7 @@ RUN apt-get update && apt-get -y install git \
 #    clang \
 #    libclang-dev \
 #    libx11-dev \
-    && git clone --depth 1 --branch emacs-27 -c http.sslverify=false https://git.savannah.gnu.org/git/emacs.git \
+    && git clone --depth 1 --branch emacs-28 -c http.sslverify=false https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
@@ -19,11 +19,13 @@ RUN apt-get update && apt-get -y install git \
 WORKDIR emacs
 RUN apt-get update && apt-get install -y vim \
     build-essential \
+    libgccjit-9-dev \
     libjansson4 \
     libjansson-dev \
     libmagickcore-dev \
     libncurses-dev \
     libgnutls28-dev \
+    texinfo \
     xsel \
     && ./autogen.sh \
     && ./configure --with-native-compilation \

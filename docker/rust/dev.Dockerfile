@@ -26,7 +26,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update \
     && mkdir -p ~/.cargo/bin \
     && curl -L https://github.com/rust-analyzer/rust-analyzer/releases/latest/download/rust-analyzer-x86_64-unknown-linux-gnu.gz | gunzip -c - > ~/.cargo/bin/rust-analyzer \
     && cargo install cargo-edit \
-    && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
+    && git clone --depth 1 --branch emacs-28 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/
@@ -40,6 +40,7 @@ RUN apt-get update && apt-get install -y vim \
     libmagickcore-dev \
     libncurses-dev \
     libgnutls28-dev \
+    texinfo \
     xsel \
     && ./autogen.sh \
     && ./configure --with-native-compilation \

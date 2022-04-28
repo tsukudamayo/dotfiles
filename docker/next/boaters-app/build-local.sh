@@ -19,3 +19,17 @@ docker-compose build \
 #--build-arg DB_USERNAME=boaters \
 
 docker-compose up -d
+
+if [[ "$OSTYPE" == "darwin"* ]]; then
+    xhost +localhost
+    docker exec -it $(docker ps | grep boaters-app_web | awk '{print $1}') \
+        /bin/bash
+    xhost -localhost
+else
+    xhost +local:
+    docker exec -it $(docker ps | grep boaters-app_web | awk '{print $1}') \
+        -v /tmp/.X11-unix:/tmp/.X11-unix \
+        -e DISPLAY=$DISPLAY \
+        /bin/bash
+    xhost -local:
+fi

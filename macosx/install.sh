@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir ~/bin
 mkdir ~/lib
 mkdir ~/local
 mkdir ~/etc
@@ -48,9 +49,19 @@ brew install --cask firefox
 brew install --cask xquartz
 
 # docker (install go)
-brew install --cask docker
+brew install docker
 brew install docker-compose
-open /Applications/Docker.app
+brew install --cask multipass
+multipass launch --name docker-vm --cpus 4 --mem 16G --disk 300G --cloud-init dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass mount /Users docker-vm:/Users
+multipass mount /private/tmp docker-vm:/tmp
+curl -O https://download.docker.com/mac/static/stable/x86_64/docker-20.10.14.tgz
+tar xzvf docker-20.10.14.tgz 
+mv docker/* $HOME/bin
+rm -rf docker/
+rm docker-20.10.14.tgz 
+docker context create docker-vm --docker "host=tcp://192.168.64.2:2375"
+docker context use docker-vm
 
 # wget
 brew install wget

@@ -2,7 +2,7 @@ services:
   crawler:
     build:
       context: "."
-      dockerfile: "dev.Dockerfile"
+      dockerfile: "Dockerfile"
     tty: true
     environment:
       DB_HOST: "db"
