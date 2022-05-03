@@ -9,7 +9,7 @@ RUN apt-get update && apt-get install -y \
     curl \
     && curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/get-poetry.py | python \
     && pip install python-lsp-server \
-    && git clone --depth 1 --branch emacs-27 https://git.savannah.gnu.org/git/emacs.git \
+    && git clone --depth 1 --branch emacs-28 https://git.savannah.gnu.org/git/emacs.git \
     && git clone https://github.com/tsukudamayo/dotfiles.git \
     && cp -r ./dotfiles/linux/.emacs.d ~/ \
     && cp -r ./dotfiles/.fonts ~/

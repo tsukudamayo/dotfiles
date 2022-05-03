@@ -9,6 +9,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
         python39-dev \
         /bin/bash
     xhost -localhost
+
 else
     xhost +local:
     docker run -it --rm \
