@@ -55,6 +55,11 @@ locate PACKAGE."
 ;; backspace using C-h
 (global-set-key "\C-h" 'delete-backward-char)
 
+;; C-' as dabbrev-expand
+(global-set-key (kbd "C-'") 'dabbrev-expand)
+
+;; share docker containers and clipboard
+;; apt install xsel in docker containers
 (unless window-system
   (defun xsel-cut-function (text &optional push)
     (with-temp-buffer
@@ -105,6 +110,9 @@ locate PACKAGE."
 (require-package 'spinner)
 (require-package 'lsp-mode)
 (require 'spinner)
+
+(setq lsp-response-timeout 4)
+
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
   (lsp)
@@ -112,6 +120,9 @@ locate PACKAGE."
   (global-set-key (kbd "M-.") 'xref-find-definitions)
   (global-set-key (kbd "M-*") 'xref-find-references)
   )
+(require-package 'lsp-docker)
+(require 'lsp-docker)
+
 
 ;; helm
 (require-package 'helm)
@@ -197,9 +208,12 @@ locate PACKAGE."
 (use-package dockerfile-mode)
 (use-package docker-compose-mode)
 (use-package docker-tramp-compat)
+(use-package docker-tramp)
 (autoload 'dockerfile-mode "dockerfile-mode" nil t)
 (add-to-list 'auto-mode-alist '("Dockerfile\\'" . dockerfile-mode))
 (set-variable 'docker-tramp-use-names t)
+(add-to-list 'tramp-remote-path 'tramp-own-remote-path)
+
 
 ;; python-mode
 (require-package 'python-mode)
@@ -211,12 +225,14 @@ locate PACKAGE."
 (add-hook 'python-mode-hook
 	  (lambda () (auto-complete-mode -1)))
 
-;; ;; jedi settings
-;; (require-package 'jedi)
-;; (require 'jedi)
-;; (add-hook 'python-mode-hook 'jedi:setup)
-;; (setq jedi:complete-on-dot t)
-
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-tramp-connection "pylsp")
+  :major-modes '(python-mode)
+  :priority 1
+  :multi-root t
+  :remote? t
+  :server-id 'pylsp-docker))
 
 ;; ein(emacs ipython notebook)
 (require-package 'ein)
@@ -263,6 +279,15 @@ locate PACKAGE."
   (pop-to-buffer buffer-or-name action norecord)
   (other-window -1)
   )
+
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-tramp-connection "rust-analyzer")
+  :major-modes '(rustic-mode)
+  :priority 1
+  :multi-root t
+  :remote? t
+  :server-id 'rust-analyzer-docker))
 
 
 ;; golang
@@ -329,6 +354,7 @@ locate PACKAGE."
 (add-hook 'irony-mode-hook
 	  (lambda () (auto-complete-mode -1)))
 
+
 ;; js
 (require-package 'js2-mode)
 (when (require 'js2-mode)
@@ -360,44 +386,70 @@ locate PACKAGE."
 
 ;; typescript
 
-(use-package web-mode
-  :init
-  (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
-  (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
+;; (use-package web-mode
+;;   :init
+;;   (add-to-list 'auto-mode-alist '("\\.ts\\'" . web-mode))
+;;   (add-to-list 'auto-mode-alist '("\\.tsx\\'" . web-mode))
 
+;;   :config
+;;   (setq web-mode-attr-indent-offset nil)
+
+;;   (setq web-mode-enable-auto-closing t)
+;;   (setq web-mode-enable-auto-pairing t)
+
+;;   (setq web-mode-auto-close-style 2)
+;;   (setq web-mode-tag-auto-close-style 2)
+
+
+;;   (setq web-mode-markup-indent-offset 2)
+;;   (setq web-mode-css-indent-offset 2)
+;;   (setq web-mode-code-indent-offset 2)
+
+;;   (setq indent-tabs-mode nil)
+;;   (setq tab-width 2)
+;;   )
+
+(require-package 'typescript-mode)
+(require 'typescript-mode)
+(add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
+(add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
+(require-package 'tide)
+(require 'tide)
+(add-hook 'typescript-mode-hook
+	  (lambda ()
+	    (tide-setup)
+	    (flycheck-mode t)
+	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+	    (eldoc-mode t)
+	    (company-mode-on)))
+(setq typescript-indent-level 2)
+
+;; remote lsp client
+(use-package lsp-mode
+  :hook ((typescript-mode . lsp-deferred))
+  :commands (lsp lsp-deferred)
   :config
-  (setq web-mode-attr-indent-offset nil)
+  (progn
+    (lsp-register-client
+     (make-lsp-client
+      :new-connection (lsp-tramp-connection "typescript-language-server --stdio")
+      :major-modes '(typescript-mode)
+      :activation-fn (lsp-activate-on "typescript")
+      :remote? t
+      :server-id 'ts-ls))))
 
-  (setq web-mode-enable-auto-closing t)
-  (setq web-mode-enable-auto-pairing t)
+;; (with-eval-after-load 'lsp-mode
+;;   (add-to-list 'lsp-language-id-configuration
+;;     '(typescript-mode . "typescript")))
 
-  (setq web-mode-auto-close-style 2)
-  (setq web-mode-tag-auto-close-style 2)
-
-
-  (setq web-mode-markup-indent-offset 2)
-  (setq web-mode-css-indent-offset 2)
-  (setq web-mode-code-indent-offset 2)
-
-  (setq indent-tabs-mode nil)
-  (setq tab-width 2)
-  )
-(add-hook 'web-mode-hook (lambda () (auto-complete-mode -1)))
-
-;; (require-package 'typescript-mode)
-;; (require 'typescript-mode)
-;; (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
-;; (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
-;; (require-package 'tide)
-;; (require 'tide)
-;; (add-hook 'typescript-mode-hook
-;; 	  (lambda ()
-;; 	    (tide-setup)
-;; 	    (flycheck-mode t)
-;; 	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-;; 	    (eldoc-mode t)
-;; 	    (company-mode-on)))
-;; (setq typescript-indent-level 4)
+;; (lsp-register-client
+;;  (make-lsp-client
+;;   :new-connection (lsp-tramp-connection "typescript-language-server --stdio")
+;;   :major-modes '(web-mode)
+;;   :priority 1
+;;   :multi-root t
+;;   :remote? t
+;;   :server-id 'tsls-docker))
 
 (setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck company avy which-key helm-xref dap-mode zenburn-theme json-mode))
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
@@ -420,6 +472,7 @@ locate PACKAGE."
   (require 'dap-chrome)
   (add-hook 'lsp-mode-hook #'lsp-enable-which-key-integration)
   (yas-global-mode))
+
 
 ;; web-mode
 (require-package 'web-mode)
@@ -447,6 +500,7 @@ locate PACKAGE."
 ;; (flycheck-add-mode 'javascript-eslint 'css-mode)
 ;; (add-hook 'vue-mode-hook 'flycheck-mode)
 
+
 ;; rjsx-mode
 (require-package 'rjsx-mode)
 (require 'rjsx-mode)
@@ -467,6 +521,7 @@ locate PACKAGE."
   (interactive)
   (eslint-fix-file)
   (revert-buffer t t))
+
 
 ;; scala
 ;; Install use-package if not already installed
@@ -588,11 +643,13 @@ locate PACKAGE."
 (require 'ess-R-object-popup)
 (define-key ess-mode-map "\C-c\C-g" 'ess-R-object-popup)
 
+
 ;; julia
 (require-package 'julia-mode)
 (require 'julia-mode)
 (require-package 'lsp-julia)
 (require 'lsp-julia)
+
 
 ;; php
 (require-package 'php-mode)
@@ -712,4 +769,3 @@ locate PACKAGE."
      (340 . "#94BFF3")
      (360 . "#DC8CC3")))
  '(vc-annotate-very-old-color "#DC8CC3"))
-
