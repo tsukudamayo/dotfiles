@@ -256,35 +256,34 @@ locate PACKAGE."
 
 
 ;; rust-mode
-(require-package 'eglot)
-(require-package 'flymake)
-(require 'jsonrpc)
-(require 'eglot)
-(require 'flymake)
-(with-eval-after-load 'eglot
-  (define-key eglot-mode-map (kbd "C-c C-d") 'eglot-help-at-point)
-  (define-key eglot-mode-map (kbd "C-c C-r") 'eglot-code-actions)
-  )
-(require-package 'spinner)
+(add-to-list 'exec-path (expand-file-name "~/bin"))
+(add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
 (require-package 'rust-mode)
-(require-package 'rustic)
-(require 'rust-mode)
-(require 'spinner)
-(require 'rustic)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rust-mode)) auto-mode-alist)
-(cl-delete-if (lambda (element) (equal (cdr element) 'rustic-mode)) auto-mode-alist)
-(add-to-list 'auto-mode-alist '("\\.rs$" . rustic-mode))
+(use-package rust-mode
+  :ensure t
+  :custom rust-format-on-save t)
 
-(defun pop-to-buffer-without-switch (buffer-or-name &optional action norecord)
-  (pop-to-buffer buffer-or-name action norecord)
-  (other-window -1)
-  )
+(require-package 'cargo)
+(use-package cargo
+  :ensure t
+  :hook (rust-mode . cargo-minor-mode))
+
+(use-package lsp-mode
+  :ensure t
+  :init (yas-global-mode)
+  :hook (rust-mode . lsp)
+  :bind ("C-c h" . lsp-describe-thing-at-point)
+  :custom (lsp-rust-server 'rust-analyzer))
+
+(require-package 'lsp-ui)
+(use-package lsp-ui
+  :ensure t)
 
 (lsp-register-client
  (make-lsp-client
   :new-connection (lsp-tramp-connection "rust-analyzer")
-  :major-modes '(rustic-mode)
-  :priority 1
+  :major-modes '(rust-mode)
+  :priority 2
   :multi-root t
   :remote? t
   :server-id 'rust-analyzer-docker))
