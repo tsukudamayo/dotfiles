@@ -52,31 +52,32 @@ brew install --cask xquartz
 brew install docker
 brew install docker-compose
 brew install --cask multipass
-multipass launch --name docker-vm --cpus 4 --mem 16G --disk 300G --cloud-init dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass launch --name docker-vm --cpus 8 --mem 8G --disk 100G --cloud-init dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
-curl -O https://download.docker.com/mac/static/stable/x86_64/docker-20.10.14.tgz
-tar xzvf docker-20.10.14.tgz 
+curl -O https://download.docker.com/mac/static/stable/aarch64/docker-20.10.17.tgz
+tar xzvf docker-20.10.17.tgz 
+
 mv docker/* $HOME/bin
 rm -rf docker/
-rm docker-20.10.14.tgz 
+rm docker-20.10.17.tgz 
 docker context create docker-vm --docker "host=tcp://192.168.64.2:2375"
 docker context use docker-vm
 
-# wget
-brew install wget
+# # wget
+# brew install wget
 
-# tmux
-brew install tmux
+# # tmux
+# brew install tmux
 
-# make
-brew install make
+# # make
+# brew install make
 
-# cmake
-brew install cmake
+# # cmake
+# brew install cmake
 
-# llvm
-brew install llvm
+# # llvm
+# brew install llvm
 
 # emacs(native compile)
 brew install autoconf gnutls texinfo
@@ -92,10 +93,10 @@ cd emacs
 make install
 sudo cp -r nextstep/Emacs.app /Applications/
 
-# gcp sdk
-curl https://sdk.cloud.google.com > gcp-sdk-install.sh
-bash gcp-sdk-install.sh --disable-prompts
-rm gpc-sdk-install.sh 
+# # gcp sdk
+# curl https://sdk.cloud.google.com > gcp-sdk-install.sh
+# bash gcp-sdk-install.sh --disable-prompts
+# rm gpc-sdk-install.sh 
 
 
 ## pandoc
