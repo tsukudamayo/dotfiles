@@ -105,13 +105,43 @@ locate PACKAGE."
 
 
 ;; lsp-mode
+(require-package 'lsp-mode)
+(require 'lsp-mode)
+(use-package lsp-mode
+  :ensure t
+  :hook (
+	 (go-mode . lsp-deferred)
+	 (rust-mode . lsp-deferred)
+	 (typescript-mode . lsp-deferred)
+	 (python-mode . lsp-deferred)
+	 (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
+	 )
+
+  :bind ("C-c h" . lsp-describe-thing-at-point)
+  :commands (lsp . lsp-deferred))
+
+(advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
+
+
+(require-package 'lsp-ui)
+(require 'lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :custom ((lsp-ui-doc-enable . t))
+  :commands lsp-ui-mode)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require-package 'jsonrpc)
 (require-package 'spinner)
-(require-package 'lsp-mode)
 (require 'spinner)
 
 (setq lsp-response-timeout 4)
+
+;; lsp-ui
+(require-package 'lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
 
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
@@ -225,13 +255,21 @@ locate PACKAGE."
 (add-hook 'python-mode-hook
 	  (lambda () (auto-complete-mode -1)))
 
+(require-package 'lsp-pyright)
+(use-package lsp-pyright
+  :ensure t
+  :hook (python-mode . (lambda ()
+			 (require 'lsp-pyright)
+			 (lsp-deferred))))
+
 (lsp-register-client
  (make-lsp-client
   :new-connection (lsp-tramp-connection "pylsp")
   :major-modes '(python-mode)
-  :priority 1
+  ;; :priority 2
   :multi-root t
   :remote? t
+  :add-on? t
   :server-id 'pylsp-docker))
 
 ;; ein(emacs ipython notebook)
@@ -256,8 +294,8 @@ locate PACKAGE."
 
 
 ;; rust-mode
-(add-to-list 'exec-path (expand-file-name "~/bin"))
-(add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
+;; (add-to-list 'exec-path (expand-file-name "~/bin"))
+;; (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
 (require-package 'rust-mode)
 (use-package rust-mode
   :ensure t
@@ -268,24 +306,17 @@ locate PACKAGE."
   :ensure t
   :hook (rust-mode . cargo-minor-mode))
 
-(use-package lsp-mode
-  :ensure t
-  :init (yas-global-mode)
-  :hook (rust-mode . lsp)
-  :bind ("C-c h" . lsp-describe-thing-at-point)
-  :custom (lsp-rust-server 'rust-analyzer))
-
-(require-package 'lsp-ui)
-(use-package lsp-ui
-  :ensure t)
-
 (lsp-register-client
  (make-lsp-client
   :new-connection (lsp-tramp-connection "rust-analyzer")
-  :major-modes '(rust-mode)
-  :priority 2
+  :major-modes '(rust-mode rustic-mode)
   :multi-root t
   :remote? t
+  :add-on? t
+  ;; :priority 1
+  :initialization-options 'lsp-rust-analyzer--make-init-options
+  :action-handlers (ht ("rust-analyzer.runSingle" #'lsp-rust--analyzer-run-single))
+  :ignore-messages nil
   :server-id 'rust-analyzer-docker))
 
 
@@ -308,21 +339,6 @@ locate PACKAGE."
   (add-hook 'before-save-hook 'gofmt-before-save)
   (add-hook 'go-mode-hook 'company-mode))
 (add-hook 'go-mode-hook 'lsp-mode-init)
-
-(require-package 'lsp-mode)
-(require 'lsp-mode)
-(use-package lsp-mode
-  :ensure t
-  :hook
-  (go-mode . lsp-deferred)
-  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
-  :commands (lsp lsp-deferred))
-
-(require-package 'lsp-ui)
-(require 'lsp-ui)
-(use-package lsp-ui
-  :ensure t
-  :commands lsp-ui-mode)
 
 (add-hook 'go-mode-hook (lambda () (auto-complete-mode -1)))
 
@@ -425,7 +441,7 @@ locate PACKAGE."
 
 ;; remote lsp client
 (use-package lsp-mode
-  :hook ((typescript-mode . lsp-deferred))
+  :hook ()
   :commands (lsp lsp-deferred)
   :config
   (progn
@@ -767,4 +783,5 @@ locate PACKAGE."
      (320 . "#8CD0D3")
      (340 . "#94BFF3")
      (360 . "#DC8CC3")))
- '(vc-annotate-very-old-color "#DC8CC3"))
+ '(vc-annotate-very-old-color "#DC8CC3")
+ '(warning-suppress-types '((use-package))))
