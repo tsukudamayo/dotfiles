@@ -17,6 +17,10 @@ mkdir ~/vimfiles/undo
 # homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
+eval "$(/opt/homebrew/bin/brew shellenv)"
+
+
 brew doctor
 
 # git
@@ -25,6 +29,8 @@ brew install git-flow
 
 git config --global user.name "tsukudamayo"
 git config --global user.email "tsukudamayo@gmail.com"
+git config --global --add remote.origin.proxy ""
+git config --global http.sslVerify "false"
 
 # dotfiles
 git clone https://github.com/tsukudamayo/dotfiles.git
@@ -52,7 +58,7 @@ brew install --cask xquartz
 brew install docker
 brew install docker-compose
 brew install --cask multipass
-multipass launch --name docker-vm --cpus 8 --mem 8G --disk 100G --cloud-init dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass launch --name docker-vm --cpus 8 --mem 8G --disk 100G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
 curl -O https://download.docker.com/mac/static/stable/aarch64/docker-20.10.17.tgz
@@ -67,8 +73,8 @@ docker context use docker-vm
 # # wget
 # brew install wget
 
-# # tmux
-# brew install tmux
+# tmux
+brew install tmux
 
 # # make
 # brew install make
