@@ -54,6 +54,12 @@ brew install --cask firefox
 # x11 client
 brew install --cask xquartz
 
+# Rosseta2
+softwareupdate --install-rosetta
+
+# kindle(x86)
+brew install --cask kindle
+
 # docker (install go)
 brew install docker
 brew install docker-compose

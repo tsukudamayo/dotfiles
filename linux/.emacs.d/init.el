@@ -262,15 +262,40 @@ locate PACKAGE."
 			 (require 'lsp-pyright)
 			 (lsp-deferred))))
 
+;; (lsp-register-client
+;;  (make-lsp-client
+;;   :new-connection (lsp-tramp-connection  "pylsp")
+;;   :major-modes '(python-mode)
+;;   ;; :priority 2
+;;   :multi-root t
+;;   :remote? t
+;;   :add-on? t
+;;   :server-id 'pylsp-docker))
+(setq lsp-log-io t)
+(setq lsp-pyright-use-library-code-for-types t)
+(setq lsp-pyright-diagnostic-mode "workspace")
 (lsp-register-client
- (make-lsp-client
-  :new-connection (lsp-tramp-connection "pylsp")
-  :major-modes '(python-mode)
-  ;; :priority 2
-  :multi-root t
-  :remote? t
-  :add-on? t
-  :server-id 'pylsp-docker))
+  (make-lsp-client
+    :new-connection (lsp-tramp-connection (lambda ()
+                                    (cons "pyright-langserver"
+                                          lsp-pyright-langserver-command-args)))
+    :major-modes '(python-mode)
+    :remote? t
+    :server-id 'pyright-remote
+    :multi-root t
+    :priority 3
+    :initialization-options (lambda () (ht-merge (lsp-configuration-section "pyright")
+                                                 (lsp-configuration-section "python")))
+    :initialized-fn (lambda (workspace)
+                      (with-lsp-workspace workspace
+                        (lsp--set-configuration
+                        (ht-merge (lsp-configuration-section "pyright")
+                                  (lsp-configuration-section "python")))))
+    :download-server-fn (lambda (_client callback error-callback _update?)
+                          (lsp-package-ensure 'pyright callback error-callback))
+    :notification-handlers (lsp-ht ("pyright/beginProgress" 'lsp-pyright--begin-progress-callback)
+                                  ("pyright/reportProgress" 'lsp-pyright--report-progress-callback)
+                                  ("pyright/endProgress" 'lsp-pyright--end-progress-callback))))
 
 ;; ein(emacs ipython notebook)
 (require-package 'ein)
