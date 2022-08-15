@@ -25,7 +25,6 @@ brew doctor
 
 # git
 brew install git
-brew install git-flow
 
 git config --global user.name "tsukudamayo"
 git config --global user.email "tsukudamayo@gmail.com"
@@ -64,7 +63,7 @@ brew install --cask kindle
 brew install docker
 brew install docker-compose
 brew install --cask multipass
-multipass launch --name docker-vm --cpus 8 --mem 8G --disk 100G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
 curl -O https://download.docker.com/mac/static/stable/aarch64/docker-20.10.17.tgz
