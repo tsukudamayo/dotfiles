@@ -112,8 +112,8 @@ locate PACKAGE."
   :hook (
 	 (go-mode . lsp-deferred)
 	 (rust-mode . lsp-deferred)
-	 (typescript-mode . lsp-deferred)
 	 (python-mode . lsp-deferred)
+	 (typescript-mode . lsp-deferred)
 	 (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
 	 )
 
@@ -449,47 +449,34 @@ locate PACKAGE."
 ;;   (setq tab-width 2)
 ;;   )
 
+
 (require-package 'typescript-mode)
 (require 'typescript-mode)
 (add-to-list 'auto-mode-alist '("\\.ts\\'" . typescript-mode))
 (add-to-list 'auto-mode-alist '("\\.tsx\\'" . typescript-mode))
-(require-package 'tide)
-(require 'tide)
-(add-hook 'typescript-mode-hook
-	  (lambda ()
-	    (tide-setup)
-	    (flycheck-mode t)
-	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
-	    (eldoc-mode t)
-	    (company-mode-on)))
+(add-hook 'typescript-mode-hook #'lsp)
+;; (require-package 'tide)
+;; (require 'tide)
+;; (add-hook 'typescript-mode-hook
+;; 	  (lambda ()
+;; 	    (tide-setup)
+;; 	    (flycheck-mode t)
+;; 	    (setq flycheck-check-syntax-automatically '(save mode-enabled))
+;; 	    (eldoc-mode t)
+;; 	    (company-mode-on)))
 (setq typescript-indent-level 2)
 
-;; remote lsp client
-(use-package lsp-mode
-  :hook ()
-  :commands (lsp lsp-deferred)
-  :config
-  (progn
-    (lsp-register-client
-     (make-lsp-client
-      :new-connection (lsp-tramp-connection "typescript-language-server --stdio")
-      :major-modes '(typescript-mode)
-      :activation-fn (lsp-activate-on "typescript")
-      :remote? t
-      :server-id 'ts-ls))))
-
-;; (with-eval-after-load 'lsp-mode
-;;   (add-to-list 'lsp-language-id-configuration
-;;     '(typescript-mode . "typescript")))
-
-;; (lsp-register-client
-;;  (make-lsp-client
-;;   :new-connection (lsp-tramp-connection "typescript-language-server --stdio")
-;;   :major-modes '(web-mode)
-;;   :priority 1
-;;   :multi-root t
-;;   :remote? t
-;;   :server-id 'tsls-docker))
+(lsp-register-client
+ (make-lsp-client
+ :new-connection (lsp-tramp-connection (list "typescript-language-server" "--stdio"))
+ :major-modes '(typescript-mode)
+ :remote? t
+ :server-id 'ts-remote
+ :multi-root t ))
+ 
+(with-eval-after-load 'lsp-mode
+  (add-to-list 'lsp-language-id-configuration
+    '(typescript-mode . "typescript")))
 
 (setq package-selected-packages '(lsp-mode yasnippet lsp-treemacs helm-lsp projectile hydra flycheck company avy which-key helm-xref dap-mode zenburn-theme json-mode))
 (when (cl-find-if-not #'package-installed-p package-selected-packages)
