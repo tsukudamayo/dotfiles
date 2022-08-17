@@ -59,21 +59,18 @@ softwareupdate --install-rosetta
 # kindle(x86)
 brew install --cask kindle
 
-# docker (install go)
+# docker deamon and multipass install(install go)
 brew install docker
 brew install docker-compose
 brew install --cask multipass
-multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
-multipass mount /Users docker-vm:/Users
-multipass mount /private/tmp docker-vm:/tmp
+
+# docker client install
 curl -O https://download.docker.com/mac/static/stable/aarch64/docker-20.10.17.tgz
 tar xzvf docker-20.10.17.tgz 
 
 mv docker/* $HOME/bin
 rm -rf docker/
-rm docker-20.10.17.tgz 
-docker context create docker-vm --docker "host=tcp://192.168.64.2:2375"
-docker context use docker-vm
+rm docker-20.10.17.tgz
 
 # # wget
 # brew install wget
@@ -104,11 +101,20 @@ cd emacs
 make install
 sudo cp -r nextstep/Emacs.app /Applications/
 
+# multipass launch and using docker context
+# XXX launch failed: cannot connect to the multipass socket
+# Need to wait restart multipass deamon
+multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass mount /Users docker-vm:/Users
+multipass mount /private/tmp docker-vm:/tmp
+
+docker context create docker-vm --docker "host=tcp://192.168.64.2:2375"
+docker context use docker-vm
+
 # # gcp sdk
 # curl https://sdk.cloud.google.com > gcp-sdk-install.sh
 # bash gcp-sdk-install.sh --disable-prompts
 # rm gpc-sdk-install.sh 
-
 
 ## pandoc
 #brew install pandoc 
