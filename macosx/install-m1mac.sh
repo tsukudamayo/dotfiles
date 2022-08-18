@@ -108,7 +108,7 @@ multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HO
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
 
-docker context create docker-vm --docker "host=tcp://192.168.64.2:2375"
+docker context create docker-vm --docker "host=tcp://$(multipass list | grep docker-vm | awk '{print $3}'):2375"
 docker context use docker-vm
 
 # # gcp sdk
