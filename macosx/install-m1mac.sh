@@ -16,11 +16,8 @@ mkdir ~/vimfiles/undo
 
 # homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
-
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
-
-
 brew doctor
 
 # git
@@ -78,9 +75,6 @@ brew install tmux
 # emacs(native compile)
 brew install autoconf gnutls texinfo
 brew install --build-from-source libgccjit automake
-## setting by .bash_profile
-# echo 'export LIBRARY_PATH="$(brew --prefix libgccjit)/lib/gcc/10"' > ~/.bash_profile
-# echo 'export PATH="/usr/local/opt/texinfo/bin:$PATH"' >  ~/.bash_profile
 cd ~/opt
 git clone git://git.sv.gnu.org/emacs.git
 cd emacs
