@@ -51,7 +51,7 @@ brew install --cask firefox
 brew install --cask xquartz
 
 # Rosseta2
-softwareupdate --install-rosetta
+softwareupdate --install-rosetta --agree-to-license
 
 # kindle(x86)
 brew install --cask kindle
