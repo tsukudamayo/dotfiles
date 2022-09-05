@@ -9,10 +9,9 @@ mkdir ~/.fonts
 mkdir ~/lib/src
 
 # vim
-mkdir ~/vimfiles
-mkdir ~/vimfiles/swp
-mkdir ~/vimfiles/backup
-mkdir ~/vimfiles/undo
+mkdir -p ~/.vim/backup
+mkdir -p ~/.vim/swp
+mkdir -p ~/.vim/undo
 
 # homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
