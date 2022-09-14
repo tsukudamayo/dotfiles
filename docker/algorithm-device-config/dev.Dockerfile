@@ -24,6 +24,7 @@ RUN pipenv requirements --dev > requirements.txt \
 RUN yum -y update && yum -y install curl graphviz
 RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
 RUN yum install -y nodejs npm
+RUN npm install -g npm@latest
 RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
 RUN rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
 RUN yum install -y yarn
