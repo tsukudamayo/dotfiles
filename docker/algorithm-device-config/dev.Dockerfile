@@ -1,5 +1,5 @@
 # FROM python:3.8-slim-bullseye
-FROM public.ecr.aws/sam/build-python3.8:latest
+FROM public.ecr.aws/sam/build-python3.9:latest
 
 WORKDIR /app
 RUN pip install --upgrade pip
