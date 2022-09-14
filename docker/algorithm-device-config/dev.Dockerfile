@@ -12,7 +12,7 @@ COPY Pipfile.lock ./
 # RUN pipenv lock --keep-outdated -r --dev > requirements.txt \
 #   && pip install -r requirements.txt
 
-RUN pipenv requirements -r --dev > requirements.txt \
+RUN pipenv requirements --dev > requirements.txt \
     && pip install -r requirements.txt
 
 # python:3.8-slim-bullseye
