@@ -1,5 +1,5 @@
-# FROM python:3.8-slim-bullseye
-FROM public.ecr.aws/sam/build-python3.9:latest
+FROM python:3.9-slim-bullseye
+# FROM public.ecr.aws/sam/build-python3.9:latest
 
 WORKDIR /app
 RUN pip install --upgrade pip
@@ -15,19 +15,20 @@ COPY Pipfile.lock ./
 RUN pipenv requirements --dev > requirements.txt \
     && pip install -r requirements.txt
 
-# python:3.8-slim-bullseye
-# RUN apt update && apt install -y curl graphviz \
-#     && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
-#     && apt install -y nodejs
+# python:3.9-slim-bullseye
+RUN apt update && apt install -y curl graphviz \
+    && curl -sL https://deb.nodesource.com/setup_16.x | bash - \
+    && apt install -y nodejs \
+    && npm install -g npm@latest
 
-# public.ecr.aws/sam/build-python3.8:latest
-RUN yum -y update && yum -y install curl graphviz
-RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
-RUN yum install -y nodejs npm
-RUN npm install -g npm@latest
-RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
-RUN rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
-RUN yum install -y yarn
+# # public.ecr.aws/sam/build-python3.8:latest
+# RUN yum -y update && yum -y install curl graphviz
+# RUN curl -sL https://rpm.nodesource.com/setup_16.x | bash -
+# RUN yum install -y nodejs npm
+# RUN npm install -g npm@latest
+# RUN curl -sL https://dl.yarnpkg.com/rpm/yarn.repo | tee /etc/yum.repos.d/yarn.repo
+# RUN rpm --import https://dl.yarnpkg.com/rpm/pubkey.gpg
+# RUN yum install -y yarn
 
 RUN pip install python-lsp-server pyright
 
