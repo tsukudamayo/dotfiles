@@ -261,16 +261,6 @@ locate PACKAGE."
   :hook (python-mode . (lambda ()
 			 (require 'lsp-pyright)
 			 (lsp-deferred))))
-
-;; (lsp-register-client
-;;  (make-lsp-client
-;;   :new-connection (lsp-tramp-connection  "pylsp")
-;;   :major-modes '(python-mode)
-;;   ;; :priority 2
-;;   :multi-root t
-;;   :remote? t
-;;   :add-on? t
-;;   :server-id 'pylsp-docker))
 (setq lsp-log-io t)
 (setq lsp-pyright-use-library-code-for-types t)
 (setq lsp-pyright-diagnostic-mode "workspace")
@@ -283,7 +273,6 @@ locate PACKAGE."
     :remote? t
     :server-id 'pyright-remote
     :multi-root t
-    :priority 3
     :initialization-options (lambda () (ht-merge (lsp-configuration-section "pyright")
                                                  (lsp-configuration-section "python")))
     :initialized-fn (lambda (workspace)
@@ -319,8 +308,6 @@ locate PACKAGE."
 
 
 ;; rust-mode
-;; (add-to-list 'exec-path (expand-file-name "~/bin"))
-;; (add-to-list 'exec-path (expand-file-name "~/.cargo/bin"))
 (require-package 'rust-mode)
 (use-package rust-mode
   :ensure t
@@ -682,9 +669,7 @@ locate PACKAGE."
 (require-package 'php-mode)
 (use-package phpunit
   :ensure t)
-
 (provide 'long-php)
-
 (require-package 'lsp-mode)
 (use-package lsp-mode
   :config
@@ -692,6 +677,375 @@ locate PACKAGE."
   :hook (php-mode . lsp)
   :commands lsp)
 
+;; SQL
+(require-package 'cl-lib)
+(require 'cl-lib)
+(require-package 'sql-indent)
+(require 'sql-indent)
+(add-hook 'sql-mode-hook 'company-mode)
+(eval-after-load "sql"
+  '(load-library "sql-indent"))
+;; Update indentation rules, select, insert, delete and update keywords
+;; are aligned with the clause start
+
+(defvar my-sql-indentation-offsets-alist
+  `((select-clause 0)
+    (select-column ++)
+    (select-table ++)
+    (select-table-continuation ++)
+    (insert-clause 0)
+    (delete-clause 0)
+    (update-clause 0)
+    ;; (in-select-clause sqlind-lineup-to-clause-end)
+    ;; (in-insert-clause sqlind-lineup-to-clause-end)
+    ;; (in-delete-clause sqlind-lineup-to-clause-end)
+    ;; (in-update-clause sqlind-lineup-to-clause-end)
+    (in-select-clause ++)
+    (in-insert-clause ++)
+    (in-delete-clause ++)
+    (in-update-clause ++)
+    ,@sqlind-default-indentation-offsets-alist))
+
+(add-hook 'sqlind-minor-mode-hook
+    (lambda ()
+       (setq sqlind-indentation-offsets-alist
+             my-sql-indentation-offsets-alist)))
+(defconst sql-completions
+  '(
+    "all"
+    "and"
+    "any"
+    "array"
+    "as"
+    "asc"
+    "assert_rows_modified"
+    "at"
+    "between"
+    "by"
+    "case"
+    "cast"
+    "collate"
+    "contains"
+    "create"
+    "cross"
+    "cube"
+    "current"
+    "default"
+    "define"
+    "desc"
+    "distinct"
+    "else"
+    "end"
+    "enum"
+    "escape"
+    "except"
+    "exclude"
+    "exists"
+    "extract"
+    "false"
+    "fetch"
+    "following"
+    "for"
+    "from"
+    "full"
+    "group"
+    "grouping"
+    "groups"
+    "hash"
+    "having"
+    "if"
+    "ignore"
+    "in"
+    "inner"
+    "intersect"
+    "interval"
+    "into"
+    "is"
+    "join"
+    "lateral"
+    "left"
+    "like"
+    "limit"
+    "lookup"
+    "merge"
+    "natural"
+    "new"
+    "no"
+    "not"
+    "null"
+    "nulls"
+    "of"
+    "on"
+    "or"
+    "order"
+    "outer"
+    "over"
+    "partition"
+    "preceding"
+    "proto"
+    "range"
+    "recursive"
+    "respect"
+    "right"
+    "rollup"
+    "rows"
+    "select"
+    "set"
+    "some"
+    "struct"
+    "tablesample"
+    "then"
+    "to"
+    "treat"
+    "true"
+    "unbounded"
+    "union"
+    "unnest"
+    "using"
+    "when"
+    "where"
+    "window"
+    "with"
+    "within"
+    "any_value"
+    "array_agg"
+    "array_concat_agg"
+    "avg"
+    "bit_and"
+    "bit_or"
+    "bit_xor"
+    "count"
+    "countif"
+    "logical_and"
+    "logical_or"
+    "max"
+    "min"
+    "string_agg"
+    "sum"
+    "corr"
+    "covar_pop"
+    "covar_samp"
+    "stddev_pop"
+    "stddev_samp"
+    "stddev"
+    "var_pop"
+    "var_samp"
+    "variance"
+    "approx_count_distinct"
+    "approx_quantiles"
+    "approx_top_count"
+    "approx_top_sum"
+    "hll_count.init"
+    "hll_count.merge"
+    "hll_count.merge_partial"
+    "hll_count.extract"
+    "rank"
+    "dense_rank"
+    "percent_rank"
+    "cume_dist"
+    "ntile"
+    "row_number"
+    "bit_count"
+    "abs"
+    "sign"
+    "is_inf"
+    "is_nan"
+    "ieee_divide"
+    "rand"
+    "sqrt"
+    "pow"
+    "power"
+    "exp"
+    "ln"
+    "log"
+    "greatest"
+    "least"
+    "div"
+    "safe_divide"
+    "safe_multiply"
+    "safe_negate"
+    "safe_add"
+    "safe_subtract"
+    "mod"
+    "round"
+    "trunc"
+    "ceil"
+    "ceiling"
+    "floor"
+    "cos"
+    "cosh"
+    "acos"
+    "acosh"
+    "sin"
+    "sinh"
+    "asin"
+    "asinh"
+    "tan"
+    "tanh"
+    "atan"
+    "atanh"
+    "range_bucket"
+    "first_value"
+    "last_value"
+    "nth_value"
+    "lead"
+    "lag"
+    "percentile_cont"
+    "percentile_disc"
+    "farm_fingerprint"
+    "byte_length"
+    "char_length"
+    "character_length"
+    "code_points_to_bytes"
+    "code_points_to_string"
+    "concat"
+    "ends_with"
+    "format"
+    "from_hex"
+    "length"
+    "lpad"
+    "lower"
+    "ltrim"
+    "normalize"
+    "normalize_and_casefold"
+    "regexp_contains"
+    "regexp_extract"
+    "regexp_extract_all"
+    "regexp_replace"
+    "replace"
+    "repeat"
+    "reverse"
+    "rpad"
+    "rtrim"
+    "safe_convert_bytes_to_string"
+    "split"
+    "starts_with"
+    "strpos"
+    "substr"
+    "to_code_points"
+    "to_hex"
+    "trim"
+    "upper"
+    "to_json_string"
+    "array"
+    "array_concat"
+    "array_length"
+    "array_to_string"
+    "generate_array"
+    "generate_date_array"
+    "generate_timestamp_array"
+    "array_reverse"
+    "current_date"
+    "extract"
+    "date"
+    "date_add"
+    "date_sub"
+    "date_diff"
+    "date_trunc"
+    "date_from_unix_date"
+    "format_date"
+    "parse_date"
+    "unix_date"
+    "current_datetime"
+    "datetime"
+    "datetime_add"
+    "datetime_sub"
+    "datetime_diff"
+    "datetime_trunc"
+    "format_datetime"
+    "parse_datetime"
+    "current_time"
+    "time"
+    "time_add"
+    "time_sub"
+    "time_diff"
+    "time_trunc"
+    "format_time"
+    "parse_time"
+    "current_timestamp"
+    "extract"
+    "string"
+    "timestamp"
+    "timestamp_add"
+    "timestamp_sub"
+    "timestamp_diff"
+    "timestamp_trunc"
+    "format_timestamp"
+    "parse_timestamp"
+    "timestamp_seconds"
+    "timestamp_millis"
+    "timestamp_micros"
+    "unix_seconds"
+    "unix_millis"
+    "unix_micros"
+    "st_geogpoint"
+    "st_makeline"
+    "st_makepolygon"
+    "st_makepolygonoriented"
+    "st_geogfromgeojson"
+    "st_geogfromtext"
+    "st_geogfromwkb"
+    "st_geogpointfromgeohash"
+    "st_asgeojson"
+    "st_astext"
+    "st_geohash"
+    "st_asbinary"
+    "st_boundary"
+    "st_centroid"
+    "st_closestpoint"
+    "st_difference"
+    "st_intersection"
+    "st_snaptogrid"
+    "st_union"
+    "st_x"
+    "st_y"
+    "st_contains"
+    "st_coveredby"
+    "st_covers"
+    "st_disjoint"
+    "st_dwithin"
+    "st_equals"
+    "st_intersects"
+    "st_intersectsbox"
+    "st_touches"
+    "st_within"
+    "st_isempty"
+    "st_iscollection"
+    "st_dimension"
+    "st_numpoints"
+    "st_area"
+    "st_distance"
+    "st_length"
+    "st_maxdistance"
+    "st_perimeter"
+    "st_union_agg"
+    "st_centroid_agg"
+    "session_user"
+    "generate_uuid"
+    "net.ip_from_string"
+    "net.safe_ip_from_string"
+    "net.ip_to_string"
+    "net.ip_net_mask"
+    "net.ip_trunc"
+    "net.host"
+    "net.public_suffix"
+    "net.reg_domain"
+    "error"
+    ))
+
+(defun company-sql-backend (command &optional arg &rest ignored)
+  (interactive (list 'interactive))
+
+  (cl-case command
+    (interactive (company-begin-backend 'company-sql-backend))
+    (prefix (and (eq major-mode 'sql-mode)
+                (company-grab-symbol)))
+    (candidates
+    (cl-remove-if-not
+      (lambda (c) (string-prefix-p arg c))
+      sql-completions))))
+
+(add-to-list 'company-backends 'company-sql-backend)
 
 ;; yaml-mode
 (require-package 'yaml-mode)
@@ -741,10 +1095,10 @@ locate PACKAGE."
 ;; keyboard macro
 ;; python import
 (fset 'importpy
-      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 105 109 112 111 114 116 return 67108896 67108896 67108896 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
+      (lambda (&optional arg) "keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 105 109 112 111 114 116 return 67108896 67108896 67108896 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
 ;; frompy
 (fset 'frompy
-      (lambda (&optional arg) "Keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
+      (lambda (&optional arg) "keyboard macro." (interactive "p") (kmacro-exec-ring-item (quote ([18 102 114 111 109 return 67108896 67108896 67108896 5 5 23 134217788 return 16 25 21 67108896 21 67108896] 0 "%d")) arg)))
 
 
 ;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
@@ -764,36 +1118,39 @@ locate PACKAGE."
  ;; If there is more than one, they won't work right.
  '(ac-go-expand-arguments-into-snippets nil)
  '(ansi-color-names-vector
-   ["#3F3F3F" "#CC9393" "#7F9F7F" "#F0DFAF" "#8CD0D3" "#DC8CC3" "#93E0E3" "#DCDCCC"])
- '(company-quickhelp-color-background "#4F4F4F")
- '(company-quickhelp-color-foreground "#DCDCCC")
+   ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
+ '(company-quickhelp-color-background "#4f4f4f")
+ '(company-quickhelp-color-foreground "#dcdccc")
  '(custom-enabled-themes '(manoj-dark))
  '(fci-rule-color "#383838")
  '(nrepl-message-colors
-   '("#CC9393" "#DFAF8F" "#F0DFAF" "#7F9F7F" "#BFEBBF" "#93E0E3" "#94BFF3" "#DC8CC3"))
+   '("#cc9393" "#dfaf8f" "#f0dfaf" "#7f9f7f" "#bfebbf" "#93e0e3" "#94bff3" "#dc8cc3"))
  '(package-selected-packages
    '(phpunint php-mode highlight-indentation yaml-mode lsp-ui sbt-mode scala-mode julia-mode ess eglot lsp-mode rjsx-mode vue-mode web-mode tide typescript-mode js2-mode rustic spinner py-autopep8 go-eldoc py-isort py-yapf go-autocomplete auto-complete-auctex company-tern company-racer racer toml-mode company-go go-mode company-jedi flycheck-rust rust-mode company-irony irony ddskk markdown-mode jedi-direx python-mode jedi flymake-python-pyflakes flymake-cursor auto-virtualenvwrapper))
- '(pdf-view-midnight-colors '("#DCDCCC" . "#383838"))
+ '(pdf-view-midnight-colors '("#dcdccc" . "#383838"))
  '(rustic-format-display-method 'pop-to-buffer-without-switch)
- '(vc-annotate-background "#2B2B2B")
+ '(vc-annotate-background "#2b2b2b")
  '(vc-annotate-color-map
-   '((20 . "#BC8383")
-     (40 . "#CC9393")
-     (60 . "#DFAF8F")
-     (80 . "#D0BF8F")
-     (100 . "#E0CF9F")
-     (120 . "#F0DFAF")
-     (140 . "#5F7F5F")
-     (160 . "#7F9F7F")
-     (180 . "#8FB28F")
-     (200 . "#9FC59F")
-     (220 . "#AFD8AF")
-     (240 . "#BFEBBF")
-     (260 . "#93E0E3")
-     (280 . "#6CA0A3")
-     (300 . "#7CB8BB")
-     (320 . "#8CD0D3")
-     (340 . "#94BFF3")
-     (360 . "#DC8CC3")))
- '(vc-annotate-very-old-color "#DC8CC3")
+   '((20 . "#bc8383")
+     (40 . "#cc9393")
+     (60 . "#dfaf8f")
+     (80 . "#d0bf8f")
+     (100 . "#e0cf9f")
+     (120 . "#f0dfaf")
+     (140 . "#5f7f5f")
+     (160 . "#7f9f7f")
+     (180 . "#8fb28f")
+     (200 . "#9fc59f")
+     (220 . "#afd8af")
+     (240 . "#bfebbf")
+     (260 . "#93e0e3")
+     (280 . "#6ca0a3")
+     (300 . "#7cb8bb")
+     (320 . "#8cd0d3")
+     (340 . "#94bff3")
+     (360 . "#dc8cc3")))
+ '(vc-annotate-very-old-color "#dc8cc3")
+ '(warning-suppress-log-types '((lsp-mode)))
  '(warning-suppress-types '((use-package))))
+(put 'set-goal-column 'disabled nil)
+(put 'downcase-region 'disabled nil)
