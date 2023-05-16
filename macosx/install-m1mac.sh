@@ -7,6 +7,8 @@ mkdir ~/etc
 mkdir ~/opt
 mkdir ~/.fonts
 mkdir ~/lib/src
+cp .bash_profile ~/.zprofile
+source ~/.zprofile
 
 # vim
 mkdir -p ~/.vim/backup
@@ -17,6 +19,7 @@ mkdir -p ~/.vim/undo
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
 echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.zprofile
 eval "$(/opt/homebrew/bin/brew shellenv)"
+
 brew doctor
 
 # git
@@ -50,10 +53,10 @@ brew install --cask firefox
 brew install --cask xquartz
 
 # Rosseta2
-softwareupdate --install-rosetta --agree-to-license
+# softwareupdate --install-rosetta --agree-to-license
 
 # kindle(x86)
-brew install --cask kindle
+# brew install --cask kindle
 
 # docker deamon and multipass install(install go)
 brew install docker
@@ -61,18 +64,18 @@ brew install docker-compose
 brew install --cask multipass
 
 # docker client install
-curl -O https://download.docker.com/mac/static/stable/aarch64/docker-20.10.17.tgz
-tar xzvf docker-20.10.17.tgz 
+curl -O https://download.docker.com/mac/static/stable/aarch64/docker-23.0.4.tgz
+tar xzvf docker-23.0.4.tgz
 
 mv docker/* $HOME/bin
 rm -rf docker/
-rm docker-20.10.17.tgz
+rm docker-23.0.4.tgz
 
 # tmux
 brew install tmux
 
 # emacs(native compile)
-brew install autoconf gnutls texinfo
+brew install autoconf gnutls texinfo libgccjit automake gcc
 brew install --build-from-source libgccjit automake
 cd ~/opt
 git clone git://git.sv.gnu.org/emacs.git
@@ -85,7 +88,7 @@ sudo cp -r nextstep/Emacs.app /Applications/
 # multipass launch and using docker context
 # XXX launch failed: cannot connect to the multipass socket
 # Need to wait restart multipass deamon
-multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 20.04
+multipass launch --name docker-vm --cpus 8 --mem 16G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 22.04
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
 
