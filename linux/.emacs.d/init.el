@@ -118,20 +118,30 @@ locate PACKAGE."
 	 )
 
   :bind ("C-c h" . lsp-describe-thing-at-point)
-  :commands lsp)
+  :commands (lsp . lsp-deferred))
 
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 
 
 (require-package 'lsp-ui)
 (require 'lsp-ui)
-(use-package lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :custom ((lsp-ui-doc-enable . t))
+  :commands lsp-ui-mode)
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require-package 'jsonrpc)
 (require-package 'spinner)
 (require 'spinner)
 
 (setq lsp-response-timeout 4)
+
+;; lsp-ui
+(require-package 'lsp-ui)
+(use-package lsp-ui
+  :ensure t
+  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode))
+
 
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
@@ -147,7 +157,7 @@ locate PACKAGE."
 ;; helm
 (require-package 'helm)
 (require 'helm)
-;; (require 'helm-config)			;
+(require 'helm-config)
 (helm-mode 1)
 
 
@@ -323,12 +333,8 @@ locate PACKAGE."
 
 
 ;; golang
-(add-to-list 'exec-path (expand-file-name "/usr/local/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "/go/bin/"))
-(add-to-list 'exec-path (expand-file-name "~/go/bin/"))
-
 (defun lsp-go-install-save-hooks()
-  ;; (add-hook 'before-save-hook #'lsp-format-buffer t t)
+  (add-hook 'before-save-hook #'lsp-format-buffer t t)
   (add-hook 'before-save-hook #'lsp-organize-imports t t))
 
 (require-package 'go-mode)
@@ -347,6 +353,21 @@ locate PACKAGE."
 (add-hook 'go-mode-hook #'lsp-deferred)
 (with-eval-after-load 'lsp-mode
   (setq lsp-enable-snippet nil))
+
+(lsp-register-custom-settings
+ '(("gopls.completeUnimported" t t)
+   ("gopls.staticcheck" t t)))
+
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-tramp-connection "gopls")
+  :major-modes '(go-mode)
+  :multi-root t
+  :remote? t
+  :add-on? t
+  ;; :priority 1
+  :ignore-messages nil
+  :server-id 'gopls-docker))
 
 
 ;; c, c++
@@ -1111,86 +1132,6 @@ locate PACKAGE."
    ["#3f3f3f" "#cc9393" "#7f9f7f" "#f0dfaf" "#8cd0d3" "#dc8cc3" "#93e0e3" "#dcdccc"])
  '(company-quickhelp-color-background "#4f4f4f")
  '(company-quickhelp-color-foreground "#dcdccc")
- '(connection-local-criteria-alist
-   '(((:application tramp :machine "localhost")
-      tramp-connection-local-darwin-ps-profile)
-     ((:application tramp :machine "DMPC-039")
-      tramp-connection-local-darwin-ps-profile)
-     ((:application tramp)
-      tramp-connection-local-default-system-profile tramp-connection-local-default-shell-profile)))
- '(connection-local-profile-alist
-   '((tramp-connection-local-darwin-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,uid,user,gid,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state=abcde" "-o" "ppid,pgid,sess,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etime,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . tramp-ps-time)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
-     (tramp-connection-local-busybox-ps-profile
-      (tramp-process-attributes-ps-args "-o" "pid,user,group,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "stat=abcde" "-o" "ppid,pgid,tty,time,nice,etime,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (user . string)
-       (group . string)
-       (comm . 52)
-       (state . 5)
-       (ppid . number)
-       (pgrp . number)
-       (ttname . string)
-       (time . tramp-ps-time)
-       (nice . number)
-       (etime . tramp-ps-time)
-       (args)))
-     (tramp-connection-local-bsd-ps-profile
-      (tramp-process-attributes-ps-args "-acxww" "-o" "pid,euid,user,egid,egroup,comm=abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" "-o" "state,ppid,pgid,sid,tty,tpgid,minflt,majflt,time,pri,nice,vsz,rss,etimes,pcpu,pmem,args")
-      (tramp-process-attributes-ps-format
-       (pid . number)
-       (euid . number)
-       (user . string)
-       (egid . number)
-       (group . string)
-       (comm . 52)
-       (state . string)
-       (ppid . number)
-       (pgrp . number)
-       (sess . number)
-       (ttname . string)
-       (tpgid . number)
-       (minflt . number)
-       (majflt . number)
-       (time . tramp-ps-time)
-       (pri . number)
-       (nice . number)
-       (vsize . number)
-       (rss . number)
-       (etime . number)
-       (pcpu . number)
-       (pmem . number)
-       (args)))
-     (tramp-connection-local-default-shell-profile
-      (shell-file-name . "/bin/sh")
-      (shell-command-switch . "-c"))
-     (tramp-connection-local-default-system-profile
-      (path-separator . ":")
-      (null-device . "/dev/null"))))
  '(custom-enabled-themes '(manoj-dark))
  '(fci-rule-color "#383838")
  '(nrepl-message-colors
