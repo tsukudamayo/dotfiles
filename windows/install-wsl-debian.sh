@@ -50,6 +50,9 @@ sudo apt install -y docker-ce \
      containerd.io \
      docker-buildx-plugin \
      docker-compose-plugin
+sudo service docker start
+sudo usermod -aG docker $USER
+sudo service docker restart
 
 # emacs
 sudo apt install -y autoconf \
