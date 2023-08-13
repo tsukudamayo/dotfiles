@@ -57,14 +57,30 @@ sudo apt install -y autoconf \
      texinfo \
      gnutls-bin \
      libgccjit-12-dev \
-     gcc
+     gcc \
+     libgtk-3-dev \
+     libgnutls28-dev \
+     libtiff5-dev \
+     libgif-dev \
+     libjpeg-dev \
+     libpng-dev \
+     libxpm-dev \
+     libncurses-dev \
+     libjansson4 \
+     libjansson-dev \
+     libmagickcore-dev \
+     libmagick++-dev \
+     libtree-sitter-dev
 cd ~/opt
 git clone git://git.sv.gnu.org/emacs.git
 cd emacs
 ./autogen.sh
 CFLAGS='-I/usr/lib/gcc/x86_64-linux-gnu/12/include -L/usr/lib/gcc/x86_64-linux-gnu/12'
-./configure --with-native-compilation --with-ns --without-x
+./configure \
+    --with-native-compilation \
+    --with-json \
+    --with-tree-sitter \
+    --with-imagemagick \
+    --with-xwidets
 make -j8
 make -j8 install
-
-
