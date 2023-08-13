@@ -83,4 +83,4 @@ CFLAGS='-I/usr/lib/gcc/x86_64-linux-gnu/12/include -L/usr/lib/gcc/x86_64-linux-g
     --with-imagemagick \
     --with-xwidets
 make -j8
-make -j8 install
+sudo make -j8 install
