@@ -157,7 +157,6 @@ locate PACKAGE."
 ;; helm
 (require-package 'helm)
 (require 'helm)
-(require 'helm-config)
 (helm-mode 1)
 
 
