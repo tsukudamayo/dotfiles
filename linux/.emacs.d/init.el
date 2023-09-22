@@ -42,6 +42,20 @@ locate PACKAGE."
 (add-to-list 'load-path "~/.emacs.d/elisp")
 (add-to-list 'load-path "~/.emacs.d/elpa")
 
+;; straight.el
+(defvar bootstrap-version)
+(let ((bootstrap-file
+      (expand-file-name "straight/repos/straight.el/bootstrap.el" user-emacs-directory))
+      (bootstrap-version 5))
+  (unless (file-exists-p bootstrap-file)
+    (with-current-buffer
+        (url-retrieve-synchronously
+        "https://raw.githubusercontent.com/raxod502/straight.el/develop/install.el"
+        'silent 'inhibit-cookies)
+      (goto-char (point-max))
+      (eval-print-last-sexp)))
+  (load bootstrap-file nil 'nomessage))
+
 ;; settings backup directory
 (setq backup-directory-alist
   (cons (cons ".*" (expand-file-name "~/.emacs.d/backup"))
@@ -54,6 +68,16 @@ locate PACKAGE."
 
 ;; backspace using C-h
 (global-set-key "\C-h" 'delete-backward-char)
+
+;; backslash for japanese keyboard
+(defun insert-backslash ()
+  (interactive)
+  (insert "\\"))
+(define-key global-map [?\M-¥] 'insert-backslash)
+(defun isearch-add-backslash()
+  (interactive)
+  (isearch-printing-char ?\\ 1))
+(define-key isearch-mode-map [?\M-¥] 'isearch-add-backslash)
 
 ;; C-' as dabbrev-expand
 (global-set-key (kbd "C-'") 'dabbrev-expand)
@@ -114,6 +138,7 @@ locate PACKAGE."
 	 (rust-mode . lsp-deferred)
 	 (python-mode . lsp-deferred)
 	 (typescript-mode . lsp-deferred)
+	 (lean4-mode . lsp-deferred)
 	 (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
 	 )
 
@@ -288,6 +313,18 @@ locate PACKAGE."
 ;; ein(emacs ipython notebook)
 (require-package 'ein)
 (require 'ein)
+
+;; ob-ipython
+(when (executable-find "ipython")
+  (setq python-shell-interpreter "ipython"))
+
+(require-package 'ob-ipython)
+(require 'ob-ipython)
+(org-babel-do-load-languages
+ 'org-babel-load-languages
+ '((ipython . t)
+   ;; other languages..
+   ))
 
 ;; ;; autopep8 settings
 ;; (require 'py-autopep8)
@@ -1083,6 +1120,28 @@ locate PACKAGE."
 (require 'company-terraform)
 (company-terraform-init)
 (add-hook 'terraform-mode-hook #'terraform-format-on-save-mode)
+
+;; lean4-mode
+(use-package lean4-mode
+  :straight (lean4-mode
+	     :type git
+	     :host github
+	     :repo "leanprover/lean4-mode"
+	     :files ("*.el" "data"))
+  ;; to defer loading the package until required
+  :commands (lean4-mode))
+(lsp-register-client
+ (make-lsp-client
+  :new-connection (lsp-tramp-connection '("lake" "serve"))
+  :major-modes '(lean4-mode)
+  :multi-root t
+  :remote? t
+  :add-on? t
+  :server-id 'lean4-docker))
+(setq lean4-rootdir "/docker:calculus:/home/.elan")
+(add-to-list 'exec-path "/docker:calculus:/home/.elan/bin")
+
+;; (add-to-list 'auto-mode-alist '("\\.lean$" . lean4-mode))
 
 ;; emacs-lisp-mode
 (add-hook 'emacs-lisp-mode-hook 'company-mode)
