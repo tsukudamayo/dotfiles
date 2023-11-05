@@ -1,3 +1,6 @@
+(require 'profiler)
+(profiler-start 'cpu)
+
 (require 'package)
 (setq package-archives
       '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -5,7 +8,7 @@
 	("org" . "http://orgmode.org/elpa/")))
 
 (package-initialize)
-(package-refresh-contents)
+;; (package-refresh-contents))
 
 (defun require-package (package &optional min-version no-refresh)
     "Install given PACKAGE, optionally requiring MIN-VERSION.
@@ -32,7 +35,14 @@ locate PACKAGE."
 	(require-package package min-version no-refresh)
       (error
        (message "Couldn't install optional package `%s': %S" package err)
-             nil)))
+       nil)))
+
+;; calculate performance tp launch Emacs
+(add-hook 'after-init-hook
+	  (lambda ()
+	    (message "init time: %.3f sec"
+		     (float-time
+		      (time-subtract after-init-time before-init-time)))))
 
 ;; use-package
 (require-package 'use-package)
@@ -68,6 +78,8 @@ locate PACKAGE."
 
 ;; backspace using C-h
 (global-set-key "\C-h" 'delete-backward-char)
+;; widonws
+(global-set-key (kbd "C-c C-SPC") 'set-mark-command)
 
 ;; backslash for japanese keyboard
 (defun insert-backslash ()
@@ -97,11 +109,15 @@ locate PACKAGE."
 
 ;; flycheck
 (require-package 'flycheck)
-(require 'flycheck)
+(use-package flycheck
+  :defer t
+  )
+;; (require 'flycheck)
 (add-hook 'after-init-hook #'global-flycheck-mode)
 
 ;; company-mode
 ;; (add-hook 'after-init-hook 'global-company-mode)
+
 (require-package 'company)
 (require 'company)
 (with-eval-after-load 'company
@@ -130,9 +146,10 @@ locate PACKAGE."
 
 ;; lsp-mode
 (require-package 'lsp-mode)
-(require 'lsp-mode)
+;; (require 'lsp-mode)
 (use-package lsp-mode
   :ensure t
+  :defer t
   :hook (
 	 (go-mode . lsp-deferred)
 	 (rust-mode . lsp-deferred)
@@ -143,30 +160,24 @@ locate PACKAGE."
 	 )
 
   :bind ("C-c h" . lsp-describe-thing-at-point)
-  :commands (lsp . lsp-deferred))
+  ;; :commands (lsp . lsp-deferred)
+  )
 
 (advice-add 'lsp :before (lambda (&rest _args) (eval '(setf (lsp-session-server-id->folders (lsp-session)) (ht)))))
 
 
 (require-package 'lsp-ui)
-(require 'lsp-ui)
+;; (require 'lsp-ui)
 (use-package lsp-ui
-  :ensure t
-  :custom ((lsp-ui-doc-enable . t))
-  :commands lsp-ui-mode)
+  :defer t
+  :after lsp-mode
+  :hook (lsp-mode . lsp-ui-mode))
 (setq gnutls-algorithm-priority "NORMAL:-VERS-TLS1.3")
 (require-package 'jsonrpc)
 (require-package 'spinner)
 (require 'spinner)
 
 (setq lsp-response-timeout 4)
-
-;; lsp-ui
-(require-package 'lsp-ui)
-(use-package lsp-ui
-  :ensure t
-  :config (add-hook 'lsp-mode-hook 'lsp-ui-mode))
-
 
 ;; setting xref in lsp-mode
 (defun lsp-mode-init ()
@@ -181,7 +192,8 @@ locate PACKAGE."
 
 ;; helm
 (require-package 'helm)
-(require 'helm)
+(use-package helm
+  :defer t)
 (helm-mode 1)
 
 
@@ -584,73 +596,73 @@ locate PACKAGE."
   (revert-buffer t t))
 
 
-;; scala
-;; Install use-package if not already installed
-(unless (package-installed-p 'use-package)
-  (package-refresh-contents)
-  (package-install 'use-package))
-
-(require-package 'use-package)
-(require 'use-package)
-(require-package 'spinner)
-(require 'spinner)
-
-;; Enable defer and ensure by default for use-package
-;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
-(setq use-package-always-defer t
-      use-package-always-ensure t
-      backup-directory-alist `((".*" . ,temporary-file-directory))
-      auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
-
-;; Enable scala-mode and sbt-mode
-(require-package 'scala-mode)
-(use-package scala-mode
-  :mode "\\.s\\(cala\\|bt\\)$")
-
-(require-package 'sbt-mode)
-(use-package sbt-mode
-  :commands sbt-start sbt-command
-  :config
-  ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
-  ;; allows using SPACE when in the minibuffer
-  (substitute-key-definition
-   'minibuffer-complete-word
-   'self-insert-command
-   minibuffer-local-completion-map)
-   ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
-   (setq sbt:program-options '("-Dsbt.supershell=false"))
-)
-
-;; Enable nice rendering of diagnostics like compile errors.
-(use-package flycheck
-  :init (global-flycheck-mode))
-
-(require-package 'lsp-mode)
-(require 'lsp-mode)
-(use-package lsp-mode
-  ;; Optional - enable lsp-mode automatically in scala files
-  :hook
-  (scala-mode . lsp)
-  (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
-  :config (setq lsp-prefer-flymake nil))
-
-(require-package 'lsp-ui)
-(use-package lsp-ui)
-
-;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
-;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
-;;   to avoid odd behavior with snippets and indentation
-(use-package yasnippet)
-
-(require 'scala-bootstrap)
-(require-package 'lsp-mode)
-(require 'lsp-mode)
-
-(add-hook 'scala-mode-hook
-          '(lambda ()
-             (scala-bootstrap:with-metals-installed
-              (scala-bootstrap:with-bloop-server-started
-               (lsp)))))
+;; ;; scala
+;; ;; Install use-package if not already installed
+;; (unless (package-installed-p 'use-package)
+;;   (package-refresh-contents)
+;;   (package-install 'use-package))
+;; 
+;; (require-package 'use-package)
+;; (require 'use-package)
+;; (require-package 'spinner)
+;; (require 'spinner)
+;; 
+;; ;; Enable defer and ensure by default for use-package
+;; ;; Keep auto-save/backup files separate from source code:  https://github.com/scalameta/metals/issues/1027
+;; (setq use-package-always-defer t
+;;       use-package-always-ensure t
+;;       backup-directory-alist `((".*" . ,temporary-file-directory))
+;;       auto-save-file-name-transforms `((".*" ,temporary-file-directory t)))
+;; 
+;; ;; Enable scala-mode and sbt-mode
+;; (require-package 'scala-mode)
+;; (use-package scala-mode
+;;   :mode "\\.s\\(cala\\|bt\\)$")
+;; 
+;; (require-package 'sbt-mode)
+;; (use-package sbt-mode
+;;   :commands sbt-start sbt-command
+;;   :config
+;;   ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+;;   ;; allows using SPACE when in the minibuffer
+;;   (substitute-key-definition
+;;    'minibuffer-complete-word
+;;    'self-insert-command
+;;    minibuffer-local-completion-map)
+;;    ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+;;    (setq sbt:program-options '("-Dsbt.supershell=false"))
+;; )
+;; 
+;; ;; Enable nice rendering of diagnostics like compile errors.
+;; (use-package flycheck
+;;   :init (global-flycheck-mode))
+;; 
+;; (require-package 'lsp-mode)
+;; (require 'lsp-mode)
+;; (use-package lsp-mode
+;;   ;; Optional - enable lsp-mode automatically in scala files
+;;   :hook
+;;   (scala-mode . lsp)
+;;   (lsp-managed-mode . (lambda () (setq-local company-backends '(company-capf))))
+;;   :config (setq lsp-prefer-flymake nil))
+;; 
+;; (require-package 'lsp-ui)
+;; (use-package lsp-ui)
+;; 
+;; ;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
+;; ;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
+;; ;;   to avoid odd behavior with snippets and indentation
+;; (use-package yasnippet)
+;; 
+;; (require 'scala-bootstrap)
+;; (require-package 'lsp-mode)
+;; (require 'lsp-mode)
+;; 
+;; (add-hook 'scala-mode-hook
+;;           '(lambda ()
+;;              (scala-bootstrap:with-metals-installed
+;;               (scala-bootstrap:with-bloop-server-started
+;;                (lsp)))))
 
 ;; R
 (require-package 'ess)
@@ -712,17 +724,17 @@ locate PACKAGE."
 (require 'lsp-julia)
 
 
-;; php
-(require-package 'php-mode)
-(use-package phpunit
-  :ensure t)
-(provide 'long-php)
-(require-package 'lsp-mode)
-(use-package lsp-mode
-  :config
-  (setq lsp-prefer-flymake nil)
-  :hook (php-mode . lsp)
-  :commands lsp)
+;; ;; php
+;; (require-package 'php-mode)
+;; (use-package phpunit
+;;   :ensure t)
+;; (provide 'long-php)
+;; (require-package 'lsp-mode)
+;; (use-package lsp-mode
+;;   :config
+;;   (setq lsp-prefer-flymake nil)
+;;   :hook (php-mode . lsp)
+;;   :commands lsp)
 
 ;; SQL
 (require-package 'cl-lib)
@@ -1215,7 +1227,7 @@ locate PACKAGE."
      (260 . "#93e0e3")
      (280 . "#6ca0a3")
      (300 . "#7cb8bb")
-     (320 . "#8cd0d3")
+
      (340 . "#94bff3")
      (360 . "#dc8cc3")))
  '(vc-annotate-very-old-color "#dc8cc3")
@@ -1223,3 +1235,7 @@ locate PACKAGE."
  '(warning-suppress-types '((use-package))))
 (put 'set-goal-column 'disabled nil)
 (put 'downcase-region 'disabled nil)
+
+
+(profiler-report)
+(profiler-stop)
