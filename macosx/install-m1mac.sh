@@ -74,6 +74,13 @@ mv docker/* $HOME/bin
 rm -rf docker/
 rm docker-${DOCKER_VERSION}.tgz
 
+# docker-buildx plugin install
+curl -sLO https://github.com/docker/buildx/releases/download/v0.14.0/buildx-v0.14.0.darwin-amd64
+mv buildx-v0.14.0.darwin-amd64 docker-buildx
+chmod +x docker-buildx
+mkdir -p ${HOME}/.docker/cli-plugins
+mv docker-buildx ${HOME}/.docker/cli-plugins/
+
 # tmux
 brew install tmux
 
