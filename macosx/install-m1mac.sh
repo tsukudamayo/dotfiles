@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DOCKER_VERSION=26.0.2
+
 mkdir ~/bin
 mkdir ~/lib
 mkdir ~/local
@@ -36,6 +38,7 @@ cp -r ~/dotfiles/linux/.emacs.d ~/
 cp ~/dotfiles/.vimrc ~/
 cp -r ~/dotfiles/go .go
 cp ~/dotfiles/.bash_profile ~/
+echo 'eval "$(/opt/homebrew/bin/brew shellenv)"' >> $HOME/.bash_profile
 
 # fonts(monaco bold)
 git clone https://github.com/vjpr/monaco-bold.git ~/.fonts/
@@ -64,18 +67,18 @@ brew install docker-compose
 brew install --cask multipass
 
 # docker client install
-curl -O https://download.docker.com/mac/static/stable/aarch64/docker-23.0.4.tgz
-tar xzvf docker-23.0.4.tgz
+curl -O https://download.docker.com/mac/static/stable/aarch64/docker-${DOCKER_VERSION}.tgz
+tar xzvf docker-${DOCKER_VERSION}.tgz
 
 mv docker/* $HOME/bin
 rm -rf docker/
-rm docker-23.0.4.tgz
+rm docker-${DOCKER_VERSION}.tgz
 
 # tmux
 brew install tmux
 
 # emacs(native compile)
-brew install autoconf gnutls texinfo libgccjit automake gcc
+brew install autoconf gnutls texinfo libgccjit automake gcc pkg-config
 brew install --build-from-source libgccjit automake
 cd ~/opt
 git clone git://git.sv.gnu.org/emacs.git
@@ -88,7 +91,7 @@ sudo cp -r nextstep/Emacs.app /Applications/
 # multipass launch and using docker context
 # XXX launch failed: cannot connect to the multipass socket
 # Need to wait restart multipass deamon
-multipass launch --name docker-vm --cpus 8 --mem 16G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 22.04
+multipass launch --name docker-vm --cpus 8 --mem 8G --disk 200G --cloud-init $HOME/dotfiles/macosx/cloud-config-$(uname -m).yml 22.04
 multipass mount /Users docker-vm:/Users
 multipass mount /private/tmp docker-vm:/tmp
 
