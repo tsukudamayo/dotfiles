@@ -95,6 +95,9 @@ cd emacs
 make install
 sudo cp -r nextstep/Emacs.app /Applications/
 
+# nix
+sh <(curl -L https://nixos.org/nix/install) --daemon --yes
+
 # multipass launch and using docker context
 # XXX launch failed: cannot connect to the multipass socket
 # Need to wait restart multipass deamon
