@@ -1,0 +1,15 @@
+services:
+  devshell:
+    build: .
+    container_name: devshell
+    working_dir: /workspace
+    volumes:
+      - ${HOME}:/workspace
+      - ${PWD}/.zshrc:/root/.zshrc:ro
+      - ~/.vimrc:/root/.vimrc:ro
+      - ~/.config/gcloud:/root/.config/gcloud
+      - ~/.kube:/root/.kube
+    environment:
+      - TZ=Asia/Tokyo
+    tty: true
+    stdin_open: true
