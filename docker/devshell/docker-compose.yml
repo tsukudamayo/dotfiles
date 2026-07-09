@@ -5,6 +5,7 @@ services:
       dockerfile: ${DOCKERFILE:-Dockerfile}
     container_name: devshell
     working_dir: /workspace
+    command: sleep infinity
     volumes:
       - ${HOME}:/workspace
       - ${PWD}/.zshrc:/root/.zshrc:ro
