@@ -1,5 +1,6 @@
 FROM ubuntu:24.04
 
+ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Tokyo
 
 RUN apt-get update && apt-get install -y \
@@ -27,6 +28,8 @@ RUN apt-get update && apt-get install -y \
         python3-venv \
         make \
         build-essential \
+        openssh-client \
+        sudo \
         && rm -rf /var/lib/apt/lists/*
 
 # Google Cloud CLI
@@ -42,11 +45,18 @@ RUN curl https://packages.cloud.google.com/apt/doc/apt-key.gpg \
         && rm -rf /var/lib/apt/lists/*
 
 # yq
-RUN wget -qO /usr/local/bin/yq \
-        https://github.com/mikefarah/yq/releases/latest/download/yq_linux_amd64 \
-        && chmod +x /usr/local/bin/yq
+RUN set -eux; \
+        ARCH="$(dpkg --print-architecture)"; \
+        case "$ARCH" in \
+          amd64) YQ_ARCH="amd64" ;; \
+          arm64) YQ_ARCH="arm64" ;; \
+          *) echo "unsupported arch: $ARCH" && exit 1 ;; \
+        esac; \
+        wget -qO /usr/local/bin/yq \
+          "https://github.com/mikefarah/yq/releases/latest/download/yq_linux_${YQ_ARCH}"; \
+        chmod +x /usr/local/bin/yq
 
-# gh
+# GitHub CLI
 RUN mkdir -p -m 755 /etc/apt/keyrings \
         && wget -qO- https://cli.github.com/packages/githubcli-archive-keyring.gpg \
         | tee /etc/apt/keyrings/githubcli-archive-keyring.gpg > /dev/null \
@@ -56,6 +66,9 @@ RUN mkdir -p -m 755 /etc/apt/keyrings \
         && apt-get update \
         && apt-get install -y gh \
         && rm -rf /var/lib/apt/lists/*
+
+# Git default config
+RUN git config --global init.defaultBranch main
 
 WORKDIR /workspace
 
