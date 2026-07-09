@@ -1,15 +1,21 @@
 services:
   devshell:
-    build: .
+    build:
+      context: .
+      dockerfile: ${DOCKERFILE:-Dockerfile}
     container_name: devshell
     working_dir: /workspace
     volumes:
       - ${HOME}:/workspace
       - ${PWD}/.zshrc:/root/.zshrc:ro
-      - ~/.vimrc:/root/.vimrc:ro
-      - ~/.config/gcloud:/root/.config/gcloud
-      - ~/.kube:/root/.kube
+      - ${HOME}/.vimrc:/root/.vimrc:ro
+      - ${HOME}/.config/gcloud:/root/.config/gcloud
+      - ${HOME}/.kube:/root/.kube
+      - gh-config:/root/.config/gh
     environment:
       - TZ=Asia/Tokyo
     tty: true
     stdin_open: true
+
+volumes:
+  gh-config:
